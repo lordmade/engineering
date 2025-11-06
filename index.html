@@ -17,8 +17,10 @@
             transition: all 0.3s ease; /* Smooth transition for hover */
         }
         nav a:hover { 
-            background-color: rgba(255,255,255,0.2); 
+            background-color: #005599; /* Enhanced with brand-inspired blue */
+            color: white;
             transform: translateY(-2px); /* Subtle lift */
+            box-shadow: 0 4px 12px rgba(0,85,153,0.3); /* Colored shadow */
         }
         .hero { 
             background: linear-gradient(to bottom, #003366, #f0f8ff); /* Mimicking gradient background */
@@ -65,13 +67,45 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
             transition: all 0.3s ease; /* Smooth transition for hover */
             cursor: pointer; /* Indicate interactivity */
+            border-left: 4px solid transparent; /* For color accent */
         }
         .card:hover { 
             transform: translateY(-5px) scale(1.02); /* Lift and subtle scale */
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15); /* Deeper shadow */
-            background-color: #f8f9fa; /* Light tint */
+            box-shadow: 0 8px 25px rgba(0,51,102,0.2); /* Deeper blue-tinted shadow */
+            background-color: #f0f8ff; /* Light blue tint */
+            border-left-color: #003366; /* Blue accent border */
         }
-        .card h3 { color: #003366; margin-bottom: 1rem; }
+        .card h3 { 
+            color: #333; 
+            margin-bottom: 1rem; 
+            transition: color 0.3s ease; /* Smooth color change */
+        }
+        .card:hover h3 { 
+            color: #003366; /* Brand blue on hover */
+        }
+
+        /* Card-specific hover colors */
+        .card-copper { border-left-color: #B87333; } /* Copper theme: warm orange-brown */
+        .card-copper:hover { 
+            background-color: #fff5f0; /* Light copper tint */
+            box-shadow: 0 8px 25px rgba(184, 115, 51, 0.2); /* Copper shadow */
+        }
+        .card-copper:hover h3 { color: #B87333; }
+
+        .card-platinum { border-left-color: #E5E4E2; } /* Platinum theme: cool silver-gray */
+        .card-platinum:hover { 
+            background-color: #f8f8f8; /* Light silver tint */
+            box-shadow: 0 8px 25px rgba(229, 228, 226, 0.3); /* Silver shadow */
+        }
+        .card-platinum:hover h3 { color: #708090; } /* Darker gray for contrast */
+
+        .card-iron { border-left-color: #8B4513; } /* Iron Ore theme: earthy saddle brown */
+        .card-iron:hover { 
+            background-color: #fdf6f0; /* Light rust tint */
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.2); /* Rust shadow */
+        }
+        .card-iron:hover h3 { color: #8B4513; }
+
         footer { background-color: #003366; color: white; text-align: center; padding: 2rem; }
 
         /* Media Queries for Responsiveness */
@@ -152,15 +186,15 @@
 
     <section id="business" class="section-grid">
         <h2>Our Business</h2>
-        <div class="card">
+        <div class="card card-copper">
             <h3>Copper</h3>
             <p>Leading producer of copper for the energy transition.</p>
         </div>
-        <div class="card">
+        <div class="card card-platinum">
             <h3>Platinum Group Metals</h3>
             <p>Essential for fuel cells and hydrogen technology.</p>
         </div>
-        <div class="card">
+        <div class="card card-iron">
             <h3>Iron Ore</h3>
             <p>High-quality iron ore for steel production.</p>
         </div>
