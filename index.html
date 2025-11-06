@@ -9,7 +9,17 @@
         header { background-color: #003366; color: white; padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; }
         nav ul { list-style: none; margin: 0; padding: 0; display: flex; justify-content: center; flex-wrap: wrap; }
         nav li { margin: 0 1rem; }
-        nav a { color: white; text-decoration: none; }
+        nav a { 
+            color: white; 
+            text-decoration: none; 
+            padding: 0.5rem 1rem; 
+            border-radius: 4px; 
+            transition: all 0.3s ease; /* Smooth transition for hover */
+        }
+        nav a:hover { 
+            background-color: rgba(255,255,255,0.2); 
+            transform: translateY(-2px); /* Subtle lift */
+        }
         .hero { 
             background: linear-gradient(to bottom, #003366, #f0f8ff); /* Mimicking gradient background */
             min-height: 100vh; /* Changed to min-height for better mobile flexibility */
@@ -48,7 +58,20 @@
         .hero > div:last-child p { font-size: 1.1rem; margin-bottom: 1rem; }
         section { padding: 4rem 2rem; max-width: 1200px; margin: 0 auto; }
         .section-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .card { 
+            background: white; 
+            padding: 2rem; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            transition: all 0.3s ease; /* Smooth transition for hover */
+            cursor: pointer; /* Indicate interactivity */
+        }
+        .card:hover { 
+            transform: translateY(-5px) scale(1.02); /* Lift and subtle scale */
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15); /* Deeper shadow */
+            background-color: #f8f9fa; /* Light tint */
+        }
+        .card h3 { color: #003366; margin-bottom: 1rem; }
         footer { background-color: #003366; color: white; text-align: center; padding: 2rem; }
 
         /* Media Queries for Responsiveness */
@@ -71,6 +94,9 @@
             }
             nav ul { flex-direction: column; align-items: center; }
             nav li { margin: 0.5rem 0; }
+            .card:hover { 
+                transform: translateY(-2px) scale(1.01); /* Reduced effect on mobile to avoid overflow */
+            }
         }
 
         @media (max-width: 480px) {
