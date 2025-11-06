@@ -249,6 +249,24 @@
         .hero-image:hover {
             transform: scale(1.1);
         }
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .carousel-dot.active {
+            background-color: white;
+            transform: scale(1.2);
+        }
         section {
             padding: 5rem 2rem;
             max-width: 1200px;
@@ -367,6 +385,13 @@
                 width: 80px;
                 height: 80px;
             }
+            .carousel-dots {
+                gap: 0.3rem;
+            }
+            .carousel-dot {
+                width: 10px;
+                height: 10px;
+            }
             .card:hover {
                 transform: translateY(-3px) scale(1.02);
             }
@@ -432,6 +457,7 @@
         <div class="parallax-bg active" id="parallaxBg1" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2071&q=80');"></div>
         <div class="parallax-bg" id="parallaxBg2" style="background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');"></div>
         <div class="parallax-bg" id="parallaxBg3" style="background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');"></div>
+        <div class="parallax-bg" id="parallaxBg4" style="background-image: url('https://i.postimg.cc/zXMJvnrr/engineering-team-managing-assembly-lines-conveyor-belts-automated-factory.jpg');"></div>
         <div id="mine-model"></div>
         <div class="hero-content">
             <h1>Re-imagining mining to improve people's lives</h1>
@@ -444,6 +470,12 @@
             <div class="hero-cta">
                 <a href="#futuresmart" class="cta">FutureSmart Mining™</a>
                 <a href="#careers" class="cta">Join Our Team</a>
+            </div>
+            <div class="carousel-dots">
+                <span class="carousel-dot active" onclick="goToSlide(0)"></span>
+                <span class="carousel-dot" onclick="goToSlide(1)"></span>
+                <span class="carousel-dot" onclick="goToSlide(2)"></span>
+                <span class="carousel-dot" onclick="goToSlide(3)"></span>
             </div>
         </div>
     </section>
@@ -491,15 +523,25 @@
                 document.getElementById('mobileMenu').classList.remove('active');
             });
         });
-        // Simple background image slideshow for hero parallax
+        // Carousel functionality
         let currentBg = 0;
         const bgImages = document.querySelectorAll('.parallax-bg');
-        function nextBg() {
+        const dots = document.querySelectorAll('.carousel-dot');
+        function updateCarousel(index) {
             bgImages[currentBg].classList.remove('active');
-            currentBg = (currentBg + 1) % bgImages.length;
+            dots[currentBg].classList.remove('active');
+            currentBg = index;
             bgImages[currentBg].classList.add('active');
+            dots[currentBg].classList.add('active');
         }
-        setInterval(nextBg, 5000); // Change every 5 seconds
+        function nextBg() {
+            const nextIndex = (currentBg + 1) % bgImages.length;
+            updateCarousel(nextIndex);
+        }
+        function goToSlide(index) {
+            updateCarousel(index);
+        }
+        setInterval(nextBg, 5000); // Auto-advance every 5 seconds
         // 3D Mine Model Setup
         let scene, camera, renderer, controls;
         function init3DModel() {
