@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anglo American - Inspired Mockup</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #333; line-height: 1.6; }
+        header { background-color: #003366; color: white; padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; }
+        nav ul { list-style: none; margin: 0; padding: 0; display: flex; justify-content: center; flex-wrap: wrap; }
+        nav li { margin: 0 1rem; }
+        nav a { color: white; text-decoration: none; }
+        .hero { 
+            background: linear-gradient(to bottom, #003366, #f0f8ff); /* Mimicking gradient background */
+            min-height: 100vh; /* Changed to min-height for better mobile flexibility */
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+            padding: 2rem; /* Increased base padding for breathing room */
+            margin-top: 60px; 
+            color: white; 
+            position: relative; 
+        }
+        .hero::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-image: url('https://via.placeholder.com/1920x1080/003366/ffffff?text=Copper+Vital+Role'); /* Placeholder for copper-themed image */
+            background-size: cover; 
+            background-position: center; 
+            opacity: 0.3; 
+            z-index: -1; 
+        }
+        .hero h1 { font-size: clamp(2rem, 5vw, 3rem); /* Responsive font size */ margin-bottom: 1rem; }
+        .hero .what-we-do { max-width: 800px; margin: 2rem 0; font-size: 1.1rem; }
+        .hero .what-we-do h2 { font-size: clamp(1.5rem, 4vw, 2rem); }
+        .hero .what-we-do p { margin-bottom: 1.5rem; }
+        .hero .futuresmart { background: rgba(255,255,255,0.1); padding: clamp(1rem, 3vw, 2rem); border-radius: 8px; max-width: 600px; margin: 2rem 0; }
+        .hero .futuresmart h2 { font-size: clamp(1.5rem, 4vw, 2rem); }
+        .hero .futuresmart p { margin-bottom: 1rem; }
+        .cta { display: inline-block; background: #fff; color: #003366; padding: clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem); text-decoration: none; border-radius: 4px; margin: 0.5rem; font-weight: bold; font-size: clamp(0.9rem, 2.5vw, 1rem); }
+        .hero > div:last-child { margin-top: 2rem; } /* Spacing for the careers section */
+        .hero > div:last-child p { font-size: 1.1rem; margin-bottom: 1rem; }
+        section { padding: 4rem 2rem; max-width: 1200px; margin: 0 auto; }
+        .section-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        footer { background-color: #003366; color: white; text-align: center; padding: 2rem; }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 90vh; /* Slightly shorter on mobile for usability */
+                padding: 1rem;
+                justify-content: flex-start; /* Align to top on small screens */
+                padding-top: 4rem; /* Account for fixed header */
+            }
+            .hero h1 { margin-top: 1rem; }
+            .hero .what-we-do,
+            .hero .futuresmart {
+                max-width: 100%; /* Full width on mobile */
+                margin: 1.5rem 0;
+            }
+            .hero .what-we-do p,
+            .hero .futuresmart p {
+                font-size: 1rem; /* Slightly smaller text */
+            }
+            nav ul { flex-direction: column; align-items: center; }
+            nav li { margin: 0.5rem 0; }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 0.5rem;
+                padding-top: 4rem;
+            }
+            .cta { display: block; margin: 1rem auto; width: fit-content; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#business">Our Business</a></li>
+                <li><a href="#sustainability">Sustainability</a></li>
+                <li><a href="#investors">Investors</a></li>
+                <li><a href="#careers">Careers</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div>
+            <h1>Re-imagining mining to improve people's lives | Anglo American</h1>
+            
+            <div class="what-we-do">
+                <h2>What we do</h2>
+                <p>We are a leading global mining company and our products are the essential ingredients in almost every aspect of modern life. Our portfolio of world class competitive operations, with a broad range of future development options, provides many of the future-enabling metals and minerals for a cleaner, greener, more sustainable world and that meet the fast growing every day demands of billions of consumers.</p>
+            </div>
+
+            <div class="futuresmart">
+                <h2>FutureSmart Mining™</h2>
+                <p>Technology, digitalisation and sustainability working hand in hand. These are the step-change innovations that will transform the nature of mining.</p>
+                <a href="#futuresmart" class="cta">Find out more about FutureSmart Mining™</a>
+            </div>
+
+            <div>
+                <p>Get ready for the future: Grow your career, transform our industry and improve lives</p>
+                <a href="#careers" class="cta">Anglo American Careers</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <h2>About Us</h2>
+        <p>Anglo American is a global mining company with a portfolio of world-class competitive operations and undeveloped resources.</p>
+    </section>
+
+    <section id="business" class="section-grid">
+        <h2>Our Business</h2>
+        <div class="card">
+            <h3>Copper</h3>
+            <p>Leading producer of copper for the energy transition.</p>
+        </div>
+        <div class="card">
+            <h3>Platinum Group Metals</h3>
+            <p>Essential for fuel cells and hydrogen technology.</p>
+        </div>
+        <div class="card">
+            <h3>Iron Ore</h3>
+            <p>High-quality iron ore for steel production.</p>
+        </div>
+    </section>
+
+    <section id="sustainability">
+        <h2>Sustainability</h2>
+        <p>Committed to responsible mining, community engagement, and environmental stewardship.</p>
+    </section>
+
+    <footer id="contact">
+        <p>&copy; 2025 Anglo American Inspired Mockup. For educational purposes only.</p>
+    </footer>
+</body>
+</html>
