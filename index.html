@@ -47,6 +47,7 @@
         }
         nav li { 
             margin: 0 0.5rem; 
+            perspective: 1000px; /* For 3D flip effect */
         }
         nav a { 
             color: white; 
@@ -56,12 +57,30 @@
             transition: all 0.3s ease; 
             font-weight: 500; /* Semi-bold for polish */
             display: block; /* Better for mobile */
+            transform-style: preserve-3d; /* Enable 3D transforms */
+            transform: rotateY(0deg); /* Initial state */
         }
         nav a:hover { 
             background-color: #005599; 
             color: white;
-            transform: translateY(-2px); 
+            transform: rotateY(180deg); /* Flip on Y-axis for card-like flip */
             box-shadow: 0 4px 12px rgba(0,85,153,0.3); 
+            /* Backface visibility hidden for clean flip */
+            backface-visibility: hidden;
+        }
+        nav a::after { /* Pseudo-element for back side if needed, but simple flip for now */
+            content: attr(data-text); /* Could customize back text */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #005599;
+            transform: rotateY(180deg);
+            backface-visibility: hidden;
         }
         .hero { 
             background: linear-gradient(135deg, #003366 0%, #005599 50%, #f0f8ff 100%); /* Enhanced gradient for depth */
@@ -170,6 +189,16 @@
             gap: 2rem; 
             justify-items: center; /* Center grid items */
         }
+        .business-header { /* Specific class for centering "Our Business" */
+            text-align: center;
+            margin-bottom: 3rem;
+            width: 100%;
+        }
+        .business-header h2 {
+            font-size: 2.5rem;
+            color: #003366;
+            margin: 0;
+        }
         .card { 
             background: white; 
             padding: 2.5rem; 
@@ -239,6 +268,9 @@
             nav li { 
                 margin: 0.25rem 0; 
             }
+            nav a:hover {
+                transform: rotateY(0deg); /* Disable flip on mobile for usability */
+            }
             .hero {
                 min-height: 90vh; 
                 padding: 1rem;
@@ -259,6 +291,9 @@
             }
             .card:hover { 
                 transform: translateY(-3px) scale(1.02); 
+            }
+            .business-header h2 {
+                font-size: 2rem;
             }
         }
 
@@ -284,13 +319,13 @@
             <a href="#home" class="logo">Anglo American</a>
             <nav>
                 <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#business">Our Business</a></li>
-                    <li><a href="#sustainability">Sustainability</a></li>
-                    <li><a href="#investors">Investors</a></li>
-                    <li><a href="#careers">Careers</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#home" data-text="Home">Home</a></li>
+                    <li><a href="#about" data-text="About">About</a></li>
+                    <li><a href="#business" data-text="Our Business">Our Business</a></li>
+                    <li><a href="#sustainability" data-text="Sustainability">Sustainability</a></li>
+                    <li><a href="#investors" data-text="Investors">Investors</a></li>
+                    <li><a href="#careers" data-text="Careers">Careers</a></li>
+                    <li><a href="#contact" data-text="Contact">Contact</a></li>
                 </ul>
             </nav>
         </div>
@@ -323,19 +358,23 @@
         <p>Anglo American is a global mining company with a portfolio of world-class competitive operations and undeveloped resources.</p>
     </section>
 
-    <section id="business" class="section-grid">
-        <h2>Our Business</h2>
-        <div class="card card-copper">
-            <h3>Copper</h3>
-            <p>Leading producer of copper for the energy transition.</p>
+    <section id="business">
+        <div class="business-header">
+            <h2>Our Business</h2>
         </div>
-        <div class="card card-platinum">
-            <h3>Platinum Group Metals</h3>
-            <p>Essential for fuel cells and hydrogen technology.</p>
-        </div>
-        <div class="card card-iron">
-            <h3>Iron Ore</h3>
-            <p>High-quality iron ore for steel production.</p>
+        <div class="section-grid">
+            <div class="card card-copper">
+                <h3>Copper</h3>
+                <p>Leading producer of copper for the energy transition.</p>
+            </div>
+            <div class="card card-platinum">
+                <h3>Platinum Group Metals</h3>
+                <p>Essential for fuel cells and hydrogen technology.</p>
+            </div>
+            <div class="card card-iron">
+                <h3>Iron Ore</h3>
+                <p>High-quality iron ore for steel production.</p>
+            </div>
         </div>
     </section>
 
