@@ -350,35 +350,86 @@
             margin-bottom: 1rem;
             color: var(--dark-gray);
         }
-        /* Gallery */
+        /* Gallery Redesigned */
         #gallery {
             background: var(--white);
+            position: relative;
+        }
+        .gallery-subtitle {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            font-size: 1.1rem;
+            opacity: 0.8;
+            font-style: italic;
         }
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
+            perspective: 1000px;
         }
-        figure {
-            border-radius: 15px;
+        .gallery-item {
+            position: relative;
+            height: 300px;
+            border-radius: 20px;
             overflow: hidden;
             box-shadow: var(--shadow-light);
             transition: var(--transition);
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(50px) rotateY(10deg);
+            animation: slideInGallery 0.8s ease-out forwards;
         }
-        figure:hover {
-            transform: scale(1.02);
+        .gallery-item:nth-child(1) { animation-delay: 0.1s; }
+        .gallery-item:nth-child(2) { animation-delay: 0.2s; }
+        .gallery-item:nth-child(3) { animation-delay: 0.3s; }
+        .gallery-item:nth-child(4) { animation-delay: 0.4s; }
+        .gallery-item:nth-child(5) { animation-delay: 0.5s; }
+        .gallery-item:nth-child(6) { animation-delay: 0.6s; }
+        .gallery-item:nth-child(7) { animation-delay: 0.7s; }
+        .gallery-item:nth-child(8) { animation-delay: 0.8s; }
+        @keyframes slideInGallery {
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateY(0deg);
+            }
+        }
+        .gallery-item:hover {
+            transform: translateY(-10px) scale(1.05) rotateY(0deg);
+            box-shadow: var(--shadow-hover);
+            z-index: 10;
         }
         .gallery-image {
             width: 100%;
-            height: 250px;
+            height: 100%;
             object-fit: cover;
-            cursor: pointer;
+            transition: var(--transition);
         }
-        figcaption {
-            padding: 1rem;
-            background: var(--light-gray);
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.1);
+        }
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
             color: var(--white);
+            padding: 2rem 1.5rem 1.5rem;
+            transform: translateY(100%);
+            transition: var(--transition);
+        }
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+        .gallery-overlay h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .gallery-overlay p {
             font-size: 0.9rem;
+            opacity: 0.9;
         }
         /* Clients */
         #clients {
@@ -603,8 +654,11 @@
             .service-icon {
                 font-size: 2.5rem;
             }
+            .gallery-item {
+                height: 250px;
+            }
             .gallery-image {
-                height: 200px;
+                height: 100%;
             }
             .clients-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -658,7 +712,7 @@
             <p>Engineering excellence for mining and industrial efficiency</p>
             <div class="hero-cta">
                 <a href="#services" class="cta">Explore Services</a>
-                <a href="#contact" class="cta">Get In Touch</a>
+                <a href="#" class="cta" onclick="alert('Redirecting to Job Portal - Coming Soon!')">Apply for Jobs</a>
             </div>
         </div>
     </section>
@@ -753,40 +807,64 @@
     </section>
     <section id="gallery" class="fade-in">
         <h2 class="section-title">Our Gallery</h2>
-        <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem; font-size: 1.1rem; opacity: 0.8;">Explore our projects and engineering excellence through these images.</p>
+        <p class="gallery-subtitle">Explore our projects and engineering excellence through these images.</p>
         <div class="gallery-grid">
-            <figure onclick="openLightbox('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop', 'Hydraulic cylinder assembly in workshop')">
+            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop', 'Hydraulic cylinder assembly in workshop')">
                 <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop" alt="Hydraulic cylinder assembly in workshop" class="gallery-image">
-                <figcaption>Hydraulic cylinder assembly in workshop</figcaption>
-            </figure>
-            <figure onclick="openLightbox('https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop', 'Conveyor belt repair on site')">
+                <div class="gallery-overlay">
+                    <h3>Hydraulic Cylinder Assembly</h3>
+                    <p>Innovative workshop precision</p>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop', 'Conveyor belt repair on site')">
                 <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop" alt="Conveyor belt repair on site" class="gallery-image">
-                <figcaption>Conveyor belt repair on site</figcaption>
-            </figure>
-            <figure onclick="openLightbox('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop', 'Line boring operation on machinery')">
+                <div class="gallery-overlay">
+                    <h3>Conveyor Belt Repair</h3>
+                    <p>On-site efficiency at work</p>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop', 'Line boring operation on machinery')">
                 <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop" alt="Line boring operation on machinery" class="gallery-image">
-                <figcaption>Line boring operation on machinery</figcaption>
-            </figure>
-            <figure onclick="openLightbox('https://images.unsplash.com/photo-1558618047-3c8c98a3e8a8?w=800&h=600&fit=crop', 'Engineering team working on excavator undercarriage')">
+                <div class="gallery-overlay">
+                    <h3>Line Boring Operation</h3>
+                    <p>Precision engineering in action</p>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1558618047-3c8c98a3e8a8?w=800&h=600&fit=crop', 'Engineering team working on excavator undercarriage')">
                 <img src="https://images.unsplash.com/photo-1558618047-3c8c98a3e8a8?w=400&h=300&fit=crop" alt="Engineering team working on excavator undercarriage" class="gallery-image">
-                <figcaption>Engineering team working on excavator undercarriage</figcaption>
-            </figure>
-            <figure onclick="openLightbox('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', 'Hose and fitting installation in hydraulic system')">
+                <div class="gallery-overlay">
+                    <h3>Excavator Undercarriage</h3>
+                    <p>Team collaboration for reliability</p>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', 'Hose and fitting installation in hydraulic system')">
                 <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="Hose and fitting installation in hydraulic system" class="gallery-image">
-                <figcaption>Hose and fitting installation in hydraulic system</figcaption>
-            </figure>
-            <figure onclick="openLightbox('https://images.unsplash.com/photo-1581093450029-8cf7a098100e?w=800&h=600&fit=crop', 'On-site rebuild of industrial equipment')">
+                <div class="gallery-overlay">
+                    <h3>Hydraulic System Installation</h3>
+                    <p>Seamless hose and fitting expertise</p>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1581093450029-8cf7a098100e?w=800&h=600&fit=crop', 'On-site rebuild of industrial equipment')">
                 <img src="https://images.unsplash.com/photo-1581093450029-8cf7a098100e?w=400&h=300&fit=crop" alt="On-site rebuild of industrial equipment" class="gallery-image">
-                <figcaption>On-site rebuild of industrial equipment</figcaption>
-            </figure>
-            <figure onclick="openLightbox('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop', 'Precision honing of cylinders')">
+                <div class="gallery-overlay">
+                    <h3>On-Site Equipment Rebuild</h3>
+                    <p>Industrial revival with precision</p>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop', 'Precision honing of cylinders')">
                 <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop" alt="Precision honing of cylinders" class="gallery-image">
-                <figcaption>Precision honing of cylinders</figcaption>
-            </figure>
-            <figure onclick="openLightbox('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', 'General steel work and welding projects')">
+                <div class="gallery-overlay">
+                    <h3>Precision Cylinder Honing</h3>
+                    <p>Finishing touches for excellence</p>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', 'General steel work and welding projects')">
                 <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="General steel work and welding projects" class="gallery-image">
-                <figcaption>General steel work and welding projects</figcaption>
-            </figure>
+                <div class="gallery-overlay">
+                    <h3>Steel Work & Welding</h3>
+                    <p>Robust fabrication and welding</p>
+                </div>
+            </div>
         </div>
     </section>
     <section id="clients" class="fade-in">
