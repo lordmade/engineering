@@ -225,27 +225,36 @@
         #about {
             background: var(--white);
             text-align: center;
+            padding: 6rem 2rem;
         }
-        .about-container {
+        .about-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .about-content {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 4rem;
-            max-width: 1000px;
-            margin: 0 auto;
+            gap: 2rem;
         }
         .about-text {
             font-size: 1.1rem;
             line-height: 1.8;
-            max-width: 800px;
             text-align: left;
+            color: var(--dark-gray);
         }
         .about-text p {
             margin-bottom: 1.5rem;
         }
         .director-section {
             text-align: center;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
         }
         .director-image {
             width: 100%;
@@ -253,74 +262,98 @@
             height: 300px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 1rem;
             box-shadow: var(--shadow-light);
-            animation: fadeInUp 0.8s ease-out 0.4s both;
+            transition: var(--transition);
+        }
+        .director-image:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-hover);
         }
         .director-name {
             font-size: 1.5rem;
             font-weight: 600;
             color: var(--primary-orange);
-            margin-bottom: 0.5rem;
         }
         .director-title {
             color: var(--light-gray);
             font-size: 1rem;
         }
+        .vm-section {
+            margin: 2rem 0;
+        }
         .vision-mission {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin: 3rem 0;
-            width: 100%;
-            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin: 2rem 0;
         }
         .vm-card {
-            background: var(--white);
+            background: linear-gradient(135deg, rgba(255,102,0,0.05), rgba(255,215,0,0.02));
             padding: 2rem;
             border-radius: 15px;
-            box-shadow: var(--shadow-light);
-            text-align: center;
+            border-left: 4px solid var(--primary-orange);
+            text-align: left;
             transition: var(--transition);
             opacity: 0;
-            transform: translateY(50px);
-            animation: fadeInUp 0.8s ease-out 0.6s both;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out forwards;
         }
+        .vm-card:nth-child(1) { animation-delay: 0.2s; }
+        .vm-card:nth-child(2) { animation-delay: 0.4s; }
         .vm-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
+            transform: translateX(10px);
+            box-shadow: var(--shadow-light);
         }
         .vm-card h3 {
             font-size: 1.3rem;
             color: var(--primary-orange);
             margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .vm-card i {
+            font-size: 1.5rem;
+        }
+        .values-section {
+            margin-top: 2rem;
         }
         .values-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-            width: 100%;
-            max-width: 800px;
+            gap: 1.5rem;
             opacity: 0;
-            transform: translateY(50px);
-            animation: fadeInUp 0.8s ease-out 0.8s both;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out 0.6s forwards;
         }
         .value-item {
             background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
             color: var(--white);
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: 15px;
             text-align: center;
             font-weight: 500;
             transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .value-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-yellow);
         }
         .value-item:hover {
-            transform: scale(1.05);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
         }
         .value-icon {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: 0.5rem;
+            opacity: 0.9;
         }
         /* Services */
         .services-grid {
@@ -568,6 +601,14 @@
         @keyframes zoomIn { from { transform: scale(0.5); } to { transform: scale(1); } }
         /* Mobile */
         @media (max-width: 768px) {
+            .about-wrapper {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+            .about-text {
+                text-align: center;
+            }
             header {
                 height: 70px;
             }
@@ -671,6 +712,9 @@
             .contact-info {
                 font-size: 0.9rem;
             }
+            .vm-card {
+                text-align: center;
+            }
         }
         @media (max-width: 480px) {
             .values-grid, .clients-grid {
@@ -718,42 +762,49 @@
         </div>
     </section>
     <section id="about" class="fade-in">
-        <div class="about-container">
-            <div class="about-text">
-                <h2>About Us</h2>
-                <p>Pitja Engineering (PTY) Ltd is a 100% female black-owned company established in 2017, with a purpose to explore opportunities in the male-dominated engineering field. We employ the highest level of integrity, values, morals, and standards.</p>
-                <p>The director of Pitja Engineering (PTY) Ltd, Ellen Shabangu, has acquired many leadership skills through programs and roles in a number of community initiatives. This experience provides a significant advantage to the company, as her knowledge and work ethic will add value in regard to leadership and experience.</p>
-                <p>Ellen is a woman who believes greatly in community upliftment. She has engaged in numerous community activities, such as crime awareness programs in Mapela and the Nkone community. She is renowned for her roles in bringing local women into agricultural projects and venturing into cosmetic and kitchen businesses historically. Refusing to be limited, she has broken into the male-dominated engineering world. Under Ellen's leadership, Pitja now boasts over one year of unbroken service to one of the reputable mines.</p>
-                <div class="vision-mission">
-                    <div class="vm-card">
-                        <h3>Vision Statement</h3>
-                        <p>We ensure efficiency through quality service that we offer our clients.</p>
-                    </div>
-                    <div class="vm-card">
-                        <h3>Mission Statement</h3>
-                        <p>Pitja Engineering (PTY) Ltd is heading towards being recognized at the same level as top engineering companies in the country.</p>
+        <div class="about-wrapper">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About Us</h2>
+                    <p>Pitja Engineering (PTY) Ltd is a 100% female black-owned company established in 2017, with a purpose to explore opportunities in the male-dominated engineering field. We employ the highest level of integrity, values, morals, and standards.</p>
+                    <p>The director of Pitja Engineering (PTY) Ltd, Ellen Shabangu, has acquired many leadership skills through programs and roles in a number of community initiatives. This experience provides a significant advantage to the company, as her knowledge and work ethic will add value in regard to leadership and experience.</p>
+                    <p>Ellen is a woman who believes greatly in community upliftment. She has engaged in numerous community activities, such as crime awareness programs in Mapela and the Nkone community. She is renowned for her roles in bringing local women into agricultural projects and venturing into cosmetic and kitchen businesses historically. Refusing to be limited, she has broken into the male-dominated engineering world. Under Ellen's leadership, Pitja now boasts over one year of unbroken service to one of the reputable mines.</p>
+                </div>
+                <div class="vm-section">
+                    <div class="vision-mission">
+                        <div class="vm-card">
+                            <h3><i class="fas fa-eye"></i> Vision Statement</h3>
+                            <p>We ensure efficiency through quality service that we offer our clients.</p>
+                        </div>
+                        <div class="vm-card">
+                            <h3><i class="fas fa-bullseye"></i> Mission Statement</h3>
+                            <p>Pitja Engineering (PTY) Ltd is heading towards being recognized at the same level as top engineering companies in the country.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="values-grid">
-                    <div class="value-item">
-                        <i class="fas fa-lightbulb value-icon"></i>
-                        <div>Innovative thinking</div>
-                    </div>
-                    <div class="value-item">
-                        <i class="fas fa-handshake value-icon"></i>
-                        <div>Integrity and Honesty</div>
-                    </div>
-                    <div class="value-item">
-                        <i class="fas fa-clock value-icon"></i>
-                        <div>Reliability & Honesty</div>
-                    </div>
-                    <div class="value-item">
-                        <i class="fas fa-ruler value-icon"></i>
-                        <div>Precision</div>
-                    </div>
-                    <div class="value-item">
-                        <i class="fas fa-users value-icon"></i>
-                        <div>Customer based</div>
+                <div class="values-section">
+                    <h3 style="font-size: 1.8rem; color: var(--primary-orange); margin-bottom: 1rem;">Our Core Values</h3>
+                    <div class="values-grid">
+                        <div class="value-item">
+                            <i class="fas fa-lightbulb value-icon"></i>
+                            <div>Innovative thinking</div>
+                        </div>
+                        <div class="value-item">
+                            <i class="fas fa-handshake value-icon"></i>
+                            <div>Integrity and Honesty</div>
+                        </div>
+                        <div class="value-item">
+                            <i class="fas fa-clock value-icon"></i>
+                            <div>Reliability & Honesty</div>
+                        </div>
+                        <div class="value-item">
+                            <i class="fas fa-ruler value-icon"></i>
+                            <div>Precision</div>
+                        </div>
+                        <div class="value-item">
+                            <i class="fas fa-users value-icon"></i>
+                            <div>Customer based</div>
+                        </div>
                     </div>
                 </div>
             </div>
