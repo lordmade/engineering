@@ -296,7 +296,7 @@
             padding: 2rem;
             border-radius: 15px;
             border-left: 4px solid var(--primary-orange);
-            text-align: left;
+            text-align: center;
             transition: var(--transition);
             opacity: 0;
             transform: translateY(30px);
@@ -315,12 +315,14 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            justify-content: center;
         }
         .vm-card i {
             font-size: 1.5rem;
         }
         .values-section {
             margin-top: 2rem;
+            text-align: center;
         }
         .values-grid {
             display: grid;
@@ -329,6 +331,7 @@
             opacity: 0;
             transform: translateY(30px);
             animation: fadeInUp 0.8s ease-out 0.6s forwards;
+            justify-content: center;
         }
         .value-item {
             background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
@@ -340,6 +343,7 @@
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            max-width: 250px;
         }
         .value-item::before {
             content: '';
@@ -626,10 +630,10 @@
             .nav-container {
                 padding: 0 1rem;
             }
-            .hamburger { 
-                display: flex; 
+            .hamburger {
+                display: flex;
             }
-            nav ul { 
+            nav ul {
                 display: none;
                 flex-direction: column;
                 position: absolute;
@@ -660,8 +664,8 @@
             .hero p {
                 font-size: clamp(1rem, 3vw, 1.2rem);
             }
-            .hero-cta { 
-                flex-direction: column; 
+            .hero-cta {
+                flex-direction: column;
                 align-items: center;
                 gap: 0.75rem;
             }
@@ -678,23 +682,23 @@
                 font-size: clamp(1.75rem, 4vw, 2.5rem);
                 margin-bottom: 2rem;
             }
-            .about-container { 
+            .about-container {
                 gap: 2rem;
             }
-            .about-text { 
-                text-align: center; 
+            .about-text {
+                text-align: center;
                 font-size: 1rem;
             }
-            .vision-mission { 
-                grid-template-columns: 1fr; 
+            .vision-mission {
+                grid-template-columns: 1fr;
                 gap: 1.5rem;
             }
-            .values-grid { 
-                grid-template-columns: repeat(2, 1fr); 
+            .values-grid {
+                grid-template-columns: repeat(2, 1fr);
                 gap: 0.75rem;
             }
-            .services-grid, .gallery-grid { 
-                grid-template-columns: 1fr; 
+            .services-grid, .gallery-grid {
+                grid-template-columns: 1fr;
                 gap: 1.5rem;
             }
             .service-card {
@@ -709,8 +713,8 @@
             .gallery-image {
                 height: 200px;
             }
-            .clients-grid { 
-                grid-template-columns: repeat(2, 1fr); 
+            .clients-grid {
+                grid-template-columns: repeat(2, 1fr);
                 gap: 1rem;
             }
             .client-logo {
