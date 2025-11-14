@@ -153,32 +153,20 @@
             font-weight: 300;
             margin-bottom: 1rem;
             letter-spacing: 0.1em;
-            border-right: 3px solid var(--white);
-            white-space: nowrap;
-            overflow: hidden;
-            animation: blink-caret 1s infinite;
-        }
-        .hero h1::after {
-            content: '';
-            display: inline-block;
-            width: 3px;
-            height: 1em;
-            background: var(--white);
-            margin-left: 0.1em;
-            animation: blink 1s infinite;
-        }
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-        @keyframes blink-caret {
-            0%, 50% { border-color: var(--white); }
-            51%, 100% { border-color: transparent; }
         }
         .hero p {
             font-size: clamp(1.2rem, 4vw, 1.5rem);
             margin-bottom: 2rem;
             opacity: 0.9;
+        }
+        /* Typing cursor styles (shared for title and subtitle) */
+        .typing {
+            border-right: 0.15em solid var(--white);
+            animation: blink-caret 0.75s step-end infinite;
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--white); }
         }
         .hero-cta {
             display: flex;
@@ -809,7 +797,7 @@
                 <img src="https://i.postimg.cc/C15GcRpW/PITJA-LOGO-removebg-preview.png" alt="Pitja Engineering Logo">
             </div>
             <h1 id="heroTitle"></h1>
-            <p>Engineering excellence for mining and industrial efficiency</p>
+            <p id="heroSubtitle"></p>
             <div class="hero-cta">
                 <a href="#services" class="cta">Explore Services</a>
                 <a href="#" class="cta job-cta">Apply for Jobs</a>
@@ -1008,23 +996,33 @@
         </div>
     </div>
     <script>
-        // Hero Typing Effect
-        window.addEventListener('load', () => {
-            const heroTitle = document.getElementById('heroTitle');
-            const text = 'Brewed To Fuel Efficiency';
+        // Reusable typing function
+        function typeWriter(element, text, speed, callback) {
+            element.innerHTML = '';
+            element.classList.add('typing');
             let i = 0;
-            function typeWriter() {
+            function type() {
                 if (i < text.length) {
-                    heroTitle.innerHTML += text.charAt(i);
+                    element.innerHTML += text.charAt(i);
                     i++;
-                    setTimeout(typeWriter, 150); // Adjust speed as needed
+                    setTimeout(type, speed);
                 } else {
-                    // Remove the caret after typing is complete
-                    heroTitle.style.borderRight = 'none';
-                    heroTitle.style.animation = 'none';
+                    element.classList.remove('typing');
+                    if (callback) callback();
                 }
             }
-            typeWriter();
+            type();
+        }
+
+        // Hero Typing Effects (title then subtitle with a short pause)
+        window.addEventListener('load', () => {
+            const heroTitle = document.getElementById('heroTitle');
+            const heroSubtitle = document.getElementById('heroSubtitle');
+            typeWriter(heroTitle, 'Brewed To Fuel Efficiency', 120, () => {
+                setTimeout(() => {
+                    typeWriter(heroSubtitle, 'Engineering excellence for mining and industrial efficiency', 60);
+                }, 400); // Short pause after title completes
+            });
         });
 
         // Mobile Menu
