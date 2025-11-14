@@ -153,6 +153,27 @@
             font-weight: 300;
             margin-bottom: 1rem;
             letter-spacing: 0.1em;
+            border-right: 3px solid var(--white);
+            white-space: nowrap;
+            overflow: hidden;
+            animation: blink-caret 1s infinite;
+        }
+        .hero h1::after {
+            content: '';
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background: var(--white);
+            margin-left: 0.1em;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        @keyframes blink-caret {
+            0%, 50% { border-color: var(--white); }
+            51%, 100% { border-color: transparent; }
         }
         .hero p {
             font-size: clamp(1.2rem, 4vw, 1.5rem);
@@ -787,7 +808,7 @@
             <div class="hero-logo">
                 <img src="https://i.postimg.cc/C15GcRpW/PITJA-LOGO-removebg-preview.png" alt="Pitja Engineering Logo">
             </div>
-            <h1>Brewed To Fuel Efficiency</h1>
+            <h1 id="heroTitle"></h1>
             <p>Engineering excellence for mining and industrial efficiency</p>
             <div class="hero-cta">
                 <a href="#services" class="cta">Explore Services</a>
@@ -987,6 +1008,25 @@
         </div>
     </div>
     <script>
+        // Hero Typing Effect
+        window.addEventListener('load', () => {
+            const heroTitle = document.getElementById('heroTitle');
+            const text = 'Brewed To Fuel Efficiency';
+            let i = 0;
+            function typeWriter() {
+                if (i < text.length) {
+                    heroTitle.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 150); // Adjust speed as needed
+                } else {
+                    // Remove the caret after typing is complete
+                    heroTitle.style.borderRight = 'none';
+                    heroTitle.style.animation = 'none';
+                }
+            }
+            typeWriter();
+        });
+
         // Mobile Menu
         function toggleMenu() {
             const hamburger = document.querySelector('.hamburger');
