@@ -230,23 +230,26 @@
         .about-wrapper {
             max-width: 1200px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: start;
-        }
-        .about-content {
             display: flex;
             flex-direction: column;
-            gap: 2rem;
-            justify-content: space-between;
-            min-height: 600px;
+            align-items: center;
+            gap: 4rem;
+            width: 100%;
+        }
+        .about-main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3rem;
+            width: 100%;
+            max-width: 800px;
         }
         .about-text {
             font-size: 1.1rem;
             line-height: 1.8;
-            text-align: left;
+            text-align: center;
             color: var(--dark-gray);
+            margin-bottom: 2rem;
         }
         .about-text p {
             margin-bottom: 1.5rem;
@@ -257,8 +260,8 @@
             flex-direction: column;
             align-items: center;
             gap: 1rem;
-            justify-content: flex-start;
-            min-height: 400px;
+            width: 100%;
+            max-width: 400px;
         }
         .director-image {
             width: 100%;
@@ -286,6 +289,7 @@
             margin: 2rem 0;
             display: flex;
             justify-content: center;
+            width: 100%;
         }
         .vision-mission {
             display: flex;
@@ -334,6 +338,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
         }
         .values-grid {
             display: grid;
@@ -625,19 +630,22 @@
         /* Mobile */
         @media (max-width: 768px) {
             .about-wrapper {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-                text-align: center;
+                gap: 2rem;
+            }
+            .about-main-content {
+                gap: 2rem;
             }
             .about-text {
                 text-align: center;
-            }
-            .about-content {
-                min-height: auto;
+                font-size: 1rem;
+                padding: 0 1rem;
             }
             .director-section {
-                min-height: auto;
-                justify-content: center;
+                max-width: 250px;
+            }
+            .director-image {
+                max-width: 250px;
+                height: 250px;
             }
             header {
                 height: 70px;
@@ -697,13 +705,6 @@
                 font-size: clamp(1.75rem, 4vw, 2.5rem);
                 margin-bottom: 2rem;
             }
-            .about-container {
-                gap: 2rem;
-            }
-            .about-text {
-                text-align: center;
-                font-size: 1rem;
-            }
             .vision-mission {
                 flex-direction: column;
                 gap: 1.5rem;
@@ -713,6 +714,7 @@
                 text-align: center;
                 max-width: 100%;
                 flex: none;
+                padding: 1.5rem;
             }
             .values-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -721,6 +723,7 @@
             }
             .value-item {
                 max-width: none;
+                padding: 1rem;
             }
             .services-grid, .gallery-grid {
                 grid-template-columns: 1fr;
@@ -765,10 +768,14 @@
                 max-width: 100%;
             }
             .vm-card {
-                padding: 1.5rem;
+                padding: 1.25rem;
             }
             .vision-mission {
                 gap: 1rem;
+            }
+            .director-image {
+                max-width: 200px;
+                height: 200px;
             }
         }
         /* Smooth Scroll */
@@ -810,7 +817,7 @@
     </section>
     <section id="about" class="fade-in">
         <div class="about-wrapper">
-            <div class="about-content">
+            <div class="about-main-content">
                 <div class="about-text">
                     <h2>About Us</h2>
                     <p>Pitja Engineering (PTY) Ltd is a 100% female black-owned company established in 2017, with a purpose to explore opportunities in the male-dominated engineering field. We employ the highest level of integrity, values, morals, and standards.</p>
