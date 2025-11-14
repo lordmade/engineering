@@ -32,7 +32,6 @@
         /* Header */
         header {
             background: var(--white);
-            backdrop-filter: blur(10px);
             position: fixed;
             width: 100%;
             top: 0;
@@ -45,7 +44,6 @@
         }
         header.scrolled {
             background: var(--primary-orange);
-            box-shadow: var(--shadow-light);
         }
         .nav-container {
             max-width: 1200px;
@@ -70,20 +68,23 @@
             gap: 2rem;
         }
         nav a {
-            color: var(--white);
+            color: var(--dark-gray);
             text-decoration: none;
             font-weight: 500;
             padding: 0.5rem 1rem;
             border-radius: 50px;
             transition: var(--transition);
-            position: relative;
-            background: linear-gradient(135deg, var(--primary-orange), var(--accent-yellow));
-            box-shadow: var(--shadow-light);
         }
         nav a:hover, nav a.active {
-            background: linear-gradient(135deg, var(--secondary-orange), var(--primary-orange));
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
+            color: var(--white);
+            background: var(--primary-orange);
+        }
+        header.scrolled nav a {
+            color: var(--white);
+        }
+        header.scrolled nav a:hover, header.scrolled nav a.active {
+            background: var(--accent-yellow);
+            color: var(--primary-orange);
         }
         .hamburger {
             display: none;
@@ -114,8 +115,7 @@
             color: var(--white);
             position: relative;
             overflow: hidden;
-            padding-top: 90px; /* Offset for fixed header */
-            box-sizing: border-box;
+            padding-top: 80px;
         }
         .hero::before {
             content: '';
@@ -133,59 +133,23 @@
             max-width: 800px;
             padding: 0 2rem;
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
         }
         .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-size: clamp(3rem, 8vw, 5rem);
             font-weight: 300;
             margin-bottom: 1rem;
             letter-spacing: 0.1em;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1s ease-out 0.2s forwards;
-            border-right: 2px solid var(--white);
-            white-space: nowrap;
-            overflow: hidden;
-            animation: typing 3s steps(40, end) 0.2s forwards, blink-caret 0.75s step-end infinite;
-        }
-        .hero h1::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 2px;
-            height: 100%;
-            background: var(--white);
-            animation: blink-caret 0.75s step-end infinite;
-        }
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; opacity: 1; transform: translateY(0); }
-        }
-        @keyframes blink-caret {
-            from, to { border-color: transparent; }
-            50% { border-color: var(--white); }
         }
         .hero p {
             font-size: clamp(1.2rem, 4vw, 1.5rem);
             margin-bottom: 2rem;
             opacity: 0.9;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1s ease-out 3.5s forwards;
         }
         .hero-cta {
             display: flex;
             gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
-            margin-bottom: 3rem;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1s ease-out 3.7s forwards;
         }
         .cta {
             background: var(--white);
@@ -204,52 +168,53 @@
         }
         /* Sections */
         section {
-            padding: 6rem 2rem;
+            padding: 8rem 2rem;
             max-width: 1200px;
             margin: 0 auto;
         }
-        .parallax-section {
-            background: linear-gradient(135deg, rgba(255,102,0,0.1) 0%, rgba(255,215,0,0.05) 100%);
-        }
-        h2 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 600;
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
             color: var(--primary-orange);
             margin-bottom: 3rem;
             text-align: center;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: fadeInUp 0.8s ease-out forwards;
+            letter-spacing: 0.05em;
         }
-        /* About Us Redesigned */
+        /* About Us */
         #about {
             background: var(--white);
+        }
+        .about-hero {
             text-align: center;
-            padding: 6rem 2rem;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(255,102,0,0.05) 0%, rgba(255,215,0,0.02) 100%);
+            border-radius: 20px;
+            margin-bottom: 4rem;
         }
-        .about-wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4rem;
-            width: 100%;
+        .about-hero h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 300;
+            color: var(--primary-orange);
+            margin-bottom: 1rem;
         }
-        .about-main-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3rem;
-            width: 100%;
+        .about-hero p {
+            font-size: 1.2rem;
             max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.8;
+        }
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+            margin-bottom: 4rem;
         }
         .about-text {
             font-size: 1.1rem;
             line-height: 1.8;
-            text-align: center;
+            text-align: left;
             color: var(--dark-gray);
-            margin-bottom: 2rem;
         }
         .about-text p {
             margin-bottom: 1.5rem;
@@ -260,8 +225,6 @@
             flex-direction: column;
             align-items: center;
             gap: 1rem;
-            width: 100%;
-            max-width: 400px;
         }
         .director-image {
             width: 100%;
@@ -285,111 +248,85 @@
             color: var(--light-gray);
             font-size: 1rem;
         }
-        .vm-section {
-            margin: 2rem 0;
+        .purpose-section {
             display: flex;
             justify-content: center;
-            width: 100%;
+            margin-bottom: 4rem;
         }
         .vision-mission {
             display: flex;
             flex-direction: row;
-            gap: 1.5rem;
-            margin: 2rem 0;
-            align-items: center;
-            max-width: 600px;
+            gap: 2rem;
+            max-width: 800px;
             width: 100%;
         }
         .vm-card {
-            background: linear-gradient(135deg, rgba(255,102,0,0.05), rgba(255,215,0,0.02));
-            padding: 2rem;
+            flex: 1;
+            background: var(--white);
+            padding: 2.5rem;
             border-radius: 15px;
-            border-left: 4px solid var(--primary-orange);
+            box-shadow: var(--shadow-light);
             text-align: center;
             transition: var(--transition);
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.8s ease-out forwards;
-            width: 100%;
-            max-width: 500px;
-            flex: 1;
-        }
-        .vm-card:nth-child(1) { animation-delay: 0.2s; }
-        .vm-card:nth-child(2) { animation-delay: 0.4s; }
-        .vm-card:hover {
-            transform: translateX(10px);
-            box-shadow: var(--shadow-light);
         }
         .vm-card h3 {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             color: var(--primary-orange);
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
             justify-content: center;
+            gap: 0.5rem;
         }
         .vm-card i {
-            font-size: 1.5rem;
+            font-size: 2rem;
+            color: var(--secondary-orange);
+        }
+        .vm-card p {
+            font-size: 1rem;
+            opacity: 0.8;
         }
         .values-section {
-            margin-top: 2rem;
-            text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%;
+        }
+        .values-title {
+            font-size: 2rem;
+            color: var(--primary-orange);
+            margin-bottom: 2rem;
         }
         .values-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.8s ease-out 0.6s forwards;
-            justify-content: center;
-            max-width: 800px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
             width: 100%;
         }
         .value-item {
-            background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
-            color: var(--white);
-            padding: 1.5rem;
+            background: var(--white);
+            padding: 2rem;
             border-radius: 15px;
+            box-shadow: var(--shadow-light);
             text-align: center;
-            font-weight: 500;
             transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            max-width: 250px;
-            width: 100%;
-        }
-        .value-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--accent-yellow);
         }
         .value-item:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-hover);
         }
         .value-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            opacity: 0.9;
+            font-size: 3rem;
+            color: var(--primary-orange);
+            margin-bottom: 1rem;
         }
         /* Services */
+        #services {
+            background: linear-gradient(135deg, rgba(255,102,0,0.05) 0%, rgba(255,215,0,0.02) 100%);
+        }
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: fadeInUp 0.8s ease-out forwards;
         }
         .service-card {
             background: var(--white);
@@ -398,32 +335,6 @@
             box-shadow: var(--shadow-light);
             transition: var(--transition);
             text-align: center;
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: slideInUp 0.6s ease-out forwards;
-        }
-        .service-card:nth-child(1) { animation-delay: 0.1s; }
-        .service-card:nth-child(2) { animation-delay: 0.2s; }
-        .service-card:nth-child(3) { animation-delay: 0.3s; }
-        .service-card:nth-child(4) { animation-delay: 0.4s; }
-        .service-card:nth-child(5) { animation-delay: 0.5s; }
-        .service-card:nth-child(6) { animation-delay: 0.6s; }
-        @keyframes slideInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-orange), var(--accent-yellow));
         }
         .service-card:hover {
             transform: translateY(-10px);
@@ -440,33 +351,20 @@
             color: var(--dark-gray);
         }
         /* Gallery */
+        #gallery {
+            background: var(--white);
+        }
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: fadeInUp 0.8s ease-out forwards;
         }
         figure {
-            margin: 0;
-            background: var(--white);
             border-radius: 15px;
             overflow: hidden;
             box-shadow: var(--shadow-light);
             transition: var(--transition);
-            opacity: 0;
-            transform: translateY(30px);
-            animation: slideInUp 0.6s ease-out forwards;
         }
-        figure:nth-child(1) { animation-delay: 0.1s; }
-        figure:nth-child(2) { animation-delay: 0.2s; }
-        figure:nth-child(3) { animation-delay: 0.3s; }
-        figure:nth-child(4) { animation-delay: 0.4s; }
-        figure:nth-child(5) { animation-delay: 0.5s; }
-        figure:nth-child(6) { animation-delay: 0.6s; }
-        figure:nth-child(7) { animation-delay: 0.7s; }
-        figure:nth-child(8) { animation-delay: 0.8s; }
         figure:hover {
             transform: scale(1.02);
         }
@@ -478,19 +376,18 @@
         }
         figcaption {
             padding: 1rem;
-            background: linear-gradient(transparent, rgba(0,0,0,0.05));
+            background: var(--light-gray);
+            color: var(--white);
             font-size: 0.9rem;
-            color: var(--light-gray);
         }
         /* Clients */
+        #clients {
+            background: linear-gradient(135deg, rgba(255,102,0,0.05) 0%, rgba(255,215,0,0.02) 100%);
+        }
         .clients-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
-            margin-top: 2rem;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: fadeInUp 0.8s ease-out forwards;
             justify-content: center;
         }
         .client-logo {
@@ -502,14 +399,7 @@
             background: var(--white);
             border-radius: 10px;
             box-shadow: var(--shadow-light);
-            opacity: 0;
-            transform: translateY(30px);
-            animation: slideInUp 0.6s ease-out forwards;
         }
-        .client-logo:nth-child(1) { animation-delay: 0.1s; }
-        .client-logo:nth-child(2) { animation-delay: 0.2s; }
-        .client-logo:nth-child(3) { animation-delay: 0.3s; }
-        .client-logo:nth-child(4) { animation-delay: 0.4s; }
         .client-logo:hover {
             filter: grayscale(0%);
             transform: translateY(-5px);
@@ -520,16 +410,18 @@
             color: var(--white);
             text-align: center;
             padding: 4rem 2rem 2rem;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: fadeInUp 0.8s ease-out forwards;
         }
         .contact-info {
             max-width: 600px;
             margin: 0 auto 2rem;
         }
+        .contact-info h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
         .contact-info p {
             margin-bottom: 1rem;
+            opacity: 0.9;
         }
         .social-links {
             display: flex;
@@ -551,12 +443,6 @@
                 opacity: 0;
                 transform: translateY(50px);
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @keyframes slideInUp {
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -629,24 +515,6 @@
         @keyframes zoomIn { from { transform: scale(0.5); } to { transform: scale(1); } }
         /* Mobile */
         @media (max-width: 768px) {
-            .about-wrapper {
-                gap: 2rem;
-            }
-            .about-main-content {
-                gap: 2rem;
-            }
-            .about-text {
-                text-align: center;
-                font-size: 1rem;
-                padding: 0 1rem;
-            }
-            .director-section {
-                max-width: 250px;
-            }
-            .director-image {
-                max-width: 250px;
-                height: 250px;
-            }
             header {
                 height: 70px;
             }
@@ -673,13 +541,11 @@
             }
             nav a {
                 text-align: center;
-                margin: 0;
                 display: block;
             }
             .hero {
-                height: 100vh;
                 padding-top: 70px;
-                padding: 0 1rem 2rem;
+                padding: 0 1rem;
             }
             .hero h1 {
                 font-size: clamp(2rem, 6vw, 3rem);
@@ -689,41 +555,43 @@
             }
             .hero-cta {
                 flex-direction: column;
-                align-items: center;
                 gap: 0.75rem;
             }
             .cta {
-                padding: 0.75rem 2rem;
-                font-size: 0.9rem;
                 width: 100%;
                 max-width: 250px;
             }
             section {
                 padding: 4rem 1rem;
             }
-            h2 {
-                font-size: clamp(1.75rem, 4vw, 2.5rem);
+            .section-title {
+                font-size: clamp(2rem, 5vw, 3rem);
+            }
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+            .about-text {
+                text-align: center;
+                font-size: 1rem;
+            }
+            .purpose-section {
                 margin-bottom: 2rem;
             }
             .vision-mission {
                 flex-direction: column;
                 gap: 1.5rem;
-                align-items: center;
             }
             .vm-card {
-                text-align: center;
-                max-width: 100%;
-                flex: none;
                 padding: 1.5rem;
             }
             .values-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 0.75rem;
-                justify-content: center;
+                gap: 1rem;
             }
             .value-item {
-                max-width: none;
-                padding: 1rem;
+                padding: 1.5rem;
             }
             .services-grid, .gallery-grid {
                 grid-template-columns: 1fr;
@@ -734,9 +602,6 @@
             }
             .service-icon {
                 font-size: 2.5rem;
-            }
-            .service-card h3 {
-                font-size: 1.3rem;
             }
             .gallery-image {
                 height: 200px;
@@ -752,33 +617,15 @@
             footer {
                 padding: 3rem 1rem 1rem;
             }
-            .contact-info {
-                font-size: 0.9rem;
-            }
         }
         @media (max-width: 480px) {
             .values-grid, .clients-grid {
                 grid-template-columns: 1fr;
-                justify-content: center;
-            }
-            .hero-cta {
-                flex-direction: column;
-            }
-            .value-item {
-                max-width: 100%;
-            }
-            .vm-card {
-                padding: 1.25rem;
             }
             .vision-mission {
                 gap: 1rem;
             }
-            .director-image {
-                max-width: 200px;
-                height: 200px;
-            }
         }
-        /* Smooth Scroll */
         html { scroll-behavior: smooth; }
     </style>
 </head>
@@ -816,51 +663,14 @@
         </div>
     </section>
     <section id="about" class="fade-in">
-        <div class="about-wrapper">
-            <div class="about-main-content">
-                <div class="about-text">
-                    <h2>About Us</h2>
-                    <p>Pitja Engineering (PTY) Ltd is a 100% female black-owned company established in 2017, with a purpose to explore opportunities in the male-dominated engineering field. We employ the highest level of integrity, values, morals, and standards.</p>
-                    <p>The director of Pitja Engineering (PTY) Ltd, Ellen Shabangu, has acquired many leadership skills through programs and roles in a number of community initiatives. This experience provides a significant advantage to the company, as her knowledge and work ethic will add value in regard to leadership and experience.</p>
-                    <p>Ellen is a woman who believes greatly in community upliftment. She has engaged in numerous community activities, such as crime awareness programs in Mapela and the Nkone community. She is renowned for her roles in bringing local women into agricultural projects and venturing into cosmetic and kitchen businesses historically. Refusing to be limited, she has broken into the male-dominated engineering world. Under Ellen's leadership, Pitja now boasts over one year of unbroken service to one of the reputable mines.</p>
-                </div>
-                <div class="vm-section">
-                    <div class="vision-mission">
-                        <div class="vm-card">
-                            <h3><i class="fas fa-eye"></i> Vision Statement</h3>
-                            <p>We ensure efficiency through quality service that we offer our clients.</p>
-                        </div>
-                        <div class="vm-card">
-                            <h3><i class="fas fa-bullseye"></i> Mission Statement</h3>
-                            <p>Pitja Engineering (PTY) Ltd is heading towards being recognized at the same level as top engineering companies in the country.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="values-section">
-                    <h3 style="font-size: 1.8rem; color: var(--primary-orange); margin-bottom: 1rem;">Our Core Values</h3>
-                    <div class="values-grid">
-                        <div class="value-item">
-                            <i class="fas fa-lightbulb value-icon"></i>
-                            <div>Innovative thinking</div>
-                        </div>
-                        <div class="value-item">
-                            <i class="fas fa-handshake value-icon"></i>
-                            <div>Integrity and Honesty</div>
-                        </div>
-                        <div class="value-item">
-                            <i class="fas fa-clock value-icon"></i>
-                            <div>Reliability & Honesty</div>
-                        </div>
-                        <div class="value-item">
-                            <i class="fas fa-ruler value-icon"></i>
-                            <div>Precision</div>
-                        </div>
-                        <div class="value-item">
-                            <i class="fas fa-users value-icon"></i>
-                            <div>Customer based</div>
-                        </div>
-                    </div>
-                </div>
+        <div class="about-hero">
+            <h2>Our Purpose</h2>
+            <p>Pitja Engineering (PTY) Ltd is a 100% female black-owned company established in 2017, with a purpose to explore opportunities in the male-dominated engineering field. We employ the highest level of integrity, values, morals, and standards.</p>
+        </div>
+        <div class="about-content">
+            <div class="about-text">
+                <p>The director of Pitja Engineering (PTY) Ltd, Ellen Shabangu, has acquired many leadership skills through programs and roles in a number of community initiatives. This experience provides a significant advantage to the company, as her knowledge and work ethic will add value in regard to leadership and experience.</p>
+                <p>Ellen is a woman who believes greatly in community upliftment. She has engaged in numerous community activities, such as crime awareness programs in Mapela and the Nkone community. She is renowned for her roles in bringing local women into agricultural projects and venturing into cosmetic and kitchen businesses historically. Refusing to be limited, she has broken into the male-dominated engineering world. Under Ellen's leadership, Pitja now boasts over one year of unbroken service to one of the reputable mines.</p>
             </div>
             <div class="director-section">
                 <img src="https://via.placeholder.com/300x300/FF6600/FFFFFF?text=Ellen+Shabangu" alt="Ellen Shabangu, Director" class="director-image">
@@ -868,9 +678,46 @@
                 <p class="director-title">Director & Founder</p>
             </div>
         </div>
+        <div class="purpose-section">
+            <div class="vision-mission">
+                <div class="vm-card">
+                    <h3><i class="fas fa-eye"></i> Vision Statement</h3>
+                    <p>We ensure efficiency through quality service that we offer our clients.</p>
+                </div>
+                <div class="vm-card">
+                    <h3><i class="fas fa-bullseye"></i> Mission Statement</h3>
+                    <p>Pitja Engineering (PTY) Ltd is heading towards being recognized at the same level as top engineering companies in the country.</p>
+                </div>
+            </div>
+        </div>
+        <div class="values-section">
+            <h3 class="values-title">Our Core Values</h3>
+            <div class="values-grid">
+                <div class="value-item">
+                    <i class="fas fa-lightbulb value-icon"></i>
+                    <div>Innovative thinking</div>
+                </div>
+                <div class="value-item">
+                    <i class="fas fa-handshake value-icon"></i>
+                    <div>Integrity and Honesty</div>
+                </div>
+                <div class="value-item">
+                    <i class="fas fa-clock value-icon"></i>
+                    <div>Reliability & Honesty</div>
+                </div>
+                <div class="value-item">
+                    <i class="fas fa-ruler value-icon"></i>
+                    <div>Precision</div>
+                </div>
+                <div class="value-item">
+                    <i class="fas fa-users value-icon"></i>
+                    <div>Customer based</div>
+                </div>
+            </div>
+        </div>
     </section>
     <section id="services" class="fade-in">
-        <h2>Our Services</h2>
+        <h2 class="section-title">Our Services</h2>
         <div class="services-grid">
             <div class="service-card">
                 <i class="fas fa-cogs service-icon"></i>
@@ -904,9 +751,9 @@
             </div>
         </div>
     </section>
-    <section id="gallery" class="parallax-section fade-in">
-        <h2>Our Gallery</h2>
-        <p style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">Explore our projects and engineering excellence through these images.</p>
+    <section id="gallery" class="fade-in">
+        <h2 class="section-title">Our Gallery</h2>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem; font-size: 1.1rem; opacity: 0.8;">Explore our projects and engineering excellence through these images.</p>
         <div class="gallery-grid">
             <figure onclick="openLightbox('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop', 'Hydraulic cylinder assembly in workshop')">
                 <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop" alt="Hydraulic cylinder assembly in workshop" class="gallery-image">
@@ -942,8 +789,8 @@
             </figure>
         </div>
     </section>
-    <section id="clients" class="parallax-section fade-in">
-        <h2>Our Clients</h2>
+    <section id="clients" class="fade-in">
+        <h2 class="section-title">Our Clients</h2>
         <div class="clients-grid">
             <img src="https://via.placeholder.com/150x100/FF6600/white?text=Anglo+American" alt="Anglo American" class="client-logo">
             <img src="https://via.placeholder.com/150x100/FF6600/white?text=Ivanplats" alt="Ivanplats" class="client-logo">
@@ -1000,7 +847,7 @@
             link.addEventListener('click', () => {
                 document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
                 link.classList.add('active');
-                toggleMenu(); // Close mobile menu on click
+                toggleMenu();
             });
         });
         // Lightbox
