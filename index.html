@@ -132,7 +132,6 @@
             z-index: 2;
             max-width: 800px;
             padding: 0 2rem;
-            animation: fadeInUp 1s ease-out;
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -144,11 +143,39 @@
             font-weight: 300;
             margin-bottom: 1rem;
             letter-spacing: 0.1em;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease-out 0.2s forwards;
+            border-right: 2px solid var(--white);
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 3s steps(40, end) 0.2s forwards, blink-caret 0.75s step-end infinite;
+        }
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: var(--white);
+            animation: blink-caret 0.75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; opacity: 1; transform: translateY(0); }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--white); }
         }
         .hero p {
             font-size: clamp(1.2rem, 4vw, 1.5rem);
             margin-bottom: 2rem;
             opacity: 0.9;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease-out 3.5s forwards;
         }
         .hero-cta {
             display: flex;
@@ -156,6 +183,9 @@
             justify-content: center;
             flex-wrap: wrap;
             margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease-out 3.7s forwards;
         }
         .cta {
             background: var(--white);
