@@ -133,6 +133,20 @@
             max-width: 800px;
             padding: 0 2rem;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+        .hero-logo {
+            height: 120px;
+            width: auto;
+            opacity: 0.9;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+        .hero-logo img {
+            height: 100%;
+            width: auto;
         }
         .hero h1 {
             font-size: clamp(3rem, 8vw, 5rem);
@@ -488,6 +502,61 @@
         .social-links a:hover {
             color: var(--accent-yellow);
         }
+        /* Custom Alert Modal */
+        .custom-alert {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+        .custom-alert.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .alert-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: var(--shadow-hover);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .alert-title {
+            font-size: 1.5rem;
+            color: var(--primary-orange);
+            margin-bottom: 1rem;
+        }
+        .alert-message {
+            font-size: 1rem;
+            color: var(--dark-gray);
+            margin-bottom: 1.5rem;
+        }
+        .alert-close {
+            background: var(--primary-orange);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .alert-close:hover {
+            background: var(--secondary-orange);
+            transform: translateY(-2px);
+        }
         /* Animations */
         @keyframes fadeInUp {
             from {
@@ -598,6 +667,9 @@
                 padding-top: 70px;
                 padding: 0 1rem;
             }
+            .hero-logo {
+                height: 80px;
+            }
             .hero h1 {
                 font-size: clamp(2rem, 6vw, 3rem);
             }
@@ -671,6 +743,10 @@
             footer {
                 padding: 3rem 1rem 1rem;
             }
+            .alert-content {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
         }
         @media (max-width: 480px) {
             .values-grid, .clients-grid {
@@ -687,7 +763,7 @@
     <header id="header">
         <div class="nav-container">
             <a href="#home" class="logo">
-                <img src="https://i.postimg.cc/C15GcRpW/PITJA-LOGO-removebg-preview.png" alt="Pitja Engineering Logo">
+                <img src="https://i.postimg.cc/wT55BcWy/PITJA-LOGO.png" alt="Pitja Engineering Logo">
             </a>
             <nav>
                 <ul>
@@ -708,11 +784,14 @@
     </header>
     <section id="home" class="hero">
         <div class="hero-content">
+            <div class="hero-logo">
+                <img src="https://i.postimg.cc/wT55BcWy/PITJA-LOGO.png" alt="Pitja Engineering Logo">
+            </div>
             <h1>Brewed To Fuel Efficiency</h1>
             <p>Engineering excellence for mining and industrial efficiency</p>
             <div class="hero-cta">
                 <a href="#services" class="cta">Explore Services</a>
-                <a href="#" class="cta" onclick="alert('Redirecting to Job Portal - Coming Soon!')">Apply for Jobs</a>
+                <a href="#" class="cta job-cta">Apply for Jobs</a>
             </div>
         </div>
     </section>
@@ -890,6 +969,14 @@
         </div>
         <p>&copy; 2025 Pitja Engineering (PTY) Ltd. REG NO: 2017/4314/07 | VAT NO: 4002289348. All rights reserved.</p>
     </footer>
+    <!-- Custom Alert Modal -->
+    <div id="customAlert" class="custom-alert">
+        <div class="alert-content">
+            <h2 class="alert-title">Job Portal</h2>
+            <p class="alert-message">Redirecting to Job Portal - Coming Soon!</p>
+            <button class="alert-close" onclick="closeCustomAlert()">OK</button>
+        </div>
+    </div>
     <!-- Lightbox Modal -->
     <div id="lightboxModal" class="lightbox-modal">
         <div class="lightbox-content">
@@ -927,6 +1014,18 @@
                 link.classList.add('active');
                 toggleMenu();
             });
+        });
+        // Custom Alert Functions
+        function showCustomAlert() {
+            document.getElementById('customAlert').classList.add('active');
+        }
+        function closeCustomAlert() {
+            document.getElementById('customAlert').classList.remove('active');
+        }
+        // Job CTA
+        document.querySelector('.job-cta').addEventListener('click', (e) => {
+            e.preventDefault();
+            showCustomAlert();
         });
         // Lightbox
         let currentImageIndex = 0;
