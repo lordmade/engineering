@@ -3,27 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pitja Engineering - Brewed To Fuel Efficiency</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <title>Pitja Engineering (PTY) Ltd - Brewed To Fuel Efficiency</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+        :root {
+            --primary-orange: #FF6600;
+            --secondary-orange: #E55A00;
+            --accent-yellow: #FFD700;
+            --dark-gray: #333;
+            --light-gray: #666;
+            --white: #fff;
+            --shadow-light: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 12px 40px rgba(255,102,0,0.15);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * {
             margin: 0;
             padding: 0;
-            color: #333;
-            line-height: 1.6;
-            text-align: center; /* Global center alignment */
+            box-sizing: border-box;
         }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            overflow-x: hidden;
+        }
+        /* Header */
         header {
-            background-color: #FF6600; /* Orange theme for energy and efficiency */
-            color: white;
-            padding: 0.5rem 0;
+            background: rgba(255, 102, 0, 0.95);
+            backdrop-filter: blur(10px);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+            transition: var(--transition);
+        }
+        header.scrolled {
+            background: rgba(255, 102, 0, 1);
+            box-shadow: var(--shadow-light);
         }
         .nav-container {
             max-width: 1200px;
@@ -31,322 +49,192 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 2rem;
+            padding: 1rem 2rem;
         }
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--white);
             text-decoration: none;
-            color: white;
         }
         nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
             display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        nav li {
-            margin: 0 0.5rem;
-            perspective: 1000px; /* For 3D flip effect */
+            list-style: none;
+            gap: 2rem;
         }
         nav a {
-            color: white;
+            color: var(--white);
             text-decoration: none;
-            padding: 0.75rem 1.25rem; /* Increased padding for better touch targets */
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            font-weight: 500; /* Semi-bold for polish */
-            display: block; /* Better for mobile */
-            transform-style: preserve-3d; /* Enable 3D transforms */
-            transform: rotateY(0deg); /* Initial state */
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: var(--transition);
+            position: relative;
         }
-        nav a:hover {
-            background-color: #E55A00; /* Darker orange on hover */
-            color: white;
-            transform: rotateY(180deg); /* Flip on Y-axis for card-like flip */
-            box-shadow: 0 4px 12px rgba(255,102,0,0.3);
-            /* Backface visibility hidden for clean flip */
-            backface-visibility: hidden;
+        nav a:hover, nav a.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
-        nav a::after { /* Pseudo-element for back side if needed, but simple flip for now */
-            content: attr(data-text); /* Could customize back text */
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #E55A00;
-            transform: rotateY(180deg);
-            backface-visibility: hidden;
-        }
-        /* Hamburger Menu Styles */
         .hamburger {
-            display: none; /* Hidden on desktop */
+            display: none;
             flex-direction: column;
             cursor: pointer;
-            padding: 0.5rem;
+            gap: 0.25rem;
         }
         .hamburger span {
             width: 25px;
             height: 3px;
-            background-color: white;
-            margin: 3px 0;
-            transition: 0.3s;
-            border-radius: 2px;
+            background: var(--white);
+            transition: var(--transition);
         }
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(-45deg) translate(-5px, 6px);
-        }
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(45deg) translate(-5px, -6px);
-        }
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            left: -100%; /* Hidden off-screen */
-            width: 100%;
-            height: 100vh;
-            background-color: #FF6600;
-            z-index: 999;
-            transition: left 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .mobile-menu.active {
-            left: 0; /* Slide in */
-        }
-        .mobile-menu ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        .mobile-menu li {
-            margin: 1rem 0;
-        }
-        .mobile-menu a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
-            padding: 1rem 2rem;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-        .mobile-menu a:hover {
-            background-color: #E55A00;
-            transform: scale(1.05);
-        }
-        .close-btn {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
-            text-decoration: none;
-        }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+        /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, rgba(255,102,0,0.7) 0%, rgba(255,165,0,0.5) 50%, rgba(255,255,224,0.3) 100%); /* Orange/yellow overlay for energy theme */
-            min-height: 100vh;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--accent-yellow) 100%);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 2rem;
-            margin-top: 60px;
-            color: white;
+            color: var(--white);
             position: relative;
-            overflow: hidden; /* For any potential overflow */
+            overflow: hidden;
         }
-        .parallax-bg {
+        .hero::before {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed; /* CSS parallax effect */
-            z-index: -2;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-        .parallax-bg.active {
-            opacity: 1;
-        }
-        #engineering-model {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-        .hero-content {
-            max-width: 900px;
-            position: relative;
+            background: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover;
+            opacity: 0.3;
             z-index: 1;
         }
+        .hero-content {
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
         .hero h1 {
-            font-size: clamp(3rem, 8vw, 5rem);
-            margin-bottom: 2rem;
-            font-weight: 300; /* Lighter for modern feel */
-            letter-spacing: 2px;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.5); /* Stronger shadow for legibility over images */
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+            letter-spacing: 0.1em;
+        }
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
         }
         .hero-cta {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-            margin-top: 3rem;
-        }
-        .cta {
-            display: inline-block;
-            background: rgba(255,255,255,0.9); /* Semi-transparent for overlay */
-            color: #FF6600;
-            padding: clamp(1rem, 2.5vw, 1.25rem) clamp(2rem, 5vw, 2.5rem);
-            text-decoration: none;
-            border-radius: 50px; /* Pill shape for modern CTAs */
-            font-weight: bold;
-            font-size: clamp(1rem, 2.5vw, 1.1rem);
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-            width: fit-content;
-        }
-        .cta:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-            background: #fff;
-        }
-        .hero-image-group {
-            display: flex;
+            gap: 1rem;
             justify-content: center;
-            gap: 2rem;
-            margin: 3rem 0;
             flex-wrap: wrap;
         }
-        .hero-image {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease;
+        .cta {
+            background: var(--white);
+            color: var(--primary-orange);
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: var(--shadow-light);
         }
-        .hero-image:hover {
-            transform: scale(1.1);
+        .cta:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
         }
-        .carousel-dots {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 2rem;
-        }
-        .carousel-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: rgba(255,255,255,0.5);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .carousel-dot.active {
-            background-color: white;
-            transform: scale(1.2);
-        }
+        /* Sections */
         section {
-            padding: 5rem 2rem;
+            padding: 6rem 2rem;
             max-width: 1200px;
             margin: 0 auto;
-            text-align: center; /* Ensure sections are centered */
-            position: relative; /* For parallax layers if added */
         }
-        /* Parallax for other sections (optional enhancement) */
         .parallax-section {
-            background: linear-gradient(135deg, rgba(255,102,0,0.3) 0%, rgba(255,165,0,0.2) 50%);
-            background-attachment: fixed;
-            background-size: cover;
+            background: linear-gradient(135deg, rgba(255,102,0,0.1) 0%, rgba(255,215,0,0.05) 100%);
         }
-        .section-grid {
+        h2 {
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--primary-orange);
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        /* Services */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        .service-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--accent-yellow));
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+        .service-icon {
+            font-size: 3rem;
+            color: var(--primary-orange);
+            margin-bottom: 1rem;
+        }
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark-gray);
+        }
+        /* Gallery */
+        .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            justify-items: center; /* Center grid items */
+            gap: 1.5rem;
         }
-        .business-header { /* Specific class for centering "Our Services" */
-            text-align: center;
-            margin-bottom: 3rem;
-            width: 100%;
-        }
-        .business-header h2 {
-            font-size: 2.5rem;
-            color: #FF6600;
+        figure {
             margin: 0;
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
         }
-        .card {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08); /* Softer shadow */
-            transition: all 0.3s ease;
+        figure:hover {
+            transform: scale(1.02);
+        }
+        .gallery-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
             cursor: pointer;
-            border-left: 5px solid transparent;
-            max-width: 350px; /* Constrain for better centering */
         }
-        .card:hover {
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 12px 40px rgba(255,102,0,0.15);
-            background-color: #fff5e6; /* Light orange tint */
-            border-left-color: #FF6600;
+        figcaption {
+            padding: 1rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.05));
+            font-size: 0.9rem;
+            color: var(--light-gray);
         }
-        .card h3 {
-            color: #333;
-            margin-bottom: 1rem;
-            transition: color 0.3s ease;
-            font-size: 1.5rem;
-        }
-        .card:hover h3 {
-            color: #FF6600;
-        }
-        /* Card-specific hover colors based on services */
-        .card-hydraulic { border-left-color: #FF6600; }
-        .card-hydraulic:hover {
-            background-color: #fff5e6;
-            box-shadow: 0 12px 40px rgba(255,102,0,0.2);
-        }
-        .card-hydraulic:hover h3 { color: #FF6600; }
-        .card-conveyor { border-left-color: #FFD700; }
-        .card-conveyor:hover {
-            background-color: #fff8dc;
-            box-shadow: 0 12px 40px rgba(255,215,0,0.3);
-        }
-        .card-conveyor:hover h3 { color: #FFD700; }
-        .card-boring { border-left-color: #FFA500; }
-        .card-boring:hover {
-            background-color: #fdf5e6;
-            box-shadow: 0 12px 40px rgba(255,165,0,0.2);
-        }
-        .card-boring:hover h3 { color: #FFA500; }
-        footer {
-            background-color: #FF6600;
-            color: white;
-            text-align: center;
-            padding: 2.5rem;
-            margin-top: 4rem;
-        }
+        /* Clients */
         .clients-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -357,56 +245,65 @@
             max-width: 150px;
             height: auto;
             filter: grayscale(100%);
-            transition: filter 0.3s ease;
+            transition: var(--transition);
+            padding: 1rem;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: var(--shadow-light);
         }
         .client-logo:hover {
             filter: grayscale(0%);
+            transform: translateY(-5px);
         }
-        .values-list {
-            list-style: none;
-            padding: 0;
+        /* Footer */
+        footer {
+            background: var(--primary-orange);
+            color: var(--white);
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+        }
+        .contact-info {
             max-width: 600px;
-            margin: 0 auto;
+            margin: 0 auto 2rem;
         }
-        .values-list li {
-            background: #fff;
-            margin: 1rem 0;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .contact-info p {
+            margin-bottom: 1rem;
         }
-        /* Gallery Styles */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
             margin-top: 2rem;
         }
-        figure {
-            margin: 0;
-            display: flex;
-            flex-direction: column;
+        .social-links a {
+            color: var(--white);
+            font-size: 1.5rem;
+            transition: var(--transition);
         }
-        .gallery-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            cursor: pointer;
+        .social-links a:hover {
+            color: var(--accent-yellow);
         }
-        .gallery-image:hover {
-            transform: scale(1.05);
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        figcaption {
-            text-align: center;
-            padding-top: 0.5rem;
-            font-size: 0.9rem;
-            color: #666;
-            font-style: italic;
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: var(--transition);
         }
-        /* Lightbox Modal Styles */
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Lightbox */
         .lightbox-modal {
             display: none;
             position: fixed;
@@ -432,296 +329,199 @@
         .lightbox-image {
             max-width: 100%;
             max-height: 100%;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(255,102,0,0.5);
+            border-radius: 10px;
         }
         .close-lightbox {
             position: absolute;
             top: -40px;
             right: 0;
-            color: white;
+            color: var(--white);
             font-size: 2.5rem;
             cursor: pointer;
-            z-index: 2001;
         }
         .close-lightbox:hover {
-            color: #FF6600;
+            color: var(--primary-orange);
         }
         .prev-btn, .next-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background-color: rgba(255,102,0,0.7);
-            color: white;
+            background: rgba(255,102,0,0.7);
+            color: var(--white);
             border: none;
             padding: 1rem;
             cursor: pointer;
             font-size: 1.5rem;
             border-radius: 50%;
-            transition: background-color 0.3s;
         }
-        .prev-btn {
-            left: -50px;
-        }
-        .next-btn {
-            right: -50px;
-        }
-        .prev-btn:hover, .next-btn:hover {
-            background-color: #FF6600;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes zoomIn {
-            from { transform: scale(0.5); }
-            to { transform: scale(1); }
-        }
-        /* Media Queries for Responsiveness */
+        .prev-btn { left: -50px; }
+        .next-btn { right: -50px; }
+        .prev-btn:hover, .next-btn:hover { background: var(--primary-orange); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zoomIn { from { transform: scale(0.5); } to { transform: scale(1); } }
+        /* Mobile */
         @media (max-width: 768px) {
-            .nav-container nav { /* Hide top nav on mobile */
-                display: none;
-            }
-            .hamburger { /* Show hamburger */
-                display: flex;
-            }
-            nav a:hover {
-                transform: rotateY(0deg); /* Disable flip on mobile for usability */
-            }
-            .hero {
-                min-height: 90vh;
-                padding: 1rem;
-                justify-content: flex-start;
-                padding-top: 5rem;
-            }
-            .parallax-bg {
-                background-attachment: scroll; /* Disable fixed parallax on mobile for performance */
-            }
-            .parallax-section {
-                background-attachment: scroll;
-            }
-            .hero h1 {
-                margin-top: 1rem;
-            }
-            .hero-cta {
-                gap: 1rem;
-                margin-top: 2rem;
-            }
-            .hero-image-group {
-                gap: 1rem;
-                margin: 2rem 0;
-            }
-            .hero-image {
-                width: 80px;
-                height: 80px;
-            }
-            .carousel-dots {
-                gap: 0.3rem;
-            }
-            .carousel-dot {
-                width: 10px;
-                height: 10px;
-            }
-            .card:hover {
-                transform: translateY(-3px) scale(1.02);
-            }
-            .business-header h2 {
-                font-size: 2rem;
-            }
-            .gallery-grid {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            }
-            .prev-btn, .next-btn {
-                left: 10px;
-                right: 10px;
-                padding: 0.5rem;
-                font-size: 1rem;
-            }
-            .prev-btn {
-                left: 10px;
-            }
-            .next-btn {
-                right: 10px;
-            }
-            .close-lightbox {
-                top: -30px;
-                font-size: 2rem;
-            }
+            .hamburger { display: flex; }
+            nav ul { display: none; }
+            .hero-cta { flex-direction: column; align-items: center; }
+            .services-grid, .gallery-grid { grid-template-columns: 1fr; }
+            .clients-grid { grid-template-columns: repeat(2, 1fr); }
         }
-        @media (max-width: 480px) {
-            .hero {
-                padding: 0.5rem;
-                padding-top: 5rem;
-            }
-            .cta {
-                display: block;
-                margin: 1rem auto;
-                width: fit-content;
-            }
-            .card {
-                max-width: 100%;
-            }
-            .hero-image-group {
-                flex-direction: column;
-                align-items: center;
-            }
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-            .lightbox-content {
-                max-width: 95%;
-                max-height: 95%;
-            }
-        }
+        /* Smooth Scroll */
+        html { scroll-behavior: smooth; }
     </style>
 </head>
 <body>
-    <header>
+    <header id="header">
         <div class="nav-container">
             <a href="#home" class="logo">Pitja Engineering (PTY) Ltd</a>
             <nav>
                 <ul>
-                    <li><a href="#home" data-text="Home">Home</a></li>
-                    <li><a href="#about" data-text="About">About</a></li>
-                    <li><a href="#services" data-text="Services">Services</a></li>
-                    <li><a href="#gallery" data-text="Gallery">Gallery</a></li>
-                    <li><a href="#clients" data-text="Clients">Clients</a></li>
-                    <li><a href="#contact" data-text="Contact">Contact</a></li>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#clients">Clients</a></li>
+                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
-            <div class="hamburger" onclick="toggleMobileMenu()">
+            <div class="hamburger" onclick="toggleMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
         </div>
     </header>
-    <div id="mobileMenu" class="mobile-menu">
-        <a href="#" class="close-btn" onclick="toggleMobileMenu()">&times;</a>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#gallery">Gallery</a></li>
-            <li><a href="#clients">Clients</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </div>
+
     <section id="home" class="hero">
-        <div class="parallax-bg active" id="parallaxBg1" style="background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');"></div>
-        <div class="parallax-bg" id="parallaxBg2" style="background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');"></div>
-        <div class="parallax-bg" id="parallaxBg3" style="background-image: url('https://i.postimg.cc/zXMJvnrr/engineering-team-managing-assembly-lines-conveyor-belts-automated-factory.jpg');"></div>
-        <div class="parallax-bg" id="parallaxBg4" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2071&q=80');"></div>
-        <div id="engineering-model"></div>
         <div class="hero-content">
             <h1>Brewed To Fuel Efficiency</h1>
             <p>Engineering excellence for mining and industrial efficiency</p>
-            <div class="hero-image-group">
-                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=200&h=200&fit=crop&crop=face" alt="Hydraulic cylinder assembly" class="hero-image">
-                <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=200&h=200&fit=crop&crop=face" alt="Conveyor belt repair" class="hero-image">
-                <img src="https://i.postimg.cc/zXMJvnrr/engineering-team-managing-assembly-lines-conveyor-belts-automated-factory.jpg?w=200&h=200&fit=crop&crop=face" alt="Line boring operation" class="hero-image">
-            </div>
             <div class="hero-cta">
-                <a href="#services" class="cta">Explore Our Services</a>
+                <a href="#services" class="cta">Explore Services</a>
                 <a href="#contact" class="cta">Get In Touch</a>
             </div>
-            <div class="carousel-dots">
-                <span class="carousel-dot active" onclick="goToSlide(0)"></span>
-                <span class="carousel-dot" onclick="goToSlide(1)"></span>
-                <span class="carousel-dot" onclick="goToSlide(2)"></span>
-                <span class="carousel-dot" onclick="goToSlide(3)"></span>
-            </div>
         </div>
     </section>
-    <section id="about" class="parallax-section">
+
+    <section id="about" class="parallax-section fade-in">
         <h2>About Us</h2>
-        <p>Pitja Engineering (PTY) Ltd is 100% female black owned company established in 2017, with a purpose to explore opportunities in the male dominated values, morals and standards. We employ the highest level of integrity, values, morals and standards.</p>
-        <p>The director of Pitja Engineering (PTY) Ltd Ellen Shabangu acquired many leadership skills through programs she played in a number of community roles which she played in a advantage of the company because her knowledge and work to the combined will add value to the company in regard to leadership. experience</p>
-        <p>Ellen is a woman who believes greatly in community upliftment. she has done a lot of community activities like engaging crime awareness to Mapela and community as a whole. Nkone, as effect on roles known by the Mapela bringing local women into Agricultural projects. she played, venture into cosmetic an kitchen businesses historically. She refused to for females. Pitja, through Ellen's leadership now has over 1 year unbroken service to one of the reputable mines.</p>
-        <h3>Vision Statement</h3>
+        <p>Pitja Engineering (PTY) Ltd is a 100% female black-owned company established in 2017, with a purpose to explore opportunities in the male-dominated engineering field. We employ the highest level of integrity, values, morals, and standards.</p>
+        <p>Director Ellen Shabangu has acquired many leadership skills through community roles, adding value to the company in leadership and experience. Ellen believes in community upliftment, engaging in activities like crime awareness in Mapela and Nkone, bringing local women into agricultural projects, and venturing into cosmetic and kitchen businesses. Through her leadership, Pitja now has over 1 year of unbroken service to reputable mines.</p>
+        <h3>Vision</h3>
         <p>We ensure efficiency through quality service that we offer our clients.</p>
-        <h3>Mission Statement</h3>
-        <p>Pitja Engineering (PTY) Ltd is heading towards quantified at the same weight as top Engineering companies in the country.</p>
+        <h3>Mission</h3>
+        <p>Pitja Engineering (PTY) Ltd is heading towards being quantified at the same weight as top engineering companies in the country.</p>
         <h3>Our Values</h3>
-        <ul class="values-list">
-            <li>Innovative thinking</li>
-            <li>Integrity and Honesty</li>
-            <li>Reliability & Honesty</li>
-            <li>Precision</li>
-            <li>Customer based</li>
+        <ul style="list-style: none; max-width: 600px; margin: 2rem auto; padding: 0;">
+            <li style="background: var(--white); margin: 1rem 0; padding: 1rem; border-radius: 10px; box-shadow: var(--shadow-light);">Innovative thinking</li>
+            <li style="background: var(--white); margin: 1rem 0; padding: 1rem; border-radius: 10px; box-shadow: var(--shadow-light);">Integrity and Honesty</li>
+            <li style="background: var(--white); margin: 1rem 0; padding: 1rem; border-radius: 10px; box-shadow: var(--shadow-light);">Reliability & Honesty</li>
+            <li style="background: var(--white); margin: 1rem 0; padding: 1rem; border-radius: 10px; box-shadow: var(--shadow-light);">Precision</li>
+            <li style="background: var(--white); margin: 1rem 0; padding: 1rem; border-radius: 10px; box-shadow: var(--shadow-light);">Customer based</li>
         </ul>
     </section>
-    <section id="services">
-        <div class="business-header">
-            <h2>Our Services</h2>
-        </div>
-        <div class="section-grid">
-            <div class="card card-hydraulic">
+
+    <section id="services" class="fade-in">
+        <h2>Our Services</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fas fa-cogs service-icon"></i>
                 <h3>Hydraulic Cylinders</h3>
                 <p>Assemble cylinders from scratch to point of use. Tested for quality and efficiency.</p>
             </div>
-            <div class="card card-conveyor">
-                <h3>Conveyor Belts</h3>
-                <p>Supply new belts, rollers, guides, guards. Engineering repairs to infrastructure.</p>
-            </div>
-            <div class="card card-boring">
-                <h3>Line Boring</h3>
-                <p>Perfectly straight boring of propeller shafts, stern gears, gearboxes.</p>
-            </div>
-        </div>
-        <div class="section-grid" style="margin-top: 3rem;">
-            <div class="card card-hydraulic">
+            <div class="service-card">
+                <i class="fas fa-tools service-icon"></i>
                 <h3>Hoses and Fittings</h3>
                 <p>Supply and install to hydraulic sections. Connect hoses to components, valves, actuators.</p>
             </div>
-            <div class="card card-conveyor">
+            <div class="service-card">
+                <i class="fas fa-conveyor-belt service-icon"></i>
+                <h3>Conveyor Belts</h3>
+                <p>Supply new belts, rollers, guides, guards. Engineering repairs to infrastructure.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-drill service-icon"></i>
+                <h3>Line Boring</h3>
+                <p>Perfectly straight boring of propeller shafts, stern gears, gearboxes.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-truck service-icon"></i>
                 <h3>Undercarriage</h3>
                 <p>Supply new sideframes, final drives, rollers, sprockets, links.</p>
             </div>
-            <div class="card card-boring">
+            <div class="service-card">
+                <i class="fas fa-wrench service-icon"></i>
                 <h3>On-Site Duties</h3>
                 <p>Field services, shutdown maintenance, rebuilds of machinery.</p>
             </div>
         </div>
     </section>
-    <section id="gallery" class="parallax-section">
+
+    <section id="gallery" class="parallax-section fade-in">
         <h2>Our Gallery</h2>
         <p>Explore our projects and engineering excellence through these images.</p>
         <div class="gallery-grid">
-            <figure>
-                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop" alt="Hydraulic cylinder assembly in workshop" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+            <figure onclick="openLightbox('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop', 'Hydraulic cylinder assembly in workshop')">
+                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop" alt="Hydraulic cylinder assembly in workshop" class="gallery-image">
                 <figcaption>Hydraulic cylinder assembly in workshop</figcaption>
             </figure>
-            <figure>
-                <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop" alt="Conveyor belt repair on site" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+            <figure onclick="openLightbox('https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop', 'Conveyor belt repair on site')">
+                <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop" alt="Conveyor belt repair on site" class="gallery-image">
                 <figcaption>Conveyor belt repair on site</figcaption>
             </figure>
-            <figure>
-                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop" alt="Line boring operation on machinery" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+            <figure onclick="openLightbox('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop', 'Line boring operation on machinery')">
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop" alt="Line boring operation on machinery" class="gallery-image">
                 <figcaption>Line boring operation on machinery</figcaption>
             </figure>
-            <figure>
-                <img src="https://images.unsplash.com/photo-1558618047-3c8c98a3e8a8?w=400&h=300&fit=crop" alt="Engineering team working on excavator undercarriage" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+            <figure onclick="openLightbox('https://images.unsplash.com/photo-1558618047-3c8c98a3e8a8?w=800&h=600&fit=crop', 'Engineering team working on excavator undercarriage')">
+                <img src="https://images.unsplash.com/photo-1558618047-3c8c98a3e8a8?w=400&h=300&fit=crop" alt="Engineering team working on excavator undercarriage" class="gallery-image">
                 <figcaption>Engineering team working on excavator undercarriage</figcaption>
             </figure>
-            <figure>
-                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="Hose and fitting installation in hydraulic system" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+            <figure onclick="openLightbox('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', 'Hose and fitting installation in hydraulic system')">
+                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="Hose and fitting installation in hydraulic system" class="gallery-image">
                 <figcaption>Hose and fitting installation in hydraulic system</figcaption>
             </figure>
-            <figure>
-                <img src="https://images.unsplash.com/photo-1581093450029-8cf7a098100e?w=400&h=300&fit=crop" alt="On-site rebuild of industrial equipment" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+            <figure onclick="openLightbox('https://images.unsplash.com/photo-1581093450029-8cf7a098100e?w=800&h=600&fit=crop', 'On-site rebuild of industrial equipment')">
+                <img src="https://images.unsplash.com/photo-1581093450029-8cf7a098100e?w=400&h=300&fit=crop" alt="On-site rebuild of industrial equipment" class="gallery-image">
                 <figcaption>On-site rebuild of industrial equipment</figcaption>
             </figure>
-            <figure>
-                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop" alt="Precision honing of cylinders" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+            <figure onclick="openLightbox('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop', 'Precision honing of cylinders')">
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop" alt="Precision honing of cylinders" class="gallery-image">
                 <figcaption>Precision honing of cylinders</figcaption>
             </figure>
-            <figure>
-                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="General steel work and welding projects" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+            <figure onclick="openLightbox('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', 'General steel work and welding projects')">
+                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="General steel work and welding projects" class="gallery-image">
                 <figcaption>General steel work and welding projects</figcaption>
             </figure>
         </div>
     </section>
+
+    <section id="clients" class="parallax-section fade-in">
+        <h2>Our Clients</h2>
+        <div class="clients-grid">
+            <img src="https://via.placeholder.com/150x100/FF6600/white?text=Anglo+American" alt="Anglo American" class="client-logo">
+            <img src="https://via.placeholder.com/150x100/FF6600/white?text=Ivanplats" alt="Ivanplats" class="client-logo">
+            <img src="https://via.placeholder.com/150x100/FF6600/white?text=SS+Hydraulics" alt="SS Hydraulics" class="client-logo">
+            <img src="https://via.placeholder.com/150x100/FF6600/white?text=G5+Mining+&+Supplies" alt="G5 Mining & Supplies" class="client-logo">
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="contact-info">
+            <h2>Contact Us</h2>
+            <p>20 Simmentaler Street<br>Mokopane 0600</p>
+            <p>Tel: 015 004 2812 / 071 662 0873<br>Email: pitjaengineering@gmail.com<br>Website: www.pitjaengineerings.co.za</p>
+        </div>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p>&copy; 2025 Pitja Engineering (PTY) Ltd. REG NO: 2017/4314/07 | VAT NO: 4002289348. All rights reserved.</p>
+    </footer>
+
     <!-- Lightbox Modal -->
     <div id="lightboxModal" class="lightbox-modal">
         <div class="lightbox-content">
@@ -731,132 +531,63 @@
             <button class="next-btn" onclick="changeImage(1)">&#10095;</button>
         </div>
     </div>
-    <section id="clients" class="parallax-section">
-        <h2>Our Clients</h2>
-        <div class="clients-grid">
-            <img src="https://via.placeholder.com/150x100/FF6600/white?text=Anglo+American" alt="Anglo American" class="client-logo">
-            <img src="https://via.placeholder.com/150x100/FF6600/white?text=Ivanplats" alt="Ivanplats" class="client-logo">
-            <img src="https://via.placeholder.com/150x100/FF6600/white?text=SS+Hydraulics" alt="SS Hydraulics" class="client-logo">
-            <img src="https://via.placeholder.com/150x100/FF6600/white?text=G5+Mining+&+Supplies" alt="G5 Mining & Supplies" class="client-logo">
-        </div>
-    </section>
-    <footer id="contact">
-        <h2>Contact Us</h2>
-        <p>20 Simmentaler Street<br>Mokopane 0600</p>
-        <p>Tel: 015 004 2812 / 071 662 0873<br>Email: pitjaengineering@gmail.com<br>Website: www.pitjaengineerings.co.za</p>
-        <p>&copy; 2025 Pitja Engineering (PTY) Ltd. REG NO: 2017/4314/07 | VAT NO: 4002289348. All rights reserved.</p>
-    </footer>
+
     <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('active');
-            // Optional: Animate hamburger lines to X
+        // Mobile Menu
+        function toggleMenu() {
             const hamburger = document.querySelector('.hamburger');
+            const nav = document.querySelector('nav ul');
             hamburger.classList.toggle('active');
+            nav.classList.toggle('active');
         }
-        // Close menu when clicking a link
-        document.querySelectorAll('.mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('mobileMenu').classList.remove('active');
+
+        // Header Scroll Effect
+        window.addEventListener('scroll', () => {
+            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Fade In on Scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
             });
         });
-        // Carousel functionality
-        let currentBg = 0;
-        const bgImages = document.querySelectorAll('.parallax-bg');
-        const dots = document.querySelectorAll('.carousel-dot');
-        function updateCarousel(index) {
-            bgImages[currentBg].classList.remove('active');
-            dots[currentBg].classList.remove('active');
-            currentBg = index;
-            bgImages[currentBg].classList.add('active');
-            dots[currentBg].classList.add('active');
-        }
-        function nextBg() {
-            const nextIndex = (currentBg + 1) % bgImages.length;
-            updateCarousel(nextIndex);
-        }
-        function goToSlide(index) {
-            updateCarousel(index);
-        }
-        setInterval(nextBg, 5000); // Auto-advance every 5 seconds
-        // 3D Engineering Model Setup (adapted for hydraulic/gear theme)
-        let scene, camera, renderer, controls;
-        function init3DModel() {
-            const container = document.getElementById('engineering-model');
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-            // Scene
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x000000); // Black for industrial feel
-            // Camera
-            camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-            camera.position.set(0, 5, 10);
-            // Renderer
-            renderer = new THREE.WebGLRenderer({ alpha: true });
-            renderer.setSize(width, height);
-            renderer.setClearColor(0x000000, 0); // Transparent
-            container.appendChild(renderer.domElement);
-            // Controls
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
-            scene.add(ambientLight);
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(10, 10, 5);
-            scene.add(directionalLight);
-            // Hydraulic Cylinder Model (Cylinder)
-            const cylinderGeometry = new THREE.CylinderGeometry(2, 2, 15, 32);
-            const cylinderMaterial = new THREE.MeshLambertMaterial({ color: 0xFFD700 }); // Gold for efficiency
-            const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
-            scene.add(cylinder);
-            // Gear (Torus for simplicity)
-            const gearGeometry = new THREE.TorusGeometry(3, 0.5, 16, 100);
-            const gearMaterial = new THREE.MeshLambertMaterial({ color: 0xFF6600 }); // Orange gear
-            const gear = new THREE.Mesh(gearGeometry, gearMaterial);
-            gear.position.set(0, 0, 0);
-            gear.rotation.x = Math.PI / 2;
-            scene.add(gear);
-            // Animation loop
-            function animate() {
-                requestAnimationFrame(animate);
-                gear.rotation.z += 0.01; // Rotate gear
-                controls.update();
-                renderer.render(scene, camera);
-            }
-            animate();
-            // Resize handler
-            window.addEventListener('resize', () => {
-                const width = container.clientWidth;
-                const height = container.clientHeight;
-                camera.aspect = width / height;
-                camera.updateProjectionMatrix();
-                renderer.setSize(width, height);
-            });
-        }
-        // Initialize 3D model when page loads
-        window.addEventListener('load', init3DModel);
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Lightbox Functionality
+        // Nav Active
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+
+        // Lightbox
         let currentImageIndex = 0;
-        const galleryImages = document.querySelectorAll('.gallery-image');
-        const imageSources = Array.from(galleryImages).map(img => ({ src: img.src, alt: img.alt }));
+        const imageSources = [
+            { src: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop', alt: 'Hydraulic cylinder assembly in workshop' },
+            { src: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop', alt: 'Conveyor belt repair on site' },
+            { src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop', alt: 'Line boring operation on machinery' },
+            { src: 'https://images.unsplash.com/photo-1558618047-3c8c98a3e8a8?w=800&h=600&fit=crop', alt: 'Engineering team working on excavator undercarriage' },
+            { src: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', alt: 'Hose and fitting installation in hydraulic system' },
+            { src: 'https://images.unsplash.com/photo-1581093450029-8cf7a098100e?w=800&h=600&fit=crop', alt: 'On-site rebuild of industrial equipment' },
+            { src: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop', alt: 'Precision honing of cylinders' },
+            { src: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', alt: 'General steel work and welding projects' }
+        ];
 
         function openLightbox(src, alt) {
-            const modal = document.getElementById('lightboxModal');
-            const lightboxImage = document.getElementById('lightboxImage');
             currentImageIndex = imageSources.findIndex(img => img.src === src);
-            lightboxImage.src = src;
-            lightboxImage.alt = alt;
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling
+            document.getElementById('lightboxImage').src = src;
+            document.getElementById('lightboxImage').alt = alt;
+            document.getElementById('lightboxModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeLightbox() {
-            const modal = document.getElementById('lightboxModal');
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto'; // Restore scrolling
+            document.getElementById('lightboxModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
         }
 
         function changeImage(direction) {
@@ -866,22 +597,14 @@
             lightboxImage.alt = imageSources[currentImageIndex].alt;
         }
 
-        // Close lightbox on outside click
-        document.getElementById('lightboxModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeLightbox();
-            }
+        document.getElementById('lightboxModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeLightbox();
         });
 
-        // Close lightbox on Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeLightbox();
-            } else if (e.key === 'ArrowLeft') {
-                changeImage(-1);
-            } else if (e.key === 'ArrowRight') {
-                changeImage(1);
-            }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+            else if (e.key === 'ArrowLeft') changeImage(-1);
+            else if (e.key === 'ArrowRight') changeImage(1);
         });
     </script>
 </body>
