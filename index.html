@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anglo American - Inspired Mockup</title>
+    <title>Pitja Engineering - Brewed To Fuel Efficiency</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <style>
@@ -16,7 +16,7 @@
             text-align: center; /* Global center alignment */
         }
         header {
-            background-color: #003366;
+            background-color: #FF6600; /* Orange theme for energy and efficiency */
             color: white;
             padding: 0.5rem 0;
             position: fixed;
@@ -63,10 +63,10 @@
             transform: rotateY(0deg); /* Initial state */
         }
         nav a:hover {
-            background-color: #005599;
+            background-color: #E55A00; /* Darker orange on hover */
             color: white;
             transform: rotateY(180deg); /* Flip on Y-axis for card-like flip */
-            box-shadow: 0 4px 12px rgba(0,85,153,0.3);
+            box-shadow: 0 4px 12px rgba(255,102,0,0.3);
             /* Backface visibility hidden for clean flip */
             backface-visibility: hidden;
         }
@@ -80,7 +80,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #005599;
+            background-color: #E55A00;
             transform: rotateY(180deg);
             backface-visibility: hidden;
         }
@@ -114,7 +114,7 @@
             left: -100%; /* Hidden off-screen */
             width: 100%;
             height: 100vh;
-            background-color: #003366;
+            background-color: #FF6600;
             z-index: 999;
             transition: left 0.3s ease;
             display: flex;
@@ -143,7 +143,7 @@
             font-weight: 500;
         }
         .mobile-menu a:hover {
-            background-color: #005599;
+            background-color: #E55A00;
             transform: scale(1.05);
         }
         .close-btn {
@@ -156,7 +156,7 @@
             text-decoration: none;
         }
         .hero {
-            background: linear-gradient(135deg, rgba(0,51,102,0.7) 0%, rgba(0,85,153,0.5) 50%, rgba(240,248,255,0.3) 100%); /* Semi-transparent overlay for readability */
+            background: linear-gradient(135deg, rgba(255,102,0,0.7) 0%, rgba(255,165,0,0.5) 50%, rgba(255,255,224,0.3) 100%); /* Orange/yellow overlay for energy theme */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -186,7 +186,7 @@
         .parallax-bg.active {
             opacity: 1;
         }
-        #mine-model {
+        #engineering-model {
             position: absolute;
             top: 0;
             left: 0;
@@ -216,7 +216,7 @@
         .cta {
             display: inline-block;
             background: rgba(255,255,255,0.9); /* Semi-transparent for overlay */
-            color: #003366;
+            color: #FF6600;
             padding: clamp(1rem, 2.5vw, 1.25rem) clamp(2rem, 5vw, 2.5rem);
             text-decoration: none;
             border-radius: 50px; /* Pill shape for modern CTAs */
@@ -276,7 +276,7 @@
         }
         /* Parallax for other sections (optional enhancement) */
         .parallax-section {
-            background: linear-gradient(135deg, rgba(0,51,102,0.3) 0%, rgba(0,85,153,0.2) 50%);
+            background: linear-gradient(135deg, rgba(255,102,0,0.3) 0%, rgba(255,165,0,0.2) 50%);
             background-attachment: fixed;
             background-size: cover;
         }
@@ -286,14 +286,14 @@
             gap: 2rem;
             justify-items: center; /* Center grid items */
         }
-        .business-header { /* Specific class for centering "Our Business" */
+        .business-header { /* Specific class for centering "Our Services" */
             text-align: center;
             margin-bottom: 3rem;
             width: 100%;
         }
         .business-header h2 {
             font-size: 2.5rem;
-            color: #003366;
+            color: #FF6600;
             margin: 0;
         }
         .card {
@@ -308,9 +308,9 @@
         }
         .card:hover {
             transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 12px 40px rgba(0,51,102,0.15);
-            background-color: #f0f8ff;
-            border-left-color: #003366;
+            box-shadow: 0 12px 40px rgba(255,102,0,0.15);
+            background-color: #fff5e6; /* Light orange tint */
+            border-left-color: #FF6600;
         }
         .card h3 {
             color: #333;
@@ -319,33 +319,163 @@
             font-size: 1.5rem;
         }
         .card:hover h3 {
-            color: #003366;
+            color: #FF6600;
         }
-        /* Card-specific hover colors */
-        .card-copper { border-left-color: #B87333; }
-        .card-copper:hover {
-            background-color: #fff5f0;
-            box-shadow: 0 12px 40px rgba(184, 115, 51, 0.2);
+        /* Card-specific hover colors based on services */
+        .card-hydraulic { border-left-color: #FF6600; }
+        .card-hydraulic:hover {
+            background-color: #fff5e6;
+            box-shadow: 0 12px 40px rgba(255,102,0,0.2);
         }
-        .card-copper:hover h3 { color: #B87333; }
-        .card-platinum { border-left-color: #E5E4E2; }
-        .card-platinum:hover {
-            background-color: #f8f8f8;
-            box-shadow: 0 12px 40px rgba(229, 228, 226, 0.3);
+        .card-hydraulic:hover h3 { color: #FF6600; }
+        .card-conveyor { border-left-color: #FFD700; }
+        .card-conveyor:hover {
+            background-color: #fff8dc;
+            box-shadow: 0 12px 40px rgba(255,215,0,0.3);
         }
-        .card-platinum:hover h3 { color: #708090; }
-        .card-iron { border-left-color: #8B4513; }
-        .card-iron:hover {
-            background-color: #fdf6f0;
-            box-shadow: 0 12px 40px rgba(139, 69, 19, 0.2);
+        .card-conveyor:hover h3 { color: #FFD700; }
+        .card-boring { border-left-color: #FFA500; }
+        .card-boring:hover {
+            background-color: #fdf5e6;
+            box-shadow: 0 12px 40px rgba(255,165,0,0.2);
         }
-        .card-iron:hover h3 { color: #8B4513; }
+        .card-boring:hover h3 { color: #FFA500; }
         footer {
-            background-color: #003366;
+            background-color: #FF6600;
             color: white;
             text-align: center;
             padding: 2.5rem;
             margin-top: 4rem;
+        }
+        .clients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .client-logo {
+            max-width: 150px;
+            height: auto;
+            filter: grayscale(100%);
+            transition: filter 0.3s ease;
+        }
+        .client-logo:hover {
+            filter: grayscale(0%);
+        }
+        .values-list {
+            list-style: none;
+            padding: 0;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .values-list li {
+            background: #fff;
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        /* Gallery Styles */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        figure {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .gallery-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .gallery-image:hover {
+            transform: scale(1.05);
+        }
+        figcaption {
+            text-align: center;
+            padding-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+        /* Lightbox Modal Styles */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            animation: fadeIn 0.3s;
+        }
+        .lightbox-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            animation: zoomIn 0.3s;
+        }
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(255,102,0,0.5);
+        }
+        .close-lightbox {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2.5rem;
+            cursor: pointer;
+            z-index: 2001;
+        }
+        .close-lightbox:hover {
+            color: #FF6600;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255,102,0,0.7);
+            color: white;
+            border: none;
+            padding: 1rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+        .prev-btn {
+            left: -50px;
+        }
+        .next-btn {
+            right: -50px;
+        }
+        .prev-btn:hover, .next-btn:hover {
+            background-color: #FF6600;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.5); }
+            to { transform: scale(1); }
         }
         /* Media Queries for Responsiveness */
         @media (max-width: 768px) {
@@ -398,6 +528,25 @@
             .business-header h2 {
                 font-size: 2rem;
             }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            .prev-btn, .next-btn {
+                left: 10px;
+                right: 10px;
+                padding: 0.5rem;
+                font-size: 1rem;
+            }
+            .prev-btn {
+                left: 10px;
+            }
+            .next-btn {
+                right: 10px;
+            }
+            .close-lightbox {
+                top: -30px;
+                font-size: 2rem;
+            }
         }
         @media (max-width: 480px) {
             .hero {
@@ -416,21 +565,27 @@
                 flex-direction: column;
                 align-items: center;
             }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            .lightbox-content {
+                max-width: 95%;
+                max-height: 95%;
+            }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="nav-container">
-            <a href="#home" class="logo">Anglo American</a>
+            <a href="#home" class="logo">Pitja Engineering (PTY) Ltd</a>
             <nav>
                 <ul>
                     <li><a href="#home" data-text="Home">Home</a></li>
                     <li><a href="#about" data-text="About">About</a></li>
-                    <li><a href="#business" data-text="Our Business">Our Business</a></li>
-                    <li><a href="#sustainability" data-text="Sustainability">Sustainability</a></li>
-                    <li><a href="#investors" data-text="Investors">Investors</a></li>
-                    <li><a href="#careers" data-text="Careers">Careers</a></li>
+                    <li><a href="#services" data-text="Services">Services</a></li>
+                    <li><a href="#gallery" data-text="Gallery">Gallery</a></li>
+                    <li><a href="#clients" data-text="Clients">Clients</a></li>
                     <li><a href="#contact" data-text="Contact">Contact</a></li>
                 </ul>
             </nav>
@@ -446,30 +601,29 @@
         <ul>
             <li><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
-            <li><a href="#business">Our Business</a></li>
-            <li><a href="#sustainability">Sustainability</a></li>
-            <li><a href="#investors">Investors</a></li>
-            <li><a href="#careers">Careers</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#clients">Clients</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </div>
     <section id="home" class="hero">
-        <div class="parallax-bg active" id="parallaxBg1" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2071&q=80');"></div>
-        <div class="parallax-bg" id="parallaxBg2" style="background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');"></div>
-        <div class="parallax-bg" id="parallaxBg3" style="background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');"></div>
-        <div class="parallax-bg" id="parallaxBg4" style="background-image: url('https://i.postimg.cc/zXMJvnrr/engineering-team-managing-assembly-lines-conveyor-belts-automated-factory.jpg');"></div>
-        <div id="mine-model"></div>
+        <div class="parallax-bg active" id="parallaxBg1" style="background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');"></div>
+        <div class="parallax-bg" id="parallaxBg2" style="background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');"></div>
+        <div class="parallax-bg" id="parallaxBg3" style="background-image: url('https://i.postimg.cc/zXMJvnrr/engineering-team-managing-assembly-lines-conveyor-belts-automated-factory.jpg');"></div>
+        <div class="parallax-bg" id="parallaxBg4" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2071&q=80');"></div>
+        <div id="engineering-model"></div>
         <div class="hero-content">
-            <h1>Re-imagining mining to improve people's lives</h1>
-           
+            <h1>Brewed To Fuel Efficiency</h1>
+            <p>Engineering excellence for mining and industrial efficiency</p>
             <div class="hero-image-group">
-                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop&crop=face" alt="Copper mining operation" class="hero-image">
-                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=200&h=200&fit=crop&crop=face" alt="Platinum extraction site" class="hero-image">
-                <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=200&h=200&fit=crop&crop=face" alt="Iron ore processing" class="hero-image">
+                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=200&h=200&fit=crop&crop=face" alt="Hydraulic cylinder assembly" class="hero-image">
+                <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=200&h=200&fit=crop&crop=face" alt="Conveyor belt repair" class="hero-image">
+                <img src="https://i.postimg.cc/zXMJvnrr/engineering-team-managing-assembly-lines-conveyor-belts-automated-factory.jpg?w=200&h=200&fit=crop&crop=face" alt="Line boring operation" class="hero-image">
             </div>
             <div class="hero-cta">
-                <a href="#futuresmart" class="cta">FutureSmart Mining™</a>
-                <a href="#careers" class="cta">Join Our Team</a>
+                <a href="#services" class="cta">Explore Our Services</a>
+                <a href="#contact" class="cta">Get In Touch</a>
             </div>
             <div class="carousel-dots">
                 <span class="carousel-dot active" onclick="goToSlide(0)"></span>
@@ -481,33 +635,116 @@
     </section>
     <section id="about" class="parallax-section">
         <h2>About Us</h2>
-        <p>Anglo American is a global mining company with a portfolio of world-class competitive operations and undeveloped resources.</p>
+        <p>Pitja Engineering (PTY) Ltd is 100% female black owned company established in 2017, with a purpose to explore opportunities in the male dominated values, morals and standards. We employ the highest level of integrity, values, morals and standards.</p>
+        <p>The director of Pitja Engineering (PTY) Ltd Ellen Shabangu acquired many leadership skills through programs she played in a number of community roles which she played in a advantage of the company because her knowledge and work to the combined will add value to the company in regard to leadership. experience</p>
+        <p>Ellen is a woman who believes greatly in community upliftment. she has done a lot of community activities like engaging crime awareness to Mapela and community as a whole. Nkone, as effect on roles known by the Mapela bringing local women into Agricultural projects. she played, venture into cosmetic an kitchen businesses historically. She refused to for females. Pitja, through Ellen's leadership now has over 1 year unbroken service to one of the reputable mines.</p>
+        <h3>Vision Statement</h3>
+        <p>We ensure efficiency through quality service that we offer our clients.</p>
+        <h3>Mission Statement</h3>
+        <p>Pitja Engineering (PTY) Ltd is heading towards quantified at the same weight as top Engineering companies in the country.</p>
+        <h3>Our Values</h3>
+        <ul class="values-list">
+            <li>Innovative thinking</li>
+            <li>Integrity and Honesty</li>
+            <li>Reliability & Honesty</li>
+            <li>Precision</li>
+            <li>Customer based</li>
+        </ul>
     </section>
-    <section id="business">
+    <section id="services">
         <div class="business-header">
-            <h2>Our Business</h2>
+            <h2>Our Services</h2>
         </div>
         <div class="section-grid">
-            <div class="card card-copper">
-                <h3>Copper</h3>
-                <p>Leading producer of copper for the energy transition.</p>
+            <div class="card card-hydraulic">
+                <h3>Hydraulic Cylinders</h3>
+                <p>Assemble cylinders from scratch to point of use. Tested for quality and efficiency.</p>
             </div>
-            <div class="card card-platinum">
-                <h3>Platinum Group Metals</h3>
-                <p>Essential for fuel cells and hydrogen technology.</p>
+            <div class="card card-conveyor">
+                <h3>Conveyor Belts</h3>
+                <p>Supply new belts, rollers, guides, guards. Engineering repairs to infrastructure.</p>
             </div>
-            <div class="card card-iron">
-                <h3>Iron Ore</h3>
-                <p>High-quality iron ore for steel production.</p>
+            <div class="card card-boring">
+                <h3>Line Boring</h3>
+                <p>Perfectly straight boring of propeller shafts, stern gears, gearboxes.</p>
+            </div>
+        </div>
+        <div class="section-grid" style="margin-top: 3rem;">
+            <div class="card card-hydraulic">
+                <h3>Hoses and Fittings</h3>
+                <p>Supply and install to hydraulic sections. Connect hoses to components, valves, actuators.</p>
+            </div>
+            <div class="card card-conveyor">
+                <h3>Undercarriage</h3>
+                <p>Supply new sideframes, final drives, rollers, sprockets, links.</p>
+            </div>
+            <div class="card card-boring">
+                <h3>On-Site Duties</h3>
+                <p>Field services, shutdown maintenance, rebuilds of machinery.</p>
             </div>
         </div>
     </section>
-    <section id="sustainability" class="parallax-section">
-        <h2>Sustainability</h2>
-        <p>Committed to responsible mining, community engagement, and environmental stewardship.</p>
+    <section id="gallery" class="parallax-section">
+        <h2>Our Gallery</h2>
+        <p>Explore our projects and engineering excellence through these images.</p>
+        <div class="gallery-grid">
+            <figure>
+                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop" alt="Hydraulic cylinder assembly in workshop" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+                <figcaption>Hydraulic cylinder assembly in workshop</figcaption>
+            </figure>
+            <figure>
+                <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop" alt="Conveyor belt repair on site" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+                <figcaption>Conveyor belt repair on site</figcaption>
+            </figure>
+            <figure>
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop" alt="Line boring operation on machinery" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+                <figcaption>Line boring operation on machinery</figcaption>
+            </figure>
+            <figure>
+                <img src="https://images.unsplash.com/photo-1558618047-3c8c98a3e8a8?w=400&h=300&fit=crop" alt="Engineering team working on excavator undercarriage" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+                <figcaption>Engineering team working on excavator undercarriage</figcaption>
+            </figure>
+            <figure>
+                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="Hose and fitting installation in hydraulic system" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+                <figcaption>Hose and fitting installation in hydraulic system</figcaption>
+            </figure>
+            <figure>
+                <img src="https://images.unsplash.com/photo-1581093450029-8cf7a098100e?w=400&h=300&fit=crop" alt="On-site rebuild of industrial equipment" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+                <figcaption>On-site rebuild of industrial equipment</figcaption>
+            </figure>
+            <figure>
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop" alt="Precision honing of cylinders" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+                <figcaption>Precision honing of cylinders</figcaption>
+            </figure>
+            <figure>
+                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="General steel work and welding projects" class="gallery-image" onclick="openLightbox(this.src, this.alt)">
+                <figcaption>General steel work and welding projects</figcaption>
+            </figure>
+        </div>
+    </section>
+    <!-- Lightbox Modal -->
+    <div id="lightboxModal" class="lightbox-modal">
+        <div class="lightbox-content">
+            <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+            <img id="lightboxImage" class="lightbox-image" src="" alt="">
+            <button class="prev-btn" onclick="changeImage(-1)">&#10094;</button>
+            <button class="next-btn" onclick="changeImage(1)">&#10095;</button>
+        </div>
+    </div>
+    <section id="clients" class="parallax-section">
+        <h2>Our Clients</h2>
+        <div class="clients-grid">
+            <img src="https://via.placeholder.com/150x100/FF6600/white?text=Anglo+American" alt="Anglo American" class="client-logo">
+            <img src="https://via.placeholder.com/150x100/FF6600/white?text=Ivanplats" alt="Ivanplats" class="client-logo">
+            <img src="https://via.placeholder.com/150x100/FF6600/white?text=SS+Hydraulics" alt="SS Hydraulics" class="client-logo">
+            <img src="https://via.placeholder.com/150x100/FF6600/white?text=G5+Mining+&+Supplies" alt="G5 Mining & Supplies" class="client-logo">
+        </div>
     </section>
     <footer id="contact">
-        <p>&copy; 2025 Anglo American Inspired Mockup. For educational purposes only.</p>
+        <h2>Contact Us</h2>
+        <p>20 Simmentaler Street<br>Mokopane 0600</p>
+        <p>Tel: 015 004 2812 / 071 662 0873<br>Email: pitjaengineering@gmail.com<br>Website: www.pitjaengineerings.co.za</p>
+        <p>&copy; 2025 Pitja Engineering (PTY) Ltd. REG NO: 2017/4314/07 | VAT NO: 4002289348. All rights reserved.</p>
     </footer>
     <script>
         function toggleMobileMenu() {
@@ -542,15 +779,15 @@
             updateCarousel(index);
         }
         setInterval(nextBg, 5000); // Auto-advance every 5 seconds
-        // 3D Mine Model Setup
+        // 3D Engineering Model Setup (adapted for hydraulic/gear theme)
         let scene, camera, renderer, controls;
         function init3DModel() {
-            const container = document.getElementById('mine-model');
+            const container = document.getElementById('engineering-model');
             const width = container.clientWidth;
             const height = container.clientHeight;
             // Scene
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x000000); // Black for mine feel
+            scene.background = new THREE.Color(0x000000); // Black for industrial feel
             // Camera
             camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
             camera.position.set(0, 5, 10);
@@ -569,37 +806,22 @@
             const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
             directionalLight.position.set(10, 10, 5);
             scene.add(directionalLight);
-            // Mine Model Elements
-            // Tunnel (Cylinder)
-            const tunnelGeometry = new THREE.CylinderGeometry(3, 3, 20, 32);
-            const tunnelMaterial = new THREE.MeshLambertMaterial({ color: 0x333333 });
-            const tunnel = new THREE.Mesh(tunnelGeometry, tunnelMaterial);
-            tunnel.rotation.z = Math.PI / 2;
-            scene.add(tunnel);
-            // Ore rocks (spheres)
-            for (let i = 0; i < 5; i++) {
-                const rockGeometry = new THREE.SphereGeometry(0.5 + Math.random() * 0.5, 8, 8);
-                const rockMaterial = new THREE.MeshLambertMaterial({ color: new THREE.Color().setHSL(0.1, 0.5, 0.3) }); // Earthy brown
-                const rock = new THREE.Mesh(rockGeometry, rockMaterial);
-                rock.position.set(
-                    (Math.random() - 0.5) * 10,
-                    (Math.random() - 0.5) * 5,
-                    (Math.random() - 0.5) * 10
-                );
-                scene.add(rock);
-            }
-            // Rails (line)
-            const railsMaterial = new THREE.LineBasicMaterial({ color: 0x666666 });
-            const railsPoints = [
-                new THREE.Vector3(-10, 0, 0),
-                new THREE.Vector3(10, 0, 0)
-            ];
-            const railsGeometry = new THREE.BufferGeometry().setFromPoints(railsPoints);
-            const rails = new THREE.Line(railsGeometry, railsMaterial);
-            scene.add(rails);
+            // Hydraulic Cylinder Model (Cylinder)
+            const cylinderGeometry = new THREE.CylinderGeometry(2, 2, 15, 32);
+            const cylinderMaterial = new THREE.MeshLambertMaterial({ color: 0xFFD700 }); // Gold for efficiency
+            const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+            scene.add(cylinder);
+            // Gear (Torus for simplicity)
+            const gearGeometry = new THREE.TorusGeometry(3, 0.5, 16, 100);
+            const gearMaterial = new THREE.MeshLambertMaterial({ color: 0xFF6600 }); // Orange gear
+            const gear = new THREE.Mesh(gearGeometry, gearMaterial);
+            gear.position.set(0, 0, 0);
+            gear.rotation.x = Math.PI / 2;
+            scene.add(gear);
             // Animation loop
             function animate() {
                 requestAnimationFrame(animate);
+                gear.rotation.z += 0.01; // Rotate gear
                 controls.update();
                 renderer.render(scene, camera);
             }
@@ -615,6 +837,52 @@
         }
         // Initialize 3D model when page loads
         window.addEventListener('load', init3DModel);
+
+        // Lightbox Functionality
+        let currentImageIndex = 0;
+        const galleryImages = document.querySelectorAll('.gallery-image');
+        const imageSources = Array.from(galleryImages).map(img => ({ src: img.src, alt: img.alt }));
+
+        function openLightbox(src, alt) {
+            const modal = document.getElementById('lightboxModal');
+            const lightboxImage = document.getElementById('lightboxImage');
+            currentImageIndex = imageSources.findIndex(img => img.src === src);
+            lightboxImage.src = src;
+            lightboxImage.alt = alt;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('lightboxModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        }
+
+        function changeImage(direction) {
+            currentImageIndex = (currentImageIndex + direction + imageSources.length) % imageSources.length;
+            const lightboxImage = document.getElementById('lightboxImage');
+            lightboxImage.src = imageSources[currentImageIndex].src;
+            lightboxImage.alt = imageSources[currentImageIndex].alt;
+        }
+
+        // Close lightbox on outside click
+        document.getElementById('lightboxModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLightbox();
+            }
+        });
+
+        // Close lightbox on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                changeImage(-1);
+            } else if (e.key === 'ArrowRight') {
+                changeImage(1);
+            }
+        });
     </script>
 </body>
 </html>
