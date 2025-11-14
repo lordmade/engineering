@@ -38,6 +38,9 @@
             top: 0;
             z-index: 1000;
             transition: var(--transition);
+            height: 80px;
+            display: flex;
+            align-items: center;
         }
         header.scrolled {
             background: rgba(255, 102, 0, 1);
@@ -49,7 +52,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
+            padding: 0 2rem;
+            width: 100%;
         }
         .logo {
             font-size: 1.8rem;
@@ -101,6 +105,8 @@
             color: var(--white);
             position: relative;
             overflow: hidden;
+            padding-top: 80px; /* Offset for fixed header */
+            box-sizing: border-box;
         }
         .hero::before {
             content: '';
@@ -118,6 +124,11 @@
             max-width: 800px;
             padding: 0 2rem;
             animation: fadeInUp 1s ease-out;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         .hero h1 {
             font-size: clamp(3rem, 8vw, 6rem);
@@ -210,26 +221,35 @@
             color: var(--primary-orange);
             margin-bottom: 3rem;
             text-align: center;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.8s ease-out forwards;
         }
         /* About Us Redesigned */
         #about {
             background: var(--white);
+            text-align: center;
         }
         .about-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            display: flex;
+            flex-direction: column;
             align-items: center;
+            gap: 4rem;
+            max-width: 1000px;
+            margin: 0 auto;
         }
         .about-text {
             font-size: 1.1rem;
             line-height: 1.8;
+            max-width: 800px;
+            text-align: left;
         }
         .about-text p {
             margin-bottom: 1.5rem;
         }
         .director-section {
             text-align: center;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
         }
         .director-image {
             width: 100%;
@@ -239,6 +259,7 @@
             object-fit: cover;
             margin-bottom: 1rem;
             box-shadow: var(--shadow-light);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
         }
         .director-name {
             font-size: 1.5rem;
@@ -255,6 +276,8 @@
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
             margin: 3rem 0;
+            width: 100%;
+            max-width: 800px;
         }
         .vm-card {
             background: var(--white);
@@ -263,6 +286,9 @@
             box-shadow: var(--shadow-light);
             text-align: center;
             transition: var(--transition);
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.8s ease-out 0.6s both;
         }
         .vm-card:hover {
             transform: translateY(-5px);
@@ -278,6 +304,11 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
             margin-top: 2rem;
+            width: 100%;
+            max-width: 800px;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.8s ease-out 0.8s both;
         }
         .value-item {
             background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
@@ -300,6 +331,9 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.8s ease-out forwards;
         }
         .service-card {
             background: var(--white);
@@ -310,6 +344,21 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideInUp 0.6s ease-out forwards;
+        }
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.2s; }
+        .service-card:nth-child(3) { animation-delay: 0.3s; }
+        .service-card:nth-child(4) { animation-delay: 0.4s; }
+        .service-card:nth-child(5) { animation-delay: 0.5s; }
+        .service-card:nth-child(6) { animation-delay: 0.6s; }
+        @keyframes slideInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .service-card::before {
             content: '';
@@ -339,6 +388,9 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.8s ease-out forwards;
         }
         figure {
             margin: 0;
@@ -347,7 +399,18 @@
             overflow: hidden;
             box-shadow: var(--shadow-light);
             transition: var(--transition);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideInUp 0.6s ease-out forwards;
         }
+        figure:nth-child(1) { animation-delay: 0.1s; }
+        figure:nth-child(2) { animation-delay: 0.2s; }
+        figure:nth-child(3) { animation-delay: 0.3s; }
+        figure:nth-child(4) { animation-delay: 0.4s; }
+        figure:nth-child(5) { animation-delay: 0.5s; }
+        figure:nth-child(6) { animation-delay: 0.6s; }
+        figure:nth-child(7) { animation-delay: 0.7s; }
+        figure:nth-child(8) { animation-delay: 0.8s; }
         figure:hover {
             transform: scale(1.02);
         }
@@ -369,6 +432,9 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.8s ease-out forwards;
         }
         .client-logo {
             max-width: 150px;
@@ -379,7 +445,14 @@
             background: var(--white);
             border-radius: 10px;
             box-shadow: var(--shadow-light);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideInUp 0.6s ease-out forwards;
         }
+        .client-logo:nth-child(1) { animation-delay: 0.1s; }
+        .client-logo:nth-child(2) { animation-delay: 0.2s; }
+        .client-logo:nth-child(3) { animation-delay: 0.3s; }
+        .client-logo:nth-child(4) { animation-delay: 0.4s; }
         .client-logo:hover {
             filter: grayscale(0%);
             transform: translateY(-5px);
@@ -390,6 +463,9 @@
             color: var(--white);
             text-align: center;
             padding: 4rem 2rem 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.8s ease-out forwards;
         }
         .contact-info {
             max-width: 600px;
@@ -416,8 +492,14 @@
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(50px);
             }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideInUp {
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -499,6 +581,7 @@
             .clients-grid { grid-template-columns: repeat(2, 1fr); }
             .values-grid { grid-template-columns: repeat(2, 1fr); }
             .hero-images { height: 150px; }
+            .about-text { text-align: center; }
         }
         /* Smooth Scroll */
         html { scroll-behavior: smooth; }
@@ -635,7 +718,7 @@
 
     <section id="gallery" class="parallax-section fade-in">
         <h2>Our Gallery</h2>
-        <p>Explore our projects and engineering excellence through these images.</p>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">Explore our projects and engineering excellence through these images.</p>
         <div class="gallery-grid">
             <figure onclick="openLightbox('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop', 'Hydraulic cylinder assembly in workshop')">
                 <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop" alt="Hydraulic cylinder assembly in workshop" class="gallery-image">
