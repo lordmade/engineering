@@ -31,7 +31,7 @@
         }
         /* Header */
         header {
-            background: rgba(255, 102, 0, 0.95);
+            background: transparent;
             backdrop-filter: blur(10px);
             position: fixed;
             width: 100%;
@@ -43,7 +43,7 @@
             align-items: center;
         }
         header.scrolled {
-            background: rgba(255, 102, 0, 1);
+            background: rgba(255, 102, 0, 0.95);
             box-shadow: var(--shadow-light);
         }
         .nav-container {
@@ -56,10 +56,12 @@
             width: 100%;
         }
         .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--white);
-            text-decoration: none;
+            height: 50px;
+            width: auto;
+        }
+        .logo img {
+            height: 100%;
+            width: auto;
         }
         nav ul {
             display: flex;
@@ -67,17 +69,20 @@
             gap: 2rem;
         }
         nav a {
-            color: var(--white);
+            color: var(--primary-orange);
             text-decoration: none;
             font-weight: 500;
             padding: 0.5rem 1rem;
             border-radius: 50px;
             transition: var(--transition);
             position: relative;
+            background: var(--white);
+            box-shadow: var(--shadow-light);
         }
         nav a:hover, nav a.active {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--white);
             transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
         .hamburger {
             display: none;
@@ -590,7 +595,9 @@
 <body>
     <header id="header">
         <div class="nav-container">
-            <a href="#home" class="logo">Pitja Engineering (PTY) Ltd</a>
+            <a href="#home" class="logo">
+                <img src="https://i.postimg.cc/wT55BcWy/PITJA-LOGO.png" alt="Pitja Engineering Logo">
+            </a>
             <nav>
                 <ul>
                     <li><a href="#home">Home</a></li>
@@ -608,7 +615,6 @@
             </div>
         </div>
     </header>
-
     <section id="home" class="hero">
         <div class="hero-content">
             <h1>Brewed To Fuel Efficiency</h1>
@@ -631,7 +637,6 @@
             </div>
         </div>
     </section>
-
     <section id="about" class="fade-in">
         <div class="about-container">
             <div class="about-text">
@@ -679,7 +684,6 @@
             </div>
         </div>
     </section>
-
     <section id="services" class="fade-in">
         <h2>Our Services</h2>
         <div class="services-grid">
@@ -715,7 +719,6 @@
             </div>
         </div>
     </section>
-
     <section id="gallery" class="parallax-section fade-in">
         <h2>Our Gallery</h2>
         <p style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">Explore our projects and engineering excellence through these images.</p>
@@ -754,7 +757,6 @@
             </figure>
         </div>
     </section>
-
     <section id="clients" class="parallax-section fade-in">
         <h2>Our Clients</h2>
         <div class="clients-grid">
@@ -764,7 +766,6 @@
             <img src="https://via.placeholder.com/150x100/FF6600/white?text=G5+Mining+&+Supplies" alt="G5 Mining & Supplies" class="client-logo">
         </div>
     </section>
-
     <footer id="contact">
         <div class="contact-info">
             <h2>Contact Us</h2>
@@ -779,7 +780,6 @@
         </div>
         <p>&copy; 2025 Pitja Engineering (PTY) Ltd. REG NO: 2017/4314/07 | VAT NO: 4002289348. All rights reserved.</p>
     </footer>
-
     <!-- Lightbox Modal -->
     <div id="lightboxModal" class="lightbox-modal">
         <div class="lightbox-content">
@@ -789,7 +789,6 @@
             <button class="next-btn" onclick="changeImage(1)">&#10095;</button>
         </div>
     </div>
-
     <script>
         // Mobile Menu
         function toggleMenu() {
@@ -798,12 +797,10 @@
             hamburger.classList.toggle('active');
             nav.classList.toggle('active');
         }
-
         // Header Scroll Effect
         window.addEventListener('scroll', () => {
             document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
         });
-
         // Fade In on Scroll
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -813,7 +810,6 @@
             });
         });
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
         // Nav Active
         document.querySelectorAll('nav a').forEach(link => {
             link.addEventListener('click', () => {
@@ -821,12 +817,10 @@
                 link.classList.add('active');
             });
         });
-
         // Hero Carousel
         let currentHeroSlide = 0;
         const heroImages = document.querySelectorAll('.hero-images img');
         const heroDots = document.querySelectorAll('.carousel-dot');
-
         function updateHeroCarousel(index) {
             const direction = index > currentHeroSlide ? 1 : -1;
             heroImages.forEach((img, i) => {
@@ -845,18 +839,14 @@
             heroDots[index].classList.add('active');
             currentHeroSlide = index;
         }
-
         function nextHeroSlide() {
             const nextIndex = (currentHeroSlide + 1) % heroImages.length;
             updateHeroCarousel(nextIndex);
         }
-
         function goToHeroSlide(index) {
             updateHeroCarousel(index);
         }
-
         setInterval(nextHeroSlide, 5000); // Auto-advance every 5 seconds
-
         // Lightbox
         let currentImageIndex = 0;
         const imageSources = [
@@ -869,7 +859,6 @@
             { src: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop', alt: 'Precision honing of cylinders' },
             { src: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', alt: 'General steel work and welding projects' }
         ];
-
         function openLightbox(src, alt) {
             currentImageIndex = imageSources.findIndex(img => img.src === src);
             document.getElementById('lightboxImage').src = src;
@@ -877,23 +866,19 @@
             document.getElementById('lightboxModal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
-
         function closeLightbox() {
             document.getElementById('lightboxModal').classList.remove('active');
             document.body.style.overflow = 'auto';
         }
-
         function changeImage(direction) {
             currentImageIndex = (currentImageIndex + direction + imageSources.length) % imageSources.length;
             const lightboxImage = document.getElementById('lightboxImage');
             lightboxImage.src = imageSources[currentImageIndex].src;
             lightboxImage.alt = imageSources[currentImageIndex].alt;
         }
-
         document.getElementById('lightboxModal').addEventListener('click', (e) => {
             if (e.target === e.currentTarget) closeLightbox();
         });
-
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeLightbox();
             else if (e.key === 'ArrowLeft') changeImage(-1);
