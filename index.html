@@ -140,13 +140,13 @@
             justify-content: center;
         }
         .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
+            font-size: clamp(2.5rem, 8vw, 5rem);
             font-weight: 300;
             margin-bottom: 1rem;
             letter-spacing: 0.1em;
         }
         .hero p {
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
             margin-bottom: 2rem;
             opacity: 0.9;
         }
@@ -166,54 +166,11 @@
             font-weight: 600;
             transition: var(--transition);
             box-shadow: var(--shadow-light);
+            font-size: 1rem;
         }
         .cta:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-hover);
-        }
-        /* Hero Images Carousel */
-        .hero-images {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            height: 200px;
-            margin: 0 auto;
-            overflow: hidden;
-            border-radius: 20px;
-            box-shadow: var(--shadow-light);
-        }
-        .hero-images img {
-            position: absolute;
-            top: 0;
-            left: 100%;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: left 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        .hero-images img.active {
-            left: 0;
-        }
-        .hero-images img.prev {
-            left: -100%;
-        }
-        .carousel-dots {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-        .carousel-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: rgba(255,255,255,0.5);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .carousel-dot.active {
-            background-color: var(--white);
-            transform: scale(1.2);
         }
         /* Sections */
         section {
@@ -225,7 +182,7 @@
             background: linear-gradient(135deg, rgba(255,102,0,0.1) 0%, rgba(255,215,0,0.05) 100%);
         }
         h2 {
-            font-size: 3rem;
+            font-size: clamp(2rem, 5vw, 3rem);
             font-weight: 600;
             color: var(--primary-orange);
             margin-bottom: 3rem;
@@ -581,7 +538,15 @@
         @keyframes zoomIn { from { transform: scale(0.5); } to { transform: scale(1); } }
         /* Mobile */
         @media (max-width: 768px) {
-            .hamburger { display: flex; }
+            header {
+                height: 70px;
+            }
+            .nav-container {
+                padding: 0 1rem;
+            }
+            .hamburger { 
+                display: flex; 
+            }
             nav ul { 
                 display: none;
                 flex-direction: column;
@@ -600,15 +565,90 @@
             nav a {
                 text-align: center;
                 margin: 0;
+                display: block;
             }
-            .hero-cta { flex-direction: column; align-items: center; }
-            .about-container { grid-template-columns: 1fr; }
-            .vision-mission { grid-template-columns: 1fr; }
-            .services-grid, .gallery-grid { grid-template-columns: 1fr; }
-            .clients-grid { grid-template-columns: repeat(2, 1fr); }
-            .values-grid { grid-template-columns: repeat(2, 1fr); }
-            .hero-images { height: 150px; }
-            .about-text { text-align: center; }
+            .hero {
+                height: 100vh;
+                padding-top: 70px;
+                padding: 0 1rem 2rem;
+            }
+            .hero h1 {
+                font-size: clamp(2rem, 6vw, 3rem);
+            }
+            .hero p {
+                font-size: clamp(1rem, 3vw, 1.2rem);
+            }
+            .hero-cta { 
+                flex-direction: column; 
+                align-items: center;
+                gap: 0.75rem;
+            }
+            .cta {
+                padding: 0.75rem 2rem;
+                font-size: 0.9rem;
+                width: 100%;
+                max-width: 250px;
+            }
+            section {
+                padding: 4rem 1rem;
+            }
+            h2 {
+                font-size: clamp(1.75rem, 4vw, 2.5rem);
+                margin-bottom: 2rem;
+            }
+            .about-container { 
+                gap: 2rem;
+            }
+            .about-text { 
+                text-align: center; 
+                font-size: 1rem;
+            }
+            .vision-mission { 
+                grid-template-columns: 1fr; 
+                gap: 1.5rem;
+            }
+            .values-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 0.75rem;
+            }
+            .services-grid, .gallery-grid { 
+                grid-template-columns: 1fr; 
+                gap: 1.5rem;
+            }
+            .service-card {
+                padding: 2rem;
+            }
+            .service-icon {
+                font-size: 2.5rem;
+            }
+            .service-card h3 {
+                font-size: 1.3rem;
+            }
+            .gallery-image {
+                height: 200px;
+            }
+            .clients-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 1rem;
+            }
+            .client-logo {
+                max-width: 120px;
+                padding: 0.75rem;
+            }
+            footer {
+                padding: 3rem 1rem 1rem;
+            }
+            .contact-info {
+                font-size: 0.9rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .values-grid, .clients-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-cta {
+                flex-direction: column;
+            }
         }
         /* Smooth Scroll */
         html { scroll-behavior: smooth; }
@@ -644,18 +684,6 @@
             <div class="hero-cta">
                 <a href="#services" class="cta">Explore Services</a>
                 <a href="#contact" class="cta">Get In Touch</a>
-            </div>
-            <div class="hero-images">
-                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=200&fit=crop" alt="Hydraulic cylinder assembly" class="active">
-                <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=200&fit=crop" alt="Conveyor belt repair">
-                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=200&fit=crop" alt="Line boring operation">
-                <img src="https://images.unsplash.com/photo-1558618047-3c8c98a3e8a8?w=600&h=200&fit=crop" alt="Engineering team at work">
-            </div>
-            <div class="carousel-dots">
-                <span class="carousel-dot active" onclick="goToHeroSlide(0)"></span>
-                <span class="carousel-dot" onclick="goToHeroSlide(1)"></span>
-                <span class="carousel-dot" onclick="goToHeroSlide(2)"></span>
-                <span class="carousel-dot" onclick="goToHeroSlide(3)"></span>
             </div>
         </div>
     </section>
@@ -837,38 +865,9 @@
             link.addEventListener('click', () => {
                 document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
                 link.classList.add('active');
+                toggleMenu(); // Close mobile menu on click
             });
         });
-        // Hero Carousel
-        let currentHeroSlide = 0;
-        const heroImages = document.querySelectorAll('.hero-images img');
-        const heroDots = document.querySelectorAll('.carousel-dot');
-        function updateHeroCarousel(index) {
-            const direction = index > currentHeroSlide ? 1 : -1;
-            heroImages.forEach((img, i) => {
-                img.classList.remove('active', 'prev');
-                if (i === index) {
-                    img.style.left = '0%';
-                    img.classList.add('active');
-                } else if (i === currentHeroSlide) {
-                    img.style.left = direction > 0 ? '-100%' : '100%';
-                    img.classList.add('prev');
-                } else {
-                    img.style.left = '100%';
-                }
-            });
-            heroDots[currentHeroSlide].classList.remove('active');
-            heroDots[index].classList.add('active');
-            currentHeroSlide = index;
-        }
-        function nextHeroSlide() {
-            const nextIndex = (currentHeroSlide + 1) % heroImages.length;
-            updateHeroCarousel(nextIndex);
-        }
-        function goToHeroSlide(index) {
-            updateHeroCarousel(index);
-        }
-        setInterval(nextHeroSlide, 5000); // Auto-advance every 5 seconds
         // Lightbox
         let currentImageIndex = 0;
         const imageSources = [
