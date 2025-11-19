@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Clients | Pitja Engineering</title>
+    <meta name="description" content="Trusted by Anglo American, Ivanplats, Glencore, Sibanye-Stillwater, Impala Platinum and more. Level 1 B-BBEE engineering partner.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF6600;
+            --primary-dark: #E55A00;
+            --accent: #FFD700;
+            --dark: #1A1A1A;
+            --light: #F8F9FA;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Inter', sans-serif; color: var(--dark); line-height: 1.7; background:#fff; overflow-x:hidden; }
+        img { max-width:100%; display:block; }
+        a { text-decoration:none; }
+        .container { width:90%; max-width:1400px; margin:0 auto; padding:0 20px; }
+
+        /* Header */
+        header { position:fixed; top:0; left:0; right:0; z-index:1000; background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); transition:var(--transition); box-shadow:0 4px 20px rgba(0,0,0,0.1); }
+        header.scrolled { background:rgba(255,102,0,0.98); }
+        header.scrolled a, header.scrolled .logo img { filter: brightness(0) invert(1); }
+        header.scrolled .hamburger span { background:white; }
+        .nav { display:flex; justify-content:space-between; align-items:center; padding:1.5rem 0; }
+        .logo img { height:65px; }
+        nav ul { display:flex; gap:3rem; list-style:none; }
+        nav a { color:var(--dark); font-weight:600; font-size:1.1rem; position:relative; }
+        nav a::after { content:''; position:absolute; width:0; height:3px; background:var(--primary); bottom:-10px; left:50%; transition:var(--transition); }
+        nav a:hover::after, nav a.active::after { width:100%; left:0; }
+        header.scrolled nav a:hover, header.scrolled nav a.active { color:var(--accent); }
+        .hamburger { display:none; cursor:pointer; }
+        .hamburger span { display:block; width:30px; height:3px; background:var(--dark); margin:6px 0; transition:0.3s; }
+        .hamburger.active span:nth-child(1) { transform:rotate(45deg) translate(8px,8px); }
+        .hamburger.active span:nth-child(2) { opacity:0; }
+        .hamburger.active span:nth-child(3) { transform:rotate(-45deg) translate(7px,-6px); }
+
+        /* Hero */
+        .hero { height:90vh; min-height:650px; background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.7)), url('https://i.postimg.cc/zBgR36mK/8744f892-6d03-463e-aeaf-f11e8d23ce5c.jpg') center/cover no-repeat fixed; display:flex; align-items:center; color:white; text-align:center; }
+        .hero h1 { font-size:clamp(3.5rem,8vw,6.5rem); font-weight:900; letter-spacing:-2px; }
+        .typing-cursor { display:inline-block; background:white; margin-left:4px; width:4px; height:0.8em; animation:blink 0.8s infinite; }
+        @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+
+        .section { padding:120px 0; }
+        .section-alt { background:var(--light); }
+        .section-title { font-size:3.5rem; text-align:center; margin-bottom:4rem; position:relative; }
+        .section-title::after { content:''; width:120px; height:5px; background:var(--primary); position:absolute; bottom:-20px; left:50%; transform:translateX(-50%); }
+
+        /* Client Logos */
+        .clients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            align-items: center;
+            justify-items: center;
+        }
+        .client-logo {
+            max-width: 180px;
+            filter: grayscale(100%) brightness(0.8);
+            transition: var(--transition);
+            padding: 1.5rem;
+        }
+        .client-logo:hover {
+            filter: grayscale(0%) brightness(1);
+            transform: scale(1.15);
+        }
+
+        /* Testimonials */
+        .testimonials { background:#0a0a0a; color:white; position:relative; overflow:hidden; }
+        .testimonial-slider {
+            display:flex;
+            width:300%;
+            animation: slide 30s infinite;
+        }
+        .testimonial {
+            width:100%;
+            text-align:center;
+            padding:4rem 2rem;
+        }
+        .testimonial p { font-size:1.4rem; max-width:900px; margin:0 auto 2rem; opacity:0.9; font-style:italic; }
+        .testimonial h4 { color:var(--accent); font-size:1.3rem; }
+        @keyframes slide {
+            0%, 33.33% { transform:translateX(0); }
+            36.66%, 66.66% { transform:translateX(-100%); }
+            69.99%, 100% { transform:translateX(-200%); }
+        }
+
+        /* Projects Table */
+        .projects-table {
+            width:100%;
+            border-collapse:collapse;
+            margin-top:3rem;
+            background:white;
+            border-radius:15px;
+            overflow:hidden;
+            box-shadow:0 10px 40px rgba(0,0,0,0.1);
+        }
+        .projects-table th {
+            background:var(--primary);
+            color:white;
+            padding:1.5rem;
+            text-align:left;
+        }
+        .projects-table td {
+            padding:1.5rem;
+            border-bottom:1px solid #eee;
+        }
+        .projects-table tr:hover { background:#fff8f0; }
+
+        footer { background:#111; color:white; padding:80px 0 40px; text-align:center; }
+
+        .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; }
+        .modal.active { display:flex; }
+        .modal-content { background:white; padding:3rem; border-radius:20px; max-width:500px; width:90%; text-align:center; animation:modalIn 0.4s; }
+        @keyframes modalIn { from { transform:scale(0.7); } to { transform:scale(1); } }
+
+        @media (max-width:992px) {
+            .hamburger { display:block; }
+            nav ul { position:fixed; top:0; left:0; width:100%; height:100vh; background:white; flex-direction:column; justify-content:center; align-items:center; transform:translateX(-100%); opacity:0; transition:0.5s; }
+            nav ul.active { transform:translateX(0); opacity:1; }
+            .testimonial-slider { animation:none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="header">
+        <div class="container nav">
+            <a href="index.html" class="logo">
+                <img src="https://i.postimg.cc/C15GcRpW/PITJA-LOGO-removebg-preview.png" alt="Pitja Engineering">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="clients.html" class="active">Clients</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="hamburger" onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('active')">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <h1 id="typingTitle">Trusted by Giants<span class="typing-cursor"></span></h1>
+            <p style="font-size:1.8rem; margin-top:2rem; opacity:0.9;">Level 1 B-BBEE partner to South Africa’s largest mining houses</p>
+        </div>
+    </section>
+
+    <!-- CLIENT LOGOS -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Our Valued Clients</h2>
+            <div class="clients-grid">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Anglo_American_logo.svg" alt="Anglo American" class="client-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/en/5/5e/Ivanhoe_Mines_logo.png" alt="Ivanplats" class="client-logo">
+                <img src="https://www.glencore.com/.imaging/mte/glencore-theme/medium/dam/glencore/logos/Glencore-logo-white.png" alt="Glencore" class="client-logo" style="filter:invert(1);">
+                <img src="https://www.sibanyestillwater.com/wp-content/themes/sibanyestillwater/assets/images/logo.svg" alt="Sibanye Stillwater" class="client-logo">
+                <img src="https://www.impala.co.za/wp-content/uploads/2020/06/Impala-Platinum-Logo.png" alt="Impala Platinum" class="client-logo">
+                <img src="https://www.northam.co.za/images/Northam-logo.png" alt="Northam Platinum" class="client-logo">
+                <img src="https://www.arm.co.za/images/logo.png" alt="African Rainbow Minerals" class="client-logo">
+                <img src="https://www.exxaro.com/wp-content/uploads/2023/03/Exxaro-Logo.png" alt="Exxaro" class="client-logo">
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title" style="color:white;">What Our Clients Say</h2>
+            <div class="testimonial-slider">
+                <div class="testimonial">
+                    <p>"Pitja Engineering has been a game-changer for our maintenance schedule. Their 24/7 response and quality work keep our fleet running."</p>
+                    <h4>— Maintenance Manager, Anglo American Platinum</h4>
+                </div>
+                <div class="testimonial">
+                    <p>"As a Level 1 B-BBEE partner, Pitja not only delivers exceptional hydraulic rebuilds but helps us meet our procurement targets."</p>
+                    <h4>— Procurement Director, Ivanplats</h4>
+                </div>
+                <div class="testimonial">
+                    <p>"Their on-site line boring team saved us weeks of downtime. Professional, safe, and always on time."</p>
+                    <h4>— Engineering Superintendent, Glencore</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAJOR PROJECTS -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Major Projects Delivered</h2>
+            <table class="projects-table">
+                <tr>
+                    <th>Client</th>
+                    <th>Project</th>
+                    <th>Year</th>
+                    <th>Scope</th>
+                </tr>
+                <tr>
+                    <td>Anglo American</td>
+                    <td>Full Hydraulic Rebuild Program</td>
+                    <td>2023–2025</td>
+                    <td>150+ cylinders rebuilt annually</td>
+                </tr>
+                <tr>
+                    <td>Ivanplats Platreef</td>
+                    <td>Conveyor System Overhaul</td>
+                    <td>2024</td>
+                    <td>2.4km belt replacement & upgrades</td>
+                </tr>
+                <tr>
+                    <td>Glencore Rhovan</td>
+                    <td>Line Boring Framework</td>
+                    <td>2022–2025</td>
+                    <td>All excavator boom & stick repairs</td>
+                </tr>
+                <tr>
+                    <td>Sibanye-Stillwater</td>
+                    <td>Undercarriage Supply Contract</td>
+                    <td>2025</td>
+                    <td>Ongoing track frame components</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Pitja Engineering (PTY) Ltd • Reg: 2017/4314/07 • VAT: 4002289348 • All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- JOB MODAL -->
+    <div id="jobModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="document.getElementById('jobModal').classList.remove('active')">&times;</span>
+            <h2>Join Our Team</h2>
+            <p style="margin:1.5rem 0;">We are always looking for skilled artisans, fitters, boilermakers, and engineers.</p>
+            <p>Email your CV to: <strong>careers@pitjaengineering.co.za</strong></p>
+            <p style="margin-top:1rem;">Or WhatsApp: <strong>071 662 0873</strong></p>
+            <button onclick="document.getElementById('jobModal').classList.remove('active')" style="margin-top:2rem;padding:1rem 2.5rem;background:var(--primary);color:white;border:none;border-radius:50px;cursor:pointer;font-weight:600;">Close</button>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        function typeWriter(el, text, speed) {
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    el.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+        window.addEventListener('load', () => {
+            typeWriter(document.getElementById('typingTitle'), "Trusted by Giants", 100);
+        });
+    </script>
+</body>
+</html>
