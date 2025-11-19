@@ -25,7 +25,7 @@
         /* Header */
         header { position:fixed; top:0; left:0; right:0; z-index:1000; background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); transition:var(--transition); box-shadow:0 4px 20px rgba(0,0,0,0.1); }
         header.scrolled { background:rgba(255,102,0,0.98); }
-        header.scrolled a { color:white; }
+        header.scrolled a, header.scrolled .logo img { filter: brightness(0) invert(1); }
         header.scrolled .hamburger span { background:white; }
         .nav { display:flex; justify-content:space-between; align-items:center; padding:1.5rem 0; }
         .logo img { height:65px; transition:var(--transition); }
@@ -50,60 +50,64 @@
         .btn-secondary { background:transparent; border:2px solid white; color:white; }
         .btn-secondary:hover { background:white; color:var(--primary); }
 
-        /* Features */
-        .features { padding:120px 0; background:var(--light); }
-        .section-title { font-size:3.5rem; text-align:center; margin-bottom:4rem; position:relative; }
+        /* General Sections */
+        .section-title { font-size:3.5rem; text-align:center; margin-bottom:4rem; position:relative; color:var(--dark); }
         .section-title::after { content:''; width:120px; height:5px; background:var(--primary); position:absolute; bottom:-20px; left:50%; transform:translateX(-50%); }
+
+        /* Why Choose & Stats */
+        .features, .stats { padding:120px 0; }
+        .features { background:var(--light); }
+        .stats { background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:white; }
         .feature-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:3rem; text-align:center; }
         .feature-icon { font-size:4.5rem; color:var(--primary); margin-bottom:1.5rem; }
-        .feature-item h3 { font-size:1.6rem; margin-bottom:1rem; }
+        .counter { font-size:4.5rem; font-weight:900; }
 
-        /* Partners Section */
+        /* Services Preview */
+        .quick-services { padding:120px 0; background:#fff; }
+        .service-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:2rem; }
+        .service-card { background:white; padding:2.5rem; border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.1); text-align:center; transition:var(--transition); }
+        .service-card:hover { transform:translateY(-15px); box-shadow:0 20px 50px rgba(0,0,0,0.15); }
+        .service-card i { font-size:3.5rem; color:var(--primary); margin-bottom:1.5rem; }
+
+        /* Recent Projects */
+        .latest-projects { padding:120px 0; background:var(--light); }
+        .project-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(350px,1fr)); gap:2rem; }
+        .project-card { border-radius:20px; overflow:hidden; box-shadow:0 15px 40px rgba(0,0,0,0.15); transition:0.4s; }
+        .project-card:hover { transform:scale(1.05); }
+        .project-card img { width:100%; height:300px; object-fit:cover; }
+
+        /* Partners */
         .partners { padding:100px 0; background:#0a0a0a; color:white; text-align:center; }
         .partners h2 { font-size:2.8rem; margin-bottom:1.5rem; }
-        .partners p { opacity:0.7; margin-bottom:3rem; font-size:1.1rem; }
-        .partners-wrapper {
-            overflow:hidden;
-            padding:30px 0;
-            position:relative;
-        }
-        .partners-track {
-            display:flex;
-            gap:5rem;
-            animation: scroll 30s linear infinite;
-            width: max-content;
-        }
-        .partner-logo {
-            height:80px;
-            filter: grayscale(100%) brightness(0.8);
-            transition:var(--transition);
-            padding:0 20px;
-        }
-        .partner-logo:hover {
-            filter: grayscale(0%) brightness(1);
-            transform:scale(1.15);
-        }
-        @keyframes scroll {
-            0% { transform:translateX(0); }
-            100% { transform:translateX(-50%); }
-        }
+        .partners p { opacity:0.7; margin-bottom:3rem; }
+        .partners-wrapper { overflow:hidden; padding:30px 0; }
+        .partners-track { display:flex; gap:5rem; animation: scroll 35s linear infinite; width: max-content; }
+        .partner-logo { height:80px; filter: grayscale(100%) brightness(0.8); transition:var(--transition); opacity:0.8; }
+        .partner-logo:hover { filter: grayscale(0%) brightness(1); transform:scale(1.2); opacity:1; }
+        @keyframes scroll { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
         .partners-track:hover { animation-play-state:paused; }
 
         /* Footer */
         footer { background:#111; color:white; padding:80px 0 40px; text-align:center; }
-        footer a { color:var(--accent); }
+
+        /* Job Modal */
+        .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.8); align-items:center; justify-content:center; }
+        .modal.active { display:flex; }
+        .modal-content { background:white; padding:3rem; border-radius:20px; max-width:500px; width:90%; text-align:center; position:relative; animation:modalIn 0.4s; }
+        @keyframes modalIn { from { transform:scale(0.7); opacity:0; } to { transform:scale(1); opacity:1; } }
+        .close-modal { position:absolute; top:15px; right:20px; font-size:2rem; cursor:pointer; color:#aaa; }
 
         @media (max-width:992px) {
             .hamburger { display:block; }
             nav ul { position:fixed; top:0; left:0; width:100%; height:100vh; background:white; flex-direction:column; justify-content:center; align-items:center; transform:translateX(-100%); opacity:0; transition:0.5s; }
             nav ul.active { transform:translateX(0); opacity:1; }
-            nav a { font-size:2rem; color:var(--dark); padding:1rem; }
+            nav a { font-size:2rem; color:var(--dark); }
             header.scrolled nav a { color:white; }
-            .partners-track { animation: scroll 40s linear infinite; }
         }
     </style>
 </head>
 <body>
+
     <header id="header">
         <div class="container nav">
             <a href="index.html" class="logo">
@@ -125,17 +129,19 @@
         </div>
     </header>
 
+    <!-- HERO -->
     <section class="hero">
         <div class="container">
             <h1>Brewed To Fuel Efficiency</h1>
             <p>South Africa’s premier 100% black female-owned engineering solutions provider for mining, industrial & heavy machinery excellence</p>
             <div>
                 <a href="services.html" class="cta-btn btn-primary">Explore Services</a>
-                <a href="contact.html" class="cta-btn btn-secondary">Get Quote Now</a>
+                <a href="#" class="cta-btn btn-secondary" onclick="document.getElementById('jobModal').classList.add('active'); event.preventDefault();">Apply for Jobs</a>
             </div>
         </div>
     </section>
 
+    <!-- WHY CHOOSE US -->
     <section class="features">
         <div class="container">
             <h2 class="section-title">Why Industry Leaders Choose Pitja</h2>
@@ -159,14 +165,55 @@
         </div>
     </section>
 
-    <!-- PARTNERS SECTION -->
+    <!-- STATS COUNTER -->
+    <section class="stats">
+        <div class="container">
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:3rem; text-align:center;">
+                <div><h3 class="counter" data-target="1500">0</h3><p>Hydraulic Cylinders Rebuilt</p></div>
+                <div><h3 class="counter" data-target="8">0</h3><p>Years of Excellence</p></div>
+                <div><h3 class="counter" data-target="24">0</h3><p>Hour Emergency Response</p></div>
+                <div><h3 class="counter" data-target="100">0</h3><p>Client Satisfaction Rate</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES PREVIEW -->
+    <section class="quick-services">
+        <div class="container">
+            <h2 class="section-title">Core Engineering Services</h2>
+            <div class="service-grid">
+                <div class="service-card"><i class="fas fa-cogs"></i><h3>Hydraulic Cylinders</h3><p>Full rebuild, testing & honing</p><a href="services.html" style="color:var(--primary);font-weight:600;">Learn More →</a></div>
+                <div class="service-card"><i class="fas fa-tools"></i><h3>Hoses & Fittings</h3><p>Supply, crimping & installation</p><a href="services.html" style="color:var(--primary);font-weight:600;">Learn More →</a></div>
+                <div class="service-card"><i class="fas fa-conveyor-belt"></i><h3>Conveyor Systems</h3><p>New belts, rollers & repairs</p><a href="services.html" style="color:var(--primary);font-weight:600;">Learn More →</a></div>
+                <div class="service-card"><i class="fas fa-drill"></i><h3>Line Boring</h3><p>On-site & workshop precision</p><a href="services.html" style="color:var(--primary);font-weight:600;">Learn More →</a></div>
+                <div class="service-card"><i class="fas fa-truck-monster"></i><h3>Undercarriage</h3><p>Tracks, rollers, sprockets supply</p><a href="services.html" style="color:var(--primary);font-weight:600;">Learn More →</a></div>
+                <div class="service-card"><i class="fas fa-wrench"></i><h3>On-Site Shutdowns</h3><p>Planned maintenance & rebuilds</p><a href="services.html" style="color:var(--primary);font-weight:600;">Learn More →</a></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RECENT PROJECTS -->
+    <section class="latest-projects">
+        <div class="container">
+            <h2 class="section-title">Recent Projects</h2>
+            <div class="project-grid">
+                <a href="gallery.html" class="project-card"><img src="https://i.postimg.cc/ryffSR7h/79764b7f-212a-4c89-a134-da9c554facad.jpg" alt=""><div style="padding:1.5rem;background:white;"><h4>Anglo American – Cylinder Rebuild</h4></div></a>
+                <a href="gallery.html" class="project-card"><img src="https://i.postimg.cc/zBgR36mK/8744f892-6d03-463e-aeaf-f11e8d23ce5c.jpg" alt=""><div style="padding:1.5rem;background:white;"><h4>Ivanplats – Conveyor Upgrade</h4></div></a>
+                <a href="gallery.html" class="project-card"><img src="https://images.unsplash.com/photo-1581093450029-8cf7a098100e?w=800" alt=""><div style="padding:1.5rem;background:white;"><h4>Glencore – Line Boring</h4></div></a>
+            </div>
+            <div style="text-align:center;margin-top:3rem;">
+                <a href="gallery.html" class="cta-btn btn-primary">View Full Gallery →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARTNERS -->
     <section class="partners">
         <div class="container">
             <h2>Trusted By Industry Giants</h2>
-            <p>We proudly partner with South Africa’s leading mining and industrial companies</p>
+            <p>We proudly serve South Africa’s leading mining and industrial companies</p>
             <div class="partners-wrapper">
                 <div class="partners-track">
-                    <!-- Duplicate set for seamless loop -->
                     <img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Anglo_American_logo.svg" alt="Anglo American" class="partner-logo">
                     <img src="https://upload.wikimedia.org/wikipedia/en/5/5e/Ivanhoe_Mines_logo.png" alt="Ivanplats" class="partner-logo">
                     <img src="https://www.glencore.com/.imaging/mte/glencore-theme/medium/dam/glencore/logos/Glencore-logo-white.png" alt="Glencore" class="partner-logo">
@@ -174,7 +221,7 @@
                     <img src="https://www.impala.co.za/wp-content/uploads/2020/06/Impala-Platinum-Logo.png" alt="Impala Platinum" class="partner-logo">
                     <img src="https://www.northam.co.za/images/Northam-logo.png" alt="Northam Platinum" class="partner-logo">
                     <img src="https://www.arm.co.za/images/logo.png" alt="African Rainbow Minerals" class="partner-logo">
-                    <!-- Repeat for infinite scroll -->
+                    <!-- Duplicate for seamless loop -->
                     <img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Anglo_American_logo.svg" alt="Anglo American" class="partner-logo">
                     <img src="https://upload.wikimedia.org/wikipedia/en/5/5e/Ivanhoe_Mines_logo.png" alt="Ivanplats" class="partner-logo">
                     <img src="https://www.glencore.com/.imaging/mte/glencore-theme/medium/dam/glencore/logos/Glencore-logo-white.png" alt="Glencore" class="partner-logo">
@@ -193,10 +240,49 @@
         </div>
     </footer>
 
+    <!-- JOB APPLICATION MODAL -->
+    <div id="jobModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="document.getElementById('jobModal').classList.remove('active')">&times;</span>
+            <h2>Join Our Team</h2>
+            <p style="margin:1.5rem 0;">We are always looking for skilled artisans, fitters, boilermakers, and engineers.</p>
+            <p>Email your CV to: <strong>careers@pitjaengineering.co.za</strong></p>
+            <p style="margin-top:1rem;">Or WhatsApp: <strong>071 662 0873</strong></p>
+            <button onclick="document.getElementById('jobModal').classList.remove('active')" style="margin-top:2rem;padding:1rem 2rem;background:var(--primary);color:white;border:none;border-radius:50px;cursor:pointer;font-weight:600;">Close</button>
+        </div>
+    </div>
+
     <script>
+        // Header scroll
         window.addEventListener('scroll', () => {
             document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
         });
+
+        // Counter animation
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = entry.target;
+                    const count = +target.getAttribute('data-target');
+                    let current = 0;
+                    const inc = count / speed;
+                    const update = () => {
+                        if (current < count) {
+                            current += inc;
+                            target.innerText = Math.ceil(current) + (count === 100 ? '%' : '+');
+                            requestAnimationFrame(update);
+                        } else {
+                            target.innerText = count === 100 ? '100%' : count + '+';
+                        }
+                    };
+                    update();
+                    observer.unobserve(target);
+                }
+            });
+        }, { threshold: 0.7 });
+        counters.forEach(c => observer.observe(c));
     </script>
 </body>
 </html>
