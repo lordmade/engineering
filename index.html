@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pitja Engineering | Brewed To Fuel Efficiency</title>
+    <meta name="description" content="South Africa’s premier 100% black female-owned engineering solutions provider for mining & heavy industry.">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -11,7 +12,7 @@
             --primary: #FF6600;
             --primary-dark: #E55A00;
             --accent: #FFD700;
-            --dark: #1A1A00;
+            --dark: #1A1A1A;
             --light: #F8F9FA;
             --gray: #555;
             --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -43,33 +44,9 @@
         /* Hero with Typing Effect */
         .hero { height:100vh; min-height:750px; background:linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.65)), url('https://i.postimg.cc/zBgR36mK/8744f892-6d03-463e-aeaf-f11e8d23ce5c.jpg') center/cover no-repeat fixed; display:flex; align-items:center; color:white; text-align:center; }
         .hero-content { max-width:1100px; margin:0 auto; }
-        .typing-title {
-            font-size:clamp(3.5rem,8vw,7rem);
-            font-weight:900;
-            letter-spacing:-2px;
-            margin-bottom:1rem;
-            opacity:0;
-        }
-        .typing-subtitle {
-            font-size:1.6rem;
-            max-width:900px;
-            margin:0 auto 3rem;
-            opacity:0.95;
-            opacity:0;
-        }
-        .typing-cursor {
-            display:inline-block;
-            background-color:white;
-            margin-left:4px;
-            width:4px;
-            height:0.8em;
-            vertical-align:middle;
-            animation:blink 0.8s infinite;
-        }
-        @keyframes blink {
-            0%,100% { opacity:1; }
-            50% { opacity:0; }
-        }
+        #typingTitle, #typingSubtitle { opacity:0; }
+        .typing-cursor { display:inline-block; background:white; margin-left:4px; width:4px; height:0.8em; animation:blink 0.8s infinite; vertical-align:middle; }
+        @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
 
         .cta-btn { display:inline-block; padding:1.3rem 3.5rem; margin:0.8rem; border-radius:50px; font-weight:700; font-size:1.1rem; transition:var(--transition); box-shadow:0 10px 30px rgba(255,102,0,0.3); }
         .btn-primary { background:var(--primary); color:white; }
@@ -77,40 +54,59 @@
         .btn-secondary { background:transparent; border:2px solid white; color:white; }
         .btn-secondary:hover { background:white; color:var(--primary); }
 
-        /* Rest of sections (unchoffed for brevity - same as previous final version) */
+        /* General */
         .section-title { font-size:3.5rem; text-align:center; margin-bottom:4rem; position:relative; color:var(--dark); }
         .section-title::after { content:''; width:120px; height:5px; background:var(--primary); position:absolute; bottom:-20px; left:50%; transform:translateX(-50%); }
         .features, .stats, .quick-services, .latest-projects { padding:120px 0; }
         .features, .latest-projects { background:var(--light); }
-        .stats { background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:white; }
-        .feature-grid, .service-grid, .project-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:3rem; text-align:center; }
-        .counter { font-size:4.5rem; font-weight:900; }
-        .service-card, .project-card { background:white; border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.1); transition:var(--transition); }
-        .service-card:hover, .project-card:hover { transform:translateY(-15px); }
+        .stats { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; text-align:center; }
+        .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:3rem; }
+        .counter { font-size:4.8rem; font-weight:900; }
+        .feature-icon { font-size:4.5rem; color:var(--primary); margin-bottom:1.5rem; }
+
+        .service-grid, .project-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:2.5rem; }
+        .service-card, .project-card { background:white; border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.1); overflow:hidden; transition:var(--transition); }
+        .service-card:hover, .project-card:hover { transform:translateY(-15px); box-shadow:0 20px 50px rgba(0,0,0,0.18); }
+        .service-card i { font-size:3.8rem; color:var(--primary); margin:2rem 0 1.5rem; }
+        .service-card a { color:var(--primary); font-weight:600; }
+
+        .project-card img { height:280px; object-fit:cover; }
+
         .partners { padding:100px 0; background:#0a0a0a; color:white; text-align:center; }
-        .partners-track { display:flex; gap:5rem; animation: scroll 35s linear infinite; width: max-content; }
-        .partner-logo { height:80px; filter: grayscale(100%) brightness(0.8); transition:var(--transition); }
-        .partner-logo:hover { filter: grayscale(0%) brightness(1); transform:scale(1.2); }
+        .partners h2 { font-size:2.8rem; margin-bottom:1rem; }
+        .partners p { opacity:0.7; margin-bottom:3rem; }
+        .partners-wrapper { overflow:hidden; }
+        .partners-track { display:flex; gap:5rem; animation:scroll 40s linear infinite; width:max-content; }
+        .partner-logo { height:80px; filter:grayscale(100%) brightness(0.8); transition:var(--transition); }
+        .partner-logo:hover { filter:grayscale(0%) brightness(1); transform:scale(1.2); }
         @keyframes scroll { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+        .partners-track:hover { animation-play-state:paused; }
+
         footer { background:#111; color:white; padding:80px 0 40px; text-align:center; }
-        .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.8); align-items:center; justify-content:center; }
+
+        /* Job Modal */
+        .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; }
         .modal.active { display:flex; }
-        .modal-content { background:white; padding:3rem; border-radius:20px; max-width:500px; width:90%; text-align:center; animation:modalIn 0.4s; }
+        .modal-content { background:white; padding:3rem; border-radius:20px; max-width:500px; width:90%; text-align:center; animation:modalIn 0.4s; position:relative; }
+        .close-modal { position:absolute; top:15px; right:20px; font-size:2rem; cursor:pointer; color:#999; }
         @keyframes modalIn { from { transform:scale(0.7); opacity:0; } to { transform:scale(1); opacity:1; } }
 
         @media (max-width:992px) {
             .hamburger { display:block; }
             nav ul { position:fixed; top:0; left:0; width:100%; height:100vh; background:white; flex-direction:column; justify-content:center; align-items:center; transform:translateX(-100%); opacity:0; transition:0.5s; }
             nav ul.active { transform:translateX(0); opacity:1; }
+            nav a { font-size:2rem; color:var(--dark); }
+            header.scrolled nav a { color:white; }
         }
     </style>
 </head>
 <body>
 
+    <!-- HEADER -->
     <header id="header">
         <div class="container nav">
             <a href="index.html" class="logo">
-                <img src="https://i.postimg.cc/C15GcRpW/PITJA-LOGO-removebg-preview.png" alt="Pitja Engineering">
+                <img src="https://i.postimg.cc/C15GcRpW/PITJA-LOGO-removebg-preview.png" alt="Pitja Engineering Logo">
             </a>
             <nav>
                 <ul>
@@ -118,7 +114,7 @@
                     <li><a href="about.html">About</a></li>
                     <li><a href="services.html">Services</a></li>
                     <li><a href="gallery.html">Gallery</a></li>
-                    <li><a href="clients.html">Clients</0></li>
+                    <li><a href="clients.html">Clients</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
             </nav>
@@ -131,8 +127,8 @@
     <!-- HERO WITH TYPING EFFECT -->
     <section class="hero">
         <div class="container hero-content">
-            <h1 class="typing-title" id="typingTitle">Brewed To Fuel Efficiency<span class="typing-cursor">|</span></h1>
-            <p class="typing-subtitle" id="typingSubtitle">South Africa’s premier 100% black female-owned engineering solutions provider for mining, industrial & heavy machinery excellence</p>
+            <h1 id="typingTitle">Brewed To Fuel Efficiency<span class="typing-cursor"></span></h1>
+            <p id="typingSubtitle">South Africa’s premier 100% black female-owned engineering solutions provider for mining, industrial & heavy machinery excellence</p>
             <div>
                 <a href="services.html" class="cta-btn btn-primary">Explore Services</a>
                 <a href="#" class="cta-btn btn-secondary" onclick="document.getElementById('jobModal').classList.add('active'); event.preventDefault();">Apply for Jobs</a>
@@ -140,11 +136,116 @@
         </div>
     </section>
 
-    <!-- All other sections remain exactly the same as previous final version -->
-    <!-- (Why Choose, Stats, Services, Projects, Partners, Footer, Modal) -->
-    <!-- Paste them here from the previous final code if needed -->
+    <!-- WHY CHOOSE US -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Why Industry Leaders Choose Pitja</h2>
+            <div class="grid">
+                <div style="text-align:center;">
+                    <i class="fas fa-medal feature-icon"></i>
+                    <h3>Level 1 B-BBEE</h3>
+                    <p>100% Black Female Owned & Managed</p>
+                </div>
+                <div style="text-align:center;">
+                    <i class="fas fa-bolt feature-icon"></i>
+                    <h3>24/7 Emergency Response</h3>
+                    <p>On-site anywhere in SA within hours</p>
+                </div>
+                <div style="text-align:center;">
+                    <i class="fas fa-certificate feature-icon"></i>
+                    <h3>OEM-Quality Guaranteed</h3>
+                    <p>ISO-certified processes with full warranty</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- JOB MODAL & SCRIPTS -->
+    <!-- STATS COUNTER -->
+    <section class="stats">
+        <div class="container">
+            <div class="grid">
+                <div><h3 class="counter" data-target="1500">0</h3><p>Hydraulic Cylinders Rebuilt</p></div>
+                <div><h3 class="counter" data-target="8">0</h3><p>Years of Excellence</p></div>
+                <div><h3 class="counter" data-target="24">0</h3><p>Hour Emergency Response</p></div>
+                <div><h3 class="counter" data-target="100">0</h3><p>Client Satisfaction Rate</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CORE SERVICES -->
+    <section class="quick-services">
+        <div class="container">
+            <h2 class="section-title">Core Engineering Services</h2>
+            <div class="service-grid">
+                <div class="service-card"><div style="padding:2rem;"><i class="fas fa-cogs"></i><h3>Hydraulic Cylinders</h3><p>Full rebuild, testing & honing</p><a href="services.html">Learn More →</a></div></div>
+                <div class="service-card"><div style="padding:2rem;"><i class="fas fa-tools"></i><h3>Hoses & Fittings</h3><p>Supply, crimping & installation</p><a href="services.html">Learn More →</a></div></div>
+                <div class="service-card"><div style="padding:2rem;"><i class="fas fa-conveyor-belt"></i><h3>Conveyor Systems</h3><p>New belts, rollers & repairs</p><a href="services.html">Learn More →</a></div></div>
+                <div class="service-card"><div style="padding:2rem;"><i class="fas fa-drill"></i><h3>Line Boring</h3><p>On-site & workshop precision</p><a href="services.html">Learn More →</a></div></div>
+                <div class="service-card"><div style="padding:2rem;"><i class="fas fa-truck-monster"></i><h3>Undercarriage</h3><p>Tracks, rollers, sprockets supply</p><a href="services.html">Learn More →</a></div></div>
+                <div class="service-card"><div style="padding:2rem;"><i class="fas fa-wrench"></i><h3>On-Site Shutdowns</h3><p>Planned maintenance & rebuilds</p><a href="services.html">Learn More →</a></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RECENT PROJECTS -->
+    <section class="latest-projects">
+        <div class="container">
+            <h2 class="section-title">Recent Projects</h2>
+            <div class="project-grid">
+                <a href="gallery.html" class="project-card">
+                    <img src="https://i.postimg.cc/ryffSR7h/79764b7f-212a-4c89-a134-da9c554facad.jpg" alt="Anglo American Project">
+                    <div style="padding:1.5rem; background:white;"><h4>Anglo American – Cylinder Rebuild</h4></div>
+                </a>
+                <a href="gallery.html" class="project-card">
+                    <img src="https://i.postimg.cc/zBgR36mK/8744f892-6d03-463e-aeaf-f11e8d23ce5c.jpg" alt="Ivanplats Project">
+                    <div style="padding:1.5rem; background:white;"><h4>Ivanplats – Conveyor Upgrade</h4></div>
+                </a>
+                <a href="gallery.html" class="project-card">
+                    <img src="https://images.unsplash.com/photo-1581093450029-8cf7a098100e?w=800" alt="Glencore Project">
+                    <div style="padding:1.5rem; background:white;"><h4>Glencore – Line Boring</h4></div>
+                </a>
+            </div>
+            <div style="text-align:center; margin-top:3rem;">
+                <a href="gallery.html" class="cta-btn btn-primary">View Full Gallery →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARTNERS CAROUSEL -->
+    <section class="partners">
+        <div class="container">
+            <h2>Trusted By Industry Giants</h2>
+            <p>We proudly serve South Africa’s leading mining and industrial companies</p>
+            <div class="partners-wrapper">
+                <div class="partners-track">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Anglo_American_logo.svg" alt="Anglo American" class="partner-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/5/5e/Ivanhoe_Mines_logo.png" alt="Ivanplats" class="partner-logo">
+                    <img src="https://www.glencore.com/.imaging/mte/glencore-theme/medium/dam/glencore/logos/Glencore-logo-white.png" alt="Glencore" class="partner-logo">
+                    <img src="https://www.sibanyestillwater.com/wp-content/themes/sibanyestillwater/assets/images/logo.svg" alt="Sibanye Stillwater" class="partner-logo">
+                    <img src="https://www.impala.co.za/wp-content/uploads/2020/06/Impala-Platinum-Logo.png" alt="Impala Platinum" class="partner-logo">
+                    <img src="https://www.northam.co.za/images/Northam-logo.png" alt="Northam Platinum" class="partner-logo">
+                    <img src="https://www.arm.co.za/images/logo.png" alt="African Rainbow Minerals" class="partner-logo">
+                    <!-- Duplicate for seamless loop -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Anglo_American_logo.svg" alt="Anglo American" class="partner-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/5/5e/Ivanhoe_Mines_logo.png" alt="Ivanplats" class="partner-logo">
+                    <img src="https://www.glencore.com/.imaging/mte/glencore-theme/medium/dam/glencore/logos/Glencore-logo-white.png" alt="Glencore" class="partner-logo">
+                    <img src="https://www.sibanyestillwater.com/wp-content/themes/sibanyestillwater/assets/images/logo.svg" alt="Sibanye Stillwater" class="partner-logo">
+                    <img src="https://www.impala.co.za/wp-content/uploads/2020/06/Impala-Platinum-Logo.png" alt="Impala Platinum" class="partner-logo">
+                    <img src="https://www.northam.co.za/images/Northam-logo.png" alt="Northam Platinum" class="partner-logo">
+                    <img src="https://www.arm.co.za/images/logo.png" alt="African Rainbow Minerals" class="partner-logo">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Pitja Engineering (PTY) Ltd • Reg: 2017/4314/07 • VAT: 4002289348 • All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- JOB APPLICATION MODAL -->
     <div id="jobModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="document.getElementById('jobModal').classList.remove('active')">&times;</span>
@@ -152,12 +253,12 @@
             <p style="margin:1.5rem 0;">We are always looking for skilled artisans, fitters, boilermakers, and engineers.</p>
             <p>Email your CV to: <strong>careers@pitjaengineering.co.za</strong></p>
             <p style="margin-top:1rem;">Or WhatsApp: <strong>071 662 0873</strong></p>
-            <button onclick="document.getElementById('jobModal').classList.remove('active')" style="margin-top:2rem;padding:1rem 2rem;background:var(--primary);color:white;border:none;border-radius:50px;cursor:pointer;font-weight:600;">Close</button>
+            <button onclick="document.getElementById('jobModal').classList.remove('active')" style="margin-top:2rem;padding:1rem 2.5rem;background:var(--primary);color:white;border:none;border-radius:50px;cursor:pointer;font-weight:600;">Close</button>
         </div>
     </div>
 
     <script>
-        // Header scroll
+        // Header scroll effect
         window.addEventListener('scroll', () => {
             document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
         });
@@ -165,20 +266,17 @@
         // Typing Effect
         function typeWriter(element, text, speed, callback) {
             let i = 0;
-            element.innerHTML = '';
             element.style.opacity = 1;
-            const cursor = element.querySelector('.typing-cursor') || document.createElement('span');
-            if (!element.querySelector('.typing-cursor')) {
-                cursor.className = 'typing-cursor';
-                element.appendChild(cursor);
-            }
+            const cursor = document.createElement('span');
+            cursor.className = 'typing-cursor';
+            element.appendChild(cursor);
+
             function type() {
                 if (i < text.length) {
-                    element.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor">|</span>';
+                    element.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
                     i++;
                     setTimeout(type, speed);
                 } else {
-                    element.innerHTML = text + '<span class="typing-cursor">|</span>';
                     if (callback) setTimeout(callback, 500);
                 }
             }
@@ -191,11 +289,11 @@
             typeWriter(title, "Brewed To Fuel Efficiency", 100, () => {
                 setTimeout(() => {
                     typeWriter(subtitle, "South Africa’s premier 100% black female-owned engineering solutions provider for mining, industrial & heavy machinery excellence", 40);
-                }, 300);
+                }, 400);
             });
         });
 
-        // Counter animation (same as before)
+        // Counter animation
         const counters = document.querySelectorAll('.counter');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
