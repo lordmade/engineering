@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | Pitja Engineering</title>
+    <meta name="description" content="See our precision engineering work in action — hydraulic rebuilds, line boring, conveyor upgrades and more across South African mines.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF6600;
+            --primary-dark: #E55A00;
+            --accent: #FFD700;
+            --dark: #1A1A1A;
+            --light: #F8F9FA;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Inter', sans-serif; color: var(--dark); line-height: 1.7; background:#fff; overflow-x:hidden; }
+        img { max-width:100%; display:block; }
+        a { text-decoration:none; }
+        .container { width:90%; max-width:1400px; margin:0 auto; padding:0 20px; }
+
+        /* Header */
+        header { position:fixed; top:0; left:0; right:0; z-index:1000; background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); transition:var(--transition); box-shadow:0 4px 20px rgba(0,0,0,0.1); }
+        header.scrolled { background:rgba(255,102,0,0.98); }
+        header.scrolled a, header.scrolled .logo img { filter: brightness(0) invert(1); }
+        header.scrolled .hamburger span { background:white; }
+        .nav { display:flex; justify-content:space-between; align-items:center; padding:1.5rem 0; }
+        .logo img { height:65px; }
+        nav ul { display:flex; gap:3rem; list-style:none; }
+        nav a { color:var(--dark); font-weight:600; font-size:1.1rem; position:relative; }
+        nav a::after { content:''; position:absolute; width:0; height:3px; background:var(--primary); bottom:-10px; left:50%; transition:var(--transition); }
+        nav a:hover::after, nav a.active::after { width:100%; left:0; }
+        header.scrolled nav a:hover, header.scrolled nav a.active { color:var(--accent); }
+        .hamburger { display:none; cursor:pointer; }
+        .hamburger span { display:block; width:30px; height:3px; background:var(--dark); margin:6px 0; transition:0.3s; }
+        .hamburger.active span:nth-child(1) { transform:rotate(45deg) translate(8px,8px); }
+        .hamburger.active span:nth-child(2) { opacity:0; }
+        .hamburger.active span:nth-child(3) { transform:rotate(-45deg) translate(7px,-6px); }
+
+        /* Hero */
+        .hero { height:90vh; min-height:650px; background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.7)), url('https://i.postimg.cc/zBgR36mK/8744f892-6d03-463e-aeaf-f11e8d23ce5c.jpg') center/cover no-repeat fixed; display:flex; align-items:center; color:white; text-align:center; }
+        .hero h1 { font-size:clamp(3.5rem,8vw,6.5rem); font-weight:900; letter-spacing:-2px; }
+        .typing-cursor { display:inline-block; background:white; margin-left:4px; width:4px; height:0.8em; animation:blink 0.8s infinite; }
+        @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+
+        .section { padding:120px 0; }
+        .section-title { font-size:3.5rem; text-align:center; margin-bottom:4rem; position:relative; }
+        .section-title::after { content:''; width:120px; height:5px; background:var(--primary); position:absolute; bottom:-20px; left:50%; transform:translateX(-50%); }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .gallery-item:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0,0,0,0.25); }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        .gallery-item:hover img { transform: scale(1.1); }
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 2rem 1.5rem 1.5rem;
+            transform: translateY(50%);
+            transition: var(--transition);
+        }
+        .gallery-item:hover .gallery-overlay { transform: translateY(0); }
+        .gallery-overlay h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            align-items: center;
+            justify-content: center;
+        }
+        .lightbox.active { display: flex; }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+        .lightbox-close, .lightbox-prev, .lightbox-next {
+            position: absolute;
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+            z-index: 2001;
+            transition: 0.3s;
+        }
+        .lightbox-close { top: 30px; right: 40px; }
+        .lightbox-close:hover { color: var(--primary); }
+        .lightbox-prev { left: 30px; top: 50%; transform: translateY(-50%); }
+        .lightbox-next { right: 30px; top: 50%; transform: translateY(-50%); }
+        .lightbox-prev:hover, .lightbox-next:hover { color: var(--accent); transform: translateY(-50%) scale(1.2); }
+
+        footer { background:#111; color:white; padding:80px 0 40px; text-align:center; }
+
+        .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; }
+        .modal.active { display:flex; }
+        .modal-content { background:white; padding:3rem; border-radius:20px; max-width:500px; width:90%; text-align:center; animation:modalIn 0.4s; }
+        @keyframes modalIn { from { transform:scale(0.7); } to { transform:scale(1); } }
+
+        @media (max-width:992px) {
+            .hamburger { display:block; }
+            nav ul { position:fixed; top:0; left:0; width:100%; height:100vh; background:white; flex-direction:column; justify-content:center; align-items:center; transform:translateX(-100%); opacity:0; transition:0.5s; }
+            nav ul.active { transform:translateX(0); opacity:1; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width:600px) {
+            .gallery-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="header">
+        <div class="container nav">
+            <a href="index.html" class="logo">
+                <img src="https://i.postimg.cc/C15GcRpW/PITJA-LOGO-removebg-preview.png" alt="Pitja Engineering">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="gallery.html" class="active">Gallery</a></li>
+                    <li><a href="clients.html">Clients</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="hamburger" onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('active')">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <h1 id="typingTitle">Excellence in Action<span class="typing-cursor"></span></h1>
+            <p style="font-size:1.8rem; margin-top:2rem; opacity:0.9;">Real projects. Real results. Real impact across South African mines.</p>
+        </div>
+    </section>
+
+    <!-- GALLERY GRID -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Our Work in Action</h2>
+            <div class="gallery-grid">
+                <!-- Add as many as you want -->
+                <div class="gallery-item" onclick="openLightbox(0)">
+                    <img src="https://i.postimg.cc/ryffSR7h/79764b7f-212a-4c89-a134-da9c554facad.jpg" alt="Hydraulic Cylinder Rebuild">
+                    <div class="gallery-overlay"><h3>Hydraulic Cylinder Rebuild</h3><p>Precision honing & testing</p></div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(1)">
+                    <img src="https://i.postimg.cc/zBgR36mK/8744f892-6d03-463e-aeaf-f11e8d23ce5c.jpg" alt="Conveyor Belt Repair">
+                    <div class="gallery-overlay"><h3>Conveyor Belt Upgrade</h3><p>On-site splicing & alignment</p></div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(2)">
+                    <img src="https://images.unsplash.com/photo-1581093450029-8cf7a098100e?w=800" alt="Line Boring">
+                    <div class="gallery-overlay"><h3>Portable Line Boring</h3><p>Excavator boom repair</p></div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(3)">
+                    <img src="https://i.postimg.cc/C5KTcTF3/d69e39c1-2426-479e-9807-3468bc518dd3.jpg" alt="Team at Work">
+                    <div class="gallery-overlay"><h3>Team Excellence</h3><p>Our skilled artisans in action</p></div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(4)">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800" alt="Cylinder Honing">
+                    <div class="gallery-overlay"><h3>Precision Honing</h3><p>Mirror finish chrome</p></div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(5)">
+                    <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800" alt="Workshop">
+                    <div class="gallery-overlay"><h3>State-of-the-Art Workshop</h3><p>Fully equipped facility</p></div>
+                </div>
+                <!-- Add more images here -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Pitja Engineering (PTY) Ltd • Reg: 2017/4314/07 • VAT: 4002289348 • All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <span class="lightbox-prev" onclick="changeImage(-1)">&#10094;</span>
+        <img id="lightbox-img" src="" alt="">
+        <span class="lightbox-next" onclick="changeImage(1)">&#10095;</span>
+    </div>
+
+    <!-- JOB MODAL -->
+    <div id="jobModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="document.getElementById('jobModal').classList.remove('active')">&times;</span>
+            <h2>Join Our Team</h2>
+            <p style="margin:1.5rem 0;">We are always looking for skilled artisans, fitters, boilermakers, and engineers.</p>
+            <p>Email your CV to: <strong>careers@pitjaengineering.co.za</strong></p>
+            <p style="margin-top:1rem;">Or WhatsApp: <strong>071 662 0873</strong></p>
+            <button onclick="document.getElementById('jobModal').classList.remove('active')" style="margin-top:2rem;padding:1rem 2.5rem;background:var(--primary);color:white;border:none;border-radius:50px;cursor:pointer;font-weight:600;">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Header
+        window.addEventListener('scroll', () => {
+            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Typing
+        function typeWriter(el, text, speed) {
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    el.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+        window.addEventListener('load', () => {
+            typeWriter(document.getElementById('typingTitle'), "Excellence in Action", 100);
+        });
+
+        // Lightbox
+        const images = [
+            "https://i.postimg.cc/ryffSR7h/79764b7f-212a-4c89-a134-da9c554facad.jpg",
+            "https://i.postimg.cc/zBgR36mK/8744f892-6d03-463e-aeaf-f11e8d23ce5c.jpg",
+            "https://images.unsplash.com/photo-1581093450029-8cf7a098100e?w=1200",
+            "https://i.postimg.cc/C5KTcTF3/d69e39c1-2426-479e-9807-3468bc518dd3.jpg",
+            "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200",
+            "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=1200"
+        ];
+        let currentIndex = 0;
+
+        function openLightbox(index) {
+            currentIndex = index;
+            document.getElementById('lightbox-img').src = images[index];
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        function changeImage(direction) {
+            currentIndex = (currentIndex + direction + images.length) % images.length;
+            document.getElementById('lightbox-img').src = images[currentIndex];
+        }
+
+        // Close on click outside image or ESC
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('lightbox')) closeLightbox();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') changeImage(-1);
+            if (e.key === 'ArrowRight') changeImage(1);
+        });
+    </script>
+</body>
+</html>
