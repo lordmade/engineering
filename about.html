@@ -22,7 +22,6 @@
         a { text-decoration:none; }
         .container { width:90%; max-width:1400px; margin:0 auto; padding:0 20px; }
 
-        /* Header - Same as Home */
         header { position:fixed; top:0; left:0; right:0; z-index:1000; background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); transition:var(--transition); box-shadow:0 4px 20px rgba(0,0,0,0.1); }
         header.scrolled { background:rgba(255,102,0,0.98); }
         header.scrolled a, header.scrolled .logo img { filter: brightness(0) invert(1); }
@@ -36,18 +35,21 @@
         header.scrolled nav a:hover, header.scrolled nav a.active { color:var(--accent); }
         .hamburger { display:none; cursor:pointer; }
         .hamburger span { display:block; width:30px; height:3px; background:var(--dark); margin:6px 0; transition:0.3s; }
+        .hamburger.active span:nth-child(1) { transform:rotate(45deg) translate(8px,8px); }
+        .hamburger.active span:nth-child(2) { opacity:0; }
+        .hamburger.active span:nth-child(3) { transform:rotate(-45deg) translate(7px,-6px); }
 
-        /* Hero */
         .hero { height:90vh; min-height:650px; background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.7)), url('https://i.postimg.cc/C5KTcTF3/d69e39c1-2426-479e-9807-3468bc518dd3.jpg') center/cover no-repeat fixed; display:flex; align-items:center; color:white; text-align:center; }
         .hero h1 { font-size:clamp(3.5rem,8vw,6.5rem); font-weight:900; letter-spacing:-2px; }
         .typing-cursor { display:inline-block; background:white; margin-left:4px; width:4px; height:0.8em; animation:blink 0.8s infinite; }
         @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
 
-        /* Sections */
         .section { padding:120px 0; }
-        .section-alt { background:var(--light); }
+        .section-alt { background:#0a0a0a; color:white; }
         .section-title { font-size:3.5rem; text-align:center; margin-bottom:4rem; position:relative; }
         .section-title::after { content:''; width:120px; height:5px; background:var(--primary); position:absolute; bottom:-20px; left:50%; transform:translateX(-50%); }
+        .section-title.white { color:white; }
+        .section-title.white::after { background:var(--accent); }
 
         .director-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; margin-bottom:6rem; }
         .director-img { border-radius:25px; box-shadow:0 20px 60px rgba(0,0,0,0.3); transition:0.5s; }
@@ -56,9 +58,21 @@
         .director-text h3 { color:var(--primary); font-size:1.8rem; margin-bottom:2rem; }
 
         .vm-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(400px,1fr)); gap:3rem; margin:5rem 0; }
-        .vm-card { background:white; padding:3rem; border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.1); text-align:center; transition:var(--transition); }
-        .vm-card:hover { transform:translateY(-10px); }
-        .vm-card i { font-size:3.5rem; color:var(--primary); margin-bottom:1.5rem; }
+        .vm-card { 
+            background:rgba(255,255,255,0.1); 
+            backdrop-filter:blur(10px); 
+            border:1px solid rgba(255,255,255,0.2);
+            padding:3rem; 
+            border-radius:20px; 
+            text-align:center; 
+            transition:var(--transition); 
+        }
+        .vm-card:hover { 
+            transform:translateY(-10px); 
+            background:rgba(255,255,255,0.15); 
+        }
+        .vm-card i { font-size:3.5rem; color:var(--accent); margin-bottom:1.5rem; }
+        .vm-card h3 { color:var(--accent); font-size:1.8rem; margin-bottom:1rem; }
 
         .values-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:2.5rem; }
         .value-card { background:white; padding:2.5rem; border-radius:20px; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,0.08); transition:var(--transition); }
@@ -67,7 +81,6 @@
 
         footer { background:#111; color:white; padding:80px 0 40px; text-align:center; }
 
-        /* Modal */
         .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; }
         .modal.active { display:flex; }
         .modal-content { background:white; padding:3rem; border-radius:20px; max-width:500px; width:90%; text-align:center; animation:modalIn 0.4s; }
@@ -83,7 +96,6 @@
 </head>
 <body>
 
-    <!-- HEADER -->
     <header id="header">
         <div class="container nav">
             <a href="index.html" class="logo">
@@ -105,7 +117,6 @@
         </div>
     </header>
 
-    <!-- HERO -->
     <section class="hero">
         <div class="container">
             <h1 id="typingTitle">Breaking Barriers.<span class="typing-cursor"></span></h1>
@@ -113,7 +124,6 @@
         </div>
     </section>
 
-    <!-- DIRECTOR SPOTLIGHT -->
     <section class="section">
         <div class="container director-grid">
             <div>
@@ -132,26 +142,29 @@
         </div>
     </section>
 
-    <!-- VISION & MISSION -->
-    <section class="section section-alt" style="background:#0a0a0a; color:white;">
+    <!-- FIXED VISION & MISSION SECTION -->
+    <section class="section section-alt">
         <div class="container">
-            <h2 class="section-title" style="color:white;">Our Purpose</h2>
+            <h2 class="section-title white">Our Purpose</h2>
             <div class="vm-grid">
                 <div class="vm-card">
                     <i class="fas fa-eye"></i>
                     <h3>Vision</h3>
-                    <p style="font-size:1.2rem; margin-top:1rem;">To be the most trusted and efficient engineering partner in African mining and heavy industry — setting the benchmark for quality, speed, and empowerment.</p>
+                    <p style="font-size:1.2rem; margin-top:1rem; opacity:0.9;">
+                        To be the most trusted and efficient engineering partner in African mining and heavy industry — setting the benchmark for quality, speed, and empowerment.
+                    </p>
                 </div>
                 <div class="vm-card">
                     <i class="fas fa-bullseye"></i>
                     <h3>Mission</h3>
-                    <p style="font-size:1.2rem; margin-top:1rem;">Deliver world-class hydraulic and mechanical solutions with zero compromise on safety, precision, or client satisfaction — while transforming lives through skills development and enterprise growth.</p>
+                    <p style="font-size:1.2rem; margin-top:1rem; opacity:0.9;">
+                        Deliver world-class hydraulic and mechanical solutions with zero compromise on safety, precision, or client satisfaction — while transforming lives through skills development and enterprise growth.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CORE VALUES -->
     <section class="section">
         <div class="container">
             <h2 class="section-title">Our Core Values</h2>
@@ -190,14 +203,12 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
         <div class="container">
             <p>&copy; 2025 Pitja Engineering (PTY) Ltd • Reg: 2017/4314/07 • VAT: 4002289348 • All Rights Reserved</p>
         </div>
     </footer>
 
-    <!-- JOB MODAL -->
     <div id="jobModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="document.getElementById('jobModal').classList.remove('active')">&times;</span>
@@ -210,12 +221,10 @@
     </div>
 
     <script>
-        // Header scroll
         window.addEventListener('scroll', () => {
             document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
         });
 
-        // Typing effect for hero
         function typeWriter(element, text, speed) {
             let i = 0;
             element.style.opacity = 1;
