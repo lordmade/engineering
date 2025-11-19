@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Pitja Engineering</title>
+    <meta name="description" content="Get in touch: 071 662 0873 | pitjaengineering@gmail.com | 20 Simmentaler Street, Mokopane 0600">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF6600;
+            --primary-dark: #E55A00;
+            --accent: #FFD700;
+            --dark: #1A1A1A;
+            --light: #F8F9FA;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Inter', sans-serif; color: var(--dark); line-height: 1.7; background:#fff; overflow-x:hidden; }
+        img { max-width:100%; display:block; }
+        a { text-decoration:none; }
+        .container { width:90%; max-width:1400px; margin:0 auto; padding:0 20px; }
+
+        /* Header */
+        header { position:fixed; top:0; left:0; right:0; z-index:1000; background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); transition:var(--transition); box-shadow:0 4px 20px rgba(0,0,0,0.1); }
+        header.scrolled { background:rgba(255,102,0,0.98); }
+        header.scrolled a, header.scrolled .logo img { filter: brightness(0) invert(1); }
+        header.scrolled .hamburger span { background:white; }
+        .nav { display:flex; justify-content:space-between; align-items:center; padding:1.5rem 0; }
+        .logo img { height:65px; }
+        nav ul { display:flex; gap:3rem; list-style:none; }
+        nav a { color:var(--dark); font-weight:600; font-size:1.1rem; position:relative; }
+        nav a::after { content:''; position:absolute; width:0; height:3px; background:var(--primary); bottom:-10px; left:50%; transition:var(--transition); }
+        nav a:hover::after, nav a.active::after { width:100%; left:0; }
+        header.scrolled nav a:hover, header.scrolled nav a.active { color:var(--accent); }
+        .hamburger { display:none; cursor:pointer; }
+        .hamburger span { display:block; width:30px; height:3px; background:var(--dark); margin:6px 0; transition:0.3s; }
+        .hamburger.active span:nth-child(1) { transform:rotate(45deg) translate(8px,8px); }
+        .hamburger.active span:nth-child(2) { opacity:0; }
+        .hamburger.active span:nth-child(3) { transform:rotate(-45deg) translate(7px,-6px); }
+
+        /* Hero */
+        .hero { height:90vh; min-height:650px; background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.7)), url('https://i.postimg.cc/zBgR36mK/8744f892-6d03-463e-aeaf-f11e8d23ce5c.jpg') center/cover no-repeat fixed; display:flex; align-items:center; color:white; text-align:center; }
+        .hero h1 { font-size:clamp(3.5rem,8vw,6.5rem); font-weight:900; letter-spacing:-2px; }
+        .typing-cursor { display:inline-block; background:white; margin-left:4px; width:4px; height:0.8em; animation:blink 0.8s infinite; }
+        @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+
+        .section { padding:120px 0; }
+        .section-alt { background:var(--light); }
+
+        /* Contact Grid */
+        .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; }
+        .contact-info h2 { font-size:3rem; margin-bottom:2rem; color:var(--primary-dark); }
+        .contact-item { display:flex; align-items:center; gap:1.5rem; margin:2rem 0; font-size:1.2rem; }
+        .contact-item i { font-size:2.5rem; color:var(--primary); width:60px; }
+        .contact-item a { color:var(--dark); transition:var(--transition); }
+        .contact-item a:hover { color:var(--primary); }
+
+        /* Form */
+        .contact-form { background:white; padding:3rem; border-radius:25px; box-shadow:0 15px 50px rgba(0,0,0,0.12); }
+        .contact-form h3 { font-size:2rem; margin-bottom:2rem; text-align:center; }
+        .form-group { margin-bottom:1.5rem; }
+        .form-group label { display:block; margin-bottom:0.5rem; font-weight:600; }
+        .form-group input, .form-group textarea, .form-group select {
+            width:100%;
+            padding:1rem;
+            border:2px solid #eee;
+            border-radius:12px;
+            font-family:inherit;
+            font-size:1rem;
+            transition:var(--transition);
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline:none;
+            border-color:var(--primary);
+            box-shadow:0 0 0 4px rgba(255,102,0,0.1);
+        }
+        button[type="submit"] {
+            background:var(--primary);
+            color:white;
+            padding:1.2rem 3rem;
+            border:none;
+            border-radius:60px;
+            font-size:1.1rem;
+            font-weight:700;
+            cursor:pointer;
+            width:100%;
+            transition:var(--transition);
+        }
+        button[type="submit"]:hover { background:var(--primary-dark); transform:translateY(-3px); }
+
+        /* Map */
+        .map-container { margin-top:4rem; border-radius:25px; overflow:hidden; box-shadow:0 15px 50px rgba(0,0,0,0.15); height:500px; }
+
+        /* WhatsApp Button */
+        .whatsapp-float {
+            position:fixed;
+            bottom:30px;
+            right:30px;
+            background:#25D366;
+            color:white;
+            width:70px;
+            height:70px;
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:2.5rem;
+            box-shadow:0 10px 30px rgba(0,0,0,0.3);
+            z-index:999;
+            animation: pulse 2s infinite;
+            transition:0.3s;
+        }
+        .whatsapp-float:hover { transform:scale(1.1); background:#128C7E; }
+        @keyframes pulse { 0% { box-shadow:0 0 0 0 rgba(37,211,102,0.7); } 70% { box-shadow:0 0 0 15px rgba(37,211,102,0); } 100% { box-shadow:0 0 0 0 rgba(37,211,102,0); } }
+
+        footer { background:#111; color:white; padding:80px 0 40px; text-align:center; }
+
+        .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; }
+        .modal.active { display:flex; }
+        .modal-content { background:white; padding:3rem; border-radius:20px; max-width:500px; width:90%; text-align:center; animation:modalIn 0.4s; }
+        @keyframes modalIn { from { transform:scale(0.7); } to { transform:scale(1); } }
+
+        @media (max-width:992px) {
+            .hamburger { display:block; }
+            nav ul { position:fixed; top:0; left:0; width:100%; height:100vh; background:white; flex-direction:column; justify-content:center; align-items:center; transform:translateX(-100%); opacity:0; transition:0.5s; }
+            nav ul.active { transform:translateX(0); opacity:1; }
+            .contact-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="header">
+        <div class="container nav">
+            <a href="index.html" class="logo">
+                <img src="https://i.postimg.cc/C15GcRpW/PITJA-LOGO-removebg-preview.png" alt="Pitja Engineering">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="clients.html">Clients</a></li>
+                    <li><a href="contact.html" class="active">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="hamburger" onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('active')">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <h1 id="typingTitle">Let's Talk Engineering<span class="typing-cursor"></span></h1>
+            <p style="font-size:1.8rem; margin-top:2rem; opacity:0.9;">24/7 response | Same-day quotes | On-site nationwide</p>
+        </div>
+    </section>
+
+    <!-- CONTACT INFO + FORM -->
+    <section class="section">
+        <div class="container contact-grid">
+            <div class="contact-info">
+                <h2>Get in Touch</h2>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <strong>Workshop Address</strong><br>
+                        20 Simmentaler Street<br>
+                        Mokopane, Limpopo 0600<br>
+                        South Africa
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <strong>Call Us</strong><br>
+                        <a href="tel:0150042812">015 004 2812</a> (Landline)<br>
+                        <a href="tel:+27716620873">071 662 0873</a> (Mobile / WhatsApp)
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <strong>Email Us</strong><br>
+                        <a href="mailto:pitjaengineering@gmail.com">pitjaengineering@gmail.com</a><br>
+                        <a href="mailto:ellen@pitjaengineering.co.za">ellen@pitjaengineering.co.za</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <strong>Emergency 24/7</strong><br>
+                        Call <a href="tel:+27716620873">071 662 0873</a> anytime
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <h3>Send Us a Message</h3>
+                <form action="https://formspree.io/f/xblrjwpw" method="POST">
+                    <div class="form-group">
+                        <label>Your Name</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Company</label>
+                        <input type="text" name="company">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="_replyto" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Service Required</label>
+                        <select name="service">
+                            <option>Hydraulic Cylinder Rebuild</option>
+                            <option>Hoses & Fittings</option>
+                            <option>Conveyor Systems</option>
+                            <option>Line Boring</option>
+                            <option>Undercarriage</option>
+                            <option>On-Site Shutdown</option>
+                            <option>Emergency Breakdown</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea name="message" rows="5" placeholder="Tell us about your requirements..."></textarea>
+                    </div>
+                    <button type="submit">Send Message →</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- GOOGLE MAPS -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3592.567376987654!2d29.006789615398!3d-24.181389984383!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ec0e1f0d7f0b4b7%3A0x9f8e5e5e5e5e5e5e!2s20%20Simmentaler%20St%2C%20Mokopane%2C%200600!5e0!3m2!1sen!2sza!4v1700000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Pitja Engineering (PTY) Ltd • Reg: 2017/4314/07 • VAT: 4002289348 • All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/27716620873?text=Hi%20Pitja%20Engineering%2C%20I%20need%20a%20quote%20for..." class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- JOB MODAL -->
+    <div id="jobModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="document.getElementById('jobModal').classList.remove('active')">&times;</span>
+            <h2>Join Our Team</h2>
+            <p style="margin:1.5rem 0;">We are always looking for skilled artisans, fitters, boilermakers, and engineers.</p>
+            <p>Email your CV to: <strong>careers@pitjaengineering.co.za</strong></p>
+            <p style="margin-top:1rem;">Or WhatsApp: <strong>071 662 0873</strong></p>
+            <button onclick="document.getElementById('jobModal').classList.remove('active')" style="margin-top:2rem;padding:1rem 2.5rem;background:var(--primary);color:white;border:none;border-radius:50px;cursor:pointer;font-weight:600;">Close</button>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        function typeWriter(el, text, speed) {
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    el.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+        window.addEventListener('load', () => {
+            typeWriter(document.getElementById('typingTitle'), "Let's Talk Engineering", 100);
+        });
+    </script>
+</body>
+</html>
