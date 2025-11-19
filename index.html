@@ -25,7 +25,7 @@
         /* Header */
         header { position:fixed; top:0; left:0; right:0; z-index:1000; background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); transition:var(--transition); box-shadow:0 4px 20px rgba(0,0,0,0.1); }
         header.scrolled { background:rgba(255,102,0,0.98); }
-        header.scrolled a, header.scrolled .logo { color:white; }
+        header.scrolled a { color:white; }
         header.scrolled .hamburger span { background:white; }
         .nav { display:flex; justify-content:space-between; align-items:center; padding:1.5rem 0; }
         .logo img { height:65px; transition:var(--transition); }
@@ -41,7 +41,7 @@
         .hamburger.active span:nth-child(3) { transform:rotate(-45deg) translate(7px,-6px); }
 
         /* Hero */
-        .hero { height:100vh; min-height:750px; background:linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.65)), url('https://i.postimg.cc/zBgR36mK/8744f892-6d03-463e-aeaf-f11e8d23ce5c.jpg') center/cover no-repeat; display:flex; align-items:center; color:white; text-align:center; }
+        .hero { height:100vh; min-height:750px; background:linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.65)), url('https://i.postimg.cc/zBgR36mK/8744f892-6d03-463e-aeaf-f11e8d23ce5c.jpg') center/cover no-repeat fixed; display:flex; align-items:center; color:white; text-align:center; }
         .hero h1 { font-size:clamp(3.5rem,8vw,7rem); font-weight:900; letter-spacing:-2px; margin-bottom:1rem; }
         .hero p { font-size:1.6rem; max-width:900px; margin:0 auto 3rem; opacity:0.95; }
         .cta-btn { display:inline-block; padding:1.3rem 3.5rem; margin:0.8rem; border-radius:50px; font-weight:700; font-size:1.1rem; transition:var(--transition); box-shadow:0 10px 30px rgba(255,102,0,0.3); }
@@ -58,6 +58,37 @@
         .feature-icon { font-size:4.5rem; color:var(--primary); margin-bottom:1.5rem; }
         .feature-item h3 { font-size:1.6rem; margin-bottom:1rem; }
 
+        /* Partners Section */
+        .partners { padding:100px 0; background:#0a0a0a; color:white; text-align:center; }
+        .partners h2 { font-size:2.8rem; margin-bottom:1.5rem; }
+        .partners p { opacity:0.7; margin-bottom:3rem; font-size:1.1rem; }
+        .partners-wrapper {
+            overflow:hidden;
+            padding:30px 0;
+            position:relative;
+        }
+        .partners-track {
+            display:flex;
+            gap:5rem;
+            animation: scroll 30s linear infinite;
+            width: max-content;
+        }
+        .partner-logo {
+            height:80px;
+            filter: grayscale(100%) brightness(0.8);
+            transition:var(--transition);
+            padding:0 20px;
+        }
+        .partner-logo:hover {
+            filter: grayscale(0%) brightness(1);
+            transform:scale(1.15);
+        }
+        @keyframes scroll {
+            0% { transform:translateX(0); }
+            100% { transform:translateX(-50%); }
+        }
+        .partners-track:hover { animation-play-state:paused; }
+
         /* Footer */
         footer { background:#111; color:white; padding:80px 0 40px; text-align:center; }
         footer a { color:var(--accent); }
@@ -68,6 +99,7 @@
             nav ul.active { transform:translateX(0); opacity:1; }
             nav a { font-size:2rem; color:var(--dark); padding:1rem; }
             header.scrolled nav a { color:white; }
+            .partners-track { animation: scroll 40s linear infinite; }
         }
     </style>
 </head>
@@ -122,6 +154,34 @@
                     <i class="fas fa-certificate feature-icon"></i>
                     <h3>OEM-Quality Guaranteed</h3>
                     <p>ISO-certified processes with full warranty</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARTNERS SECTION -->
+    <section class="partners">
+        <div class="container">
+            <h2>Trusted By Industry Giants</h2>
+            <p>We proudly partner with South Africa’s leading mining and industrial companies</p>
+            <div class="partners-wrapper">
+                <div class="partners-track">
+                    <!-- Duplicate set for seamless loop -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Anglo_American_logo.svg" alt="Anglo American" class="partner-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/5/5e/Ivanhoe_Mines_logo.png" alt="Ivanplats" class="partner-logo">
+                    <img src="https://www.glencore.com/.imaging/mte/glencore-theme/medium/dam/glencore/logos/Glencore-logo-white.png" alt="Glencore" class="partner-logo">
+                    <img src="https://www.sibanyestillwater.com/wp-content/themes/sibanyestillwater/assets/images/logo.svg" alt="Sibanye Stillwater" class="partner-logo">
+                    <img src="https://www.impala.co.za/wp-content/uploads/2020/06/Impala-Platinum-Logo.png" alt="Impala Platinum" class="partner-logo">
+                    <img src="https://www.northam.co.za/images/Northam-logo.png" alt="Northam Platinum" class="partner-logo">
+                    <img src="https://www.arm.co.za/images/logo.png" alt="African Rainbow Minerals" class="partner-logo">
+                    <!-- Repeat for infinite scroll -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Anglo_American_logo.svg" alt="Anglo American" class="partner-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/5/5e/Ivanhoe_Mines_logo.png" alt="Ivanplats" class="partner-logo">
+                    <img src="https://www.glencore.com/.imaging/mte/glencore-theme/medium/dam/glencore/logos/Glencore-logo-white.png" alt="Glencore" class="partner-logo">
+                    <img src="https://www.sibanyestillwater.com/wp-content/themes/sibanyestillwater/assets/images/logo.svg" alt="Sibanye Stillwater" class="partner-logo">
+                    <img src="https://www.impala.co.za/wp-content/uploads/2020/06/Impala-Platinum-Logo.png" alt="Impala Platinum" class="partner-logo">
+                    <img src="https://www.northam.co.za/images/Northam-logo.png" alt="Northam Platinum" class="partner-logo">
+                    <img src="https://www.arm.co.za/images/logo.png" alt="African Rainbow Minerals" class="partner-logo">
                 </div>
             </div>
         </div>
