@@ -3,1104 +3,420 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pitja Engineering (PTY) Ltd - Brewed To Fuel Efficiency</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Pitja Engineering | South Africa's Premier Mining & Heavy Engineering Company</title>
+    <meta name="description" content="Pitja Engineering (Pty) Ltd – 100% Black Female-Owned Level 1 B-BBEE leader in hydraulic cylinders, conveyor systems, line boring, undercarriage rebuilds and on-site engineering for the mining and industrial sectors.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
         :root {
-            --primary-orange: #FF6600;
-            --secondary-orange: #E55A00;
-            --accent-yellow: #FFD700;
-            --dark-gray: #333;
-            --light-gray: #666;
-            --white: #fff;
-            --shadow-light: 0 4px 20px rgba(0,0,0,0.08);
-            --shadow-hover: 0 12px 40px rgba(255,102,0,0.15);
-            --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --primary-red: #C41E3A;      /* SA Flag Red - Bold & Powerful */
+            --secondary-gold: #FFB81C;   /* SA Flag Gold - Excellence */
+            --dark: #111111;
+            --gray: #222222;
+            --light-gray: #f4f4f4;
+            --white: #ffffff;
+            --accent-green: #0A5C36;     /* SA Flag Green - Growth & Sustainability */
+            --text: #333333;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--dark-gray);
-            overflow-x: hidden;
-        }
-        /* Header */
+        
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Inter', sans-serif; color:var(--text); line-height:1.7; background:var(--white); overflow-x:hidden; }
+        h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; color:var(--dark); font-weight:800; }
+        a { text-decoration:none; color:inherit; }
+        img { max-width:100%; display:block; }
+        p { margin-bottom:1.5rem; }
+        
+        /* Header - Fixed Premium Dark */
         header {
-            background: var(--white);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            transition: var(--transition);
-            height: 80px;
-            display: flex;
-            align-items: center;
-            box-shadow: var(--shadow-light);
-        }
-        header.scrolled {
-            background: var(--primary-orange);
+            position:fixed; top:0; left:0; width:100%; z-index:1000;
+            background:rgba(17,17,17,0.95); backdrop-filter:blur(12px);
+            transition:var(--transition);
+            padding:1rem 0;
         }
         .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-            width: 100%;
+            max-width:1600px; margin:0 auto; padding:0 4rem;
+            display:flex; justify-content:space-between; align-items:center;
         }
-        .logo {
-            height: 50px;
-            width: auto;
-        }
-        .logo img {
-            height: 100%;
-            width: auto;
-        }
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
+        .logo img { height:65px; transition:var(--transition); }
+        nav ul { 
+            display:flex; gap:3.5rem; list-style:none; 
         }
         nav a {
-            color: var(--dark-gray);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            transition: var(--transition);
+            color:#fff; font-weight:600; font-size:1.1rem; position:relative; letter-spacing:0.5px;
+            transition:var(--transition);
         }
-        nav a:hover, nav a.active {
-            color: var(--white);
-            background: var(--primary-orange);
+        nav a::after {
+            content:''; position:absolute; bottom:-10px; left:0; width:0; height:3px;
+            background:var(--secondary-gold); transition:var(--transition);
         }
-        header.scrolled nav a {
-            color: var(--white);
-        }
-        header.scrolled nav a:hover, header.scrolled nav a.active {
-            background: var(--accent-yellow);
-            color: var(--primary-orange);
-        }
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 0.25rem;
-        }
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: var(--dark-gray);
-            transition: var(--transition);
-        }
-        header.scrolled .hamburger span {
-            background: var(--white);
-        }
-        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-        .hamburger.active span:nth-child(2) { opacity: 0; }
-        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
-        /* Hero Section */
+        nav a:hover::after, nav a.active::after { width:100%; }
+        nav a:hover { color:var(--secondary-gold); }
+        
+        .mobile-menu { display:none; color:#fff; font-size:2rem; cursor:pointer; }
+        
+        /* Hero - Full Width Cinematic */
         .hero {
-            height: 100vh;
-            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--accent-yellow) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: var(--white);
-            position: relative;
-            overflow: hidden;
-            padding-top: 80px;
+            height:100vh; min-height:700px; position:relative; overflow:hidden;
+            display:flex; align-items:center; color:#fff;
         }
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://i.postimg.cc/zBgR36mK/8744f892-6d03-463e-aeaf-f11e8d23ce5c.jpg') center/cover;
-            opacity: 0.3;
-            z-index: 1;
+        .hero-video {
+            position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-2;
+            filter:brightness(0.55);
+        }
+        .hero-overlay {
+            position:absolute; top:0; left:0; width:100%; height:100%;
+            background:linear-gradient(135deg, rgba(196,30,58,0.8) 0%, rgba(10,92,54,0.7) 100%);
+            z-index:-1;
         }
         .hero-content {
-            z-index: 2;
-            max-width: 800px;
-            padding: 0 2rem;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-        }
-        .hero-logo {
-            height: 120px;
-            width: auto;
-            opacity: 0.9;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-        }
-        .hero-logo img {
-            height: 100%;
-            width: auto;
+            max-width:1600px; margin:0 auto; padding:0 4rem; z-index:2; width:100%;
         }
         .hero h1 {
-            font-size: clamp(3rem, 8vw, 5rem);
-            font-weight: 300;
-            margin-bottom: 1rem;
-            letter-spacing: 0.1em;
+            font-size:clamp(4.5rem, 10vw, 9rem); line-height:1; margin-bottom:1rem;
+            text-shadow:0 4px 20px rgba(0,0,0,0.6);
+        }
+        .hero .subtitle {
+            font-size:clamp(1.8rem, 5vw, 3.2rem); font-weight:300; margin-bottom:2rem;
+            opacity:0.95;
         }
         .hero p {
-            font-size: clamp(1.2rem, 4vw, 1.5rem);
-            margin-bottom: 2rem;
-            opacity: 0.9;
+            font-size:1.4rem; max-width:800px; margin-bottom:3rem; opacity:0.9;
         }
-        /* Typing cursor styles (shared for title and subtitle) */
-        .typing {
-            border-right: 0.15em solid var(--white);
-            animation: blink-caret 0.75s step-end infinite;
+        .cta-group {
+            display:flex; gap:1.5rem; flex-wrap:wrap;
         }
-        @keyframes blink-caret {
-            from, to { border-color: transparent; }
-            50% { border-color: var(--white); }
+        .cta-primary {
+            background:var(--secondary-gold); color:var(--dark); padding:1.3rem 3.5rem;
+            border-radius:100px; font-weight:700; font-size:1.3rem; letter-spacing:1px;
+            box-shadow:0 15px 40px rgba(0,0,0,0.3); transition:var(--transition);
         }
-        .hero-cta {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
+        .cta-primary:hover {
+            transform:translateY(-8px); box-shadow:0 25px 50px rgba(0,0,0,0.4);
         }
-        .cta {
-            background: var(--white);
-            color: var(--primary-orange);
-            padding: 1rem 2.5rem;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: var(--transition);
-            box-shadow: var(--shadow-light);
-            font-size: 1rem;
+        .cta-secondary {
+            background:transparent; color:#fff; border:2px solid #fff; padding:1.3rem 3.5rem;
+            border-radius:100px; font-weight:600; font-size:1.3rem; transition:var(--transition);
         }
-        .cta:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
+        .cta-secondary:hover {
+            background:#fff; color:var(--primary-red);
         }
-        /* Sections */
-        section {
-            padding: 8rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
+        
+        /* Stats Bar */
+        .stats-bar {
+            background:var(--dark); color:#fff; padding:4rem 0;
+        }
+        .stats-container {
+            max-width:1600px; margin:0 auto; padding:0 4rem;
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:3rem; text-align:center;
+        }
+        .stat-item h3 {
+            font-size:3.5rem; color:var(--secondary-gold); margin-bottom:0.5rem;
+        }
+        .stat-item p { font-size:1.2rem; opacity:0.9; }
+        
+        /* Services Preview */
+        .services-preview {
+            padding:10rem 4rem; background:var(--light-gray);
         }
         .section-title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 300;
-            color: var(--primary-orange);
-            margin-bottom: 3rem;
-            text-align: center;
-            letter-spacing: 0.05em;
-        }
-        /* About Us */
-        #about {
-            background: var(--white);
-        }
-        .about-hero {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: linear-gradient(135deg, rgba(255,102,0,0.05) 0%, rgba(255,215,0,0.02) 100%);
-            border-radius: 20px;
-            margin-bottom: 4rem;
-        }
-        .about-hero h2 {
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            font-weight: 300;
-            color: var(--primary-orange);
-            margin-bottom: 1rem;
-        }
-        .about-hero p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto;
-            opacity: 0.8;
-        }
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: start;
-            margin-bottom: 4rem;
-        }
-        .about-text {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            text-align: left;
-            color: var(--dark-gray);
-        }
-        .about-text p {
-            margin-bottom: 1.5rem;
-        }
-        .director-section {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-        }
-        .director-image {
-            width: 100%;
-            max-width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            object-fit: cover;
-            box-shadow: var(--shadow-light);
-            transition: var(--transition);
-        }
-        .director-image:hover {
-            transform: scale(1.05);
-            box-shadow: var(--shadow-hover);
-        }
-        .director-name {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary-orange);
-        }
-        .director-title {
-            color: var(--light-gray);
-            font-size: 1rem;
-        }
-        .purpose-section {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 4rem;
-        }
-        .vision-mission {
-            display: flex;
-            flex-direction: row;
-            gap: 2rem;
-            max-width: 800px;
-            width: 100%;
-        }
-        .vm-card {
-            flex: 1;
-            background: var(--white);
-            padding: 2.5rem;
-            border-radius: 15px;
-            box-shadow: var(--shadow-light);
-            text-align: center;
-            transition: var(--transition);
-        }
-        .vm-card h3 {
-            font-size: 1.5rem;
-            color: var(--primary-orange);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-        .vm-card i {
-            font-size: 2rem;
-            color: var(--secondary-orange);
-        }
-        .vm-card p {
-            font-size: 1rem;
-            opacity: 0.8;
-        }
-        .values-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .values-title {
-            font-size: 2rem;
-            color: var(--primary-orange);
-            margin-bottom: 2rem;
-        }
-        .values-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            width: 100%;
-        }
-        .value-item {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: var(--shadow-light);
-            text-align: center;
-            transition: var(--transition);
-        }
-        .value-item:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
-        .value-icon {
-            font-size: 3rem;
-            color: var(--primary-orange);
-            margin-bottom: 1rem;
-        }
-        /* Services */
-        #services {
-            background: linear-gradient(135deg, rgba(255,102,0,0.05) 0%, rgba(255,215,0,0.02) 100%);
+            text-align:center; font-size:clamp(3rem,7vw,5.5rem); margin-bottom:5rem; color:var(--primary-red);
         }
         .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            max-width:1600px; margin:0 auto;
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(350px,1fr)); gap:3rem;
         }
         .service-card {
-            background: var(--white);
-            padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: var(--shadow-light);
-            transition: var(--transition);
-            text-align: center;
+            background:#fff; border-radius:20px; overflow:hidden;
+            box-shadow:0 20px 60px rgba(0,0,0,0.1); transition:var(--transition);
         }
         .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-hover);
+            transform:translateY(-20px); box-shadow:0 30px 80px rgba(0,0,0,0.15);
         }
         .service-icon {
-            font-size: 3rem;
-            color: var(--primary-orange);
-            margin-bottom: 1rem;
+            height:200px; background:var(--primary-red); display:flex; align-items:center; justify-content:center;
         }
-        .service-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--dark-gray);
+        .service-icon i { font-size:5rem; color:#fff; }
+        .service-content {
+            padding:2.5rem;
         }
-        /* Gallery Redesigned */
-        #gallery {
-            background: var(--white);
-            position: relative;
+        .service-content h3 {
+            font-size:2rem; margin-bottom:1rem; color:var(--primary-red);
         }
-        .gallery-subtitle {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 3rem;
-            font-size: 1.1rem;
-            opacity: 0.8;
-            font-style: italic;
+        
+        /* Why Choose Us */
+        .why-choose {
+            padding:10rem 4rem; background:#fff;
         }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            perspective: 1000px;
+        .why-grid {
+            max-width:1600px; margin:0 auto;
+            display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:center;
         }
-        .gallery-item {
-            position: relative;
-            height: 300px;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: var(--shadow-light);
-            transition: var(--transition);
-            cursor: pointer;
-            opacity: 0;
-            transform: translateY(50px) rotateY(10deg);
-            animation: slideInGallery 0.8s ease-out forwards;
+        .why-text h2 {
+            font-size:4rem; margin-bottom:2rem; color:var(--primary-red);
         }
-        .gallery-item:nth-child(1) { animation-delay: 0.1s; }
-        .gallery-item:nth-child(2) { animation-delay: 0.2s; }
-        .gallery-item:nth-child(3) { animation-delay: 0.3s; }
-        .gallery-item:nth-child(4) { animation-delay: 0.4s; }
-        .gallery-item:nth-child(5) { animation-delay: 0.5s; }
-        .gallery-item:nth-child(6) { animation-delay: 0.6s; }
-        .gallery-item:nth-child(7) { animation-delay: 0.7s; }
-        .gallery-item:nth-child(8) { animation-delay: 0.8s; }
-        @keyframes slideInGallery {
-            to {
-                opacity: 1;
-                transform: translateY(0) rotateY(0deg);
-            }
+        .why-text ul {
+            list-style:none; font-size:1.3rem;
         }
-        .gallery-item:hover {
-            transform: translateY(-10px) scale(1.05) rotateY(0deg);
-            box-shadow: var(--shadow-hover);
-            z-index: 10;
+        .why-text li {
+            padding:1rem 0; border-bottom:1px solid #eee;
+            display:flex; align-items:center; gap:1rem;
         }
-        .gallery-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: var(--transition);
+        .why-text i {
+            color:var(--accent-green); font-size:1.5rem;
         }
-        .gallery-item:hover .gallery-image {
-            transform: scale(1.1);
+        .certifications {
+            display:flex; flex-wrap:wrap; gap:2rem; justify-content:center;
         }
-        .gallery-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            color: var(--white);
-            padding: 2rem 1.5rem 1.5rem;
-            transform: translateY(100%);
-            transition: var(--transition);
+        .cert-badge {
+            background:#fff; padding:2rem; border-radius:15px; box-shadow:0 10px 40px rgba(0,0,0,0.1);
+            text-align:center; width:180px;
         }
-        .gallery-item:hover .gallery-overlay {
-            transform: translateY(0);
-        }
-        .gallery-overlay h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-        .gallery-overlay p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
+        .cert-badge i { font-size:3rem; color:var(--secondary-gold); margin-bottom:1rem; }
+        
         /* Clients */
-        #clients {
-            background: linear-gradient(135deg, rgba(255,102,0,0.05) 0%, rgba(255,215,0,0.02) 100%);
+        .clients-section {
+            padding:8rem 4rem; background:var(--light-gray); text-align:center;
         }
         .clients-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            justify-content: center;
+            max-width:1600px; margin:2rem auto 0;
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:3rem; align-items:center;
         }
         .client-logo {
-            max-width: 150px;
-            height: auto;
-            filter: grayscale(100%);
-            transition: var(--transition);
-            padding: 1rem;
-            background: var(--white);
-            border-radius: 10px;
-            box-shadow: var(--shadow-light);
+            filter:grayscale(100%); opacity:0.7; transition:var(--transition); padding:1rem;
         }
         .client-logo:hover {
-            filter: grayscale(0%);
-            transform: translateY(-5px);
+            filter:grayscale(0%); opacity:1; transform:scale(1.1);
         }
+        
         /* Footer */
         footer {
-            background: var(--primary-orange);
-            color: var(--white);
-            text-align: center;
-            padding: 4rem 2rem 2rem;
+            background:var(--dark); color:#fff; padding:6rem 4rem 2rem;
         }
-        .contact-info {
-            max-width: 600px;
-            margin: 0 auto 2rem;
+        .footer-container {
+            max-width:1600px; margin:0 auto;
+            display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:4rem;
         }
-        .contact-info h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+        .footer-col h3 {
+            font-size:1.8rem; margin-bottom:2rem; color:var(--secondary-gold);
         }
-        .contact-info p {
-            margin-bottom: 1rem;
-            opacity: 0.9;
+        .footer-col a {
+            display:block; margin-bottom:1rem; transition:var(--transition);
         }
+        .footer-col a:hover { color:var(--secondary-gold); padding-left:5px; }
         .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
+            display:flex; gap:1.5rem; margin-top:2rem;
         }
         .social-links a {
-            color: var(--white);
-            font-size: 1.5rem;
-            transition: var(--transition);
+            width:50px; height:50px; background:rgba(255,255,255,0.1); border-radius:50%;
+            display:flex; align-items:center; justify-content:center; font-size:1.5rem;
+            transition:var(--transition);
         }
         .social-links a:hover {
-            color: var(--accent-yellow);
+            background:var(--secondary-gold); color:var(--dark);
         }
-        /* Custom Alert Modal */
-        .custom-alert {
-            display: none;
-            position: fixed;
-            z-index: 3000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
+        .copyright {
+            grid-column:1/-1; text-align:center; padding-top:4rem; border-top:1px solid rgba(255,255,255,0.1);
+            margin-top:4rem; opacity:0.8;
         }
-        .custom-alert.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .nav-container { padding:0 2rem; }
+            .hero-content { padding:0 2rem; }
+            .why-grid { grid-template-columns:1fr; }
+            .footer-container { grid-template-columns:1fr 1fr; }
         }
-        .alert-content {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: var(--shadow-hover);
-            animation: modalSlideIn 0.3s ease-out;
-        }
-        @keyframes modalSlideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .alert-title {
-            font-size: 1.5rem;
-            color: var(--primary-orange);
-            margin-bottom: 1rem;
-        }
-        .alert-message {
-            font-size: 1rem;
-            color: var(--dark-gray);
-            margin-bottom: 1.5rem;
-        }
-        .alert-close {
-            background: var(--primary-orange);
-            color: var(--white);
-            border: none;
-            padding: 0.75rem 2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-        .alert-close:hover {
-            background: var(--secondary-orange);
-            transform: translateY(-2px);
-        }
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: var(--transition);
-        }
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        /* Lightbox */
-        .lightbox-modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            animation: fadeIn 0.3s;
-        }
-        .lightbox-modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .lightbox-content {
-            position: relative;
-            max-width: 90%;
-            max-height: 90%;
-            animation: zoomIn 0.3s;
-        }
-        .lightbox-image {
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 10px;
-        }
-        .close-lightbox {
-            position: absolute;
-            top: -40px;
-            right: 0;
-            color: var(--white);
-            font-size: 2.5rem;
-            cursor: pointer;
-        }
-        .close-lightbox:hover {
-            color: var(--primary-orange);
-        }
-        .prev-btn, .next-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255,102,0,0.7);
-            color: var(--white);
-            border: none;
-            padding: 1rem;
-            cursor: pointer;
-            font-size: 1.5rem;
-            border-radius: 50%;
-        }
-        .prev-btn { left: -50px; }
-        .next-btn { right: -50px; }
-        .prev-btn:hover, .next-btn:hover { background: var(--primary-orange); }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes zoomIn { from { transform: scale(0.5); } to { transform: scale(1); } }
-        /* Mobile */
         @media (max-width: 768px) {
-            header {
-                height: 70px;
-            }
-            .nav-container {
-                padding: 0 1rem;
-            }
-            .hamburger {
-                display: flex;
-            }
-            nav ul {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: var(--white);
-                padding: 1rem;
-                box-shadow: var(--shadow-light);
-                gap: 1rem;
-            }
-            nav ul.active {
-                display: flex;
-            }
-            nav a {
-                text-align: center;
-                display: block;
-            }
-            .hero {
-                padding-top: 70px;
-                padding: 0 1rem;
-            }
-            .hero-logo {
-                height: 80px;
-            }
-            .hero h1 {
-                font-size: clamp(2rem, 6vw, 3rem);
-            }
-            .hero p {
-                font-size: clamp(1rem, 3vw, 1.2rem);
-            }
-            .hero-cta {
-                flex-direction: column;
-                gap: 0.75rem;
-            }
-            .cta {
-                width: 100%;
-                max-width: 250px;
-            }
-            section {
-                padding: 4rem 1rem;
-            }
-            .section-title {
-                font-size: clamp(2rem, 5vw, 3rem);
-            }
-            .about-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-                text-align: center;
-            }
-            .about-text {
-                text-align: center;
-                font-size: 1rem;
-            }
-            .purpose-section {
-                margin-bottom: 2rem;
-            }
-            .vision-mission {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-            .vm-card {
-                padding: 1.5rem;
-            }
-            .values-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-            }
-            .value-item {
-                padding: 1.5rem;
-            }
-            .services-grid, .gallery-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            .service-card {
-                padding: 2rem;
-            }
-            .service-icon {
-                font-size: 2.5rem;
-            }
-            .gallery-item {
-                height: 250px;
-            }
-            .gallery-image {
-                height: 100%;
-            }
-            .clients-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-            }
-            .client-logo {
-                max-width: 120px;
-                padding: 0.75rem;
-            }
-            footer {
-                padding: 3rem 1rem 1rem;
-            }
-            .alert-content {
-                padding: 1.5rem;
-                margin: 1rem;
-            }
+            nav ul { display:none; position:fixed; top:80px; left:0; width:100%; background:var(--dark); padding:2rem; flex-direction:column; }
+            nav ul.active { display:flex; }
+            .mobile-menu { display:block; }
+            .cta-group { flex-direction:column; align-items:flex-start; }
+            .stats-container { grid-template-columns:1fr 1fr; }
+            .footer-container { grid-template-columns:1fr; text-align:center; }
         }
-        @media (max-width: 480px) {
-            .values-grid, .clients-grid {
-                grid-template-columns: 1fr;
-            }
-            .vision-mission {
-                gap: 1rem;
-            }
-        }
-        html { scroll-behavior: smooth; }
     </style>
 </head>
 <body>
+
+    <!-- Header -->
     <header id="header">
         <div class="nav-container">
-            <a href="#home" class="logo">
+            <a href="index.html" class="logo">
                 <img src="https://i.postimg.cc/C15GcRpW/PITJA-LOGO-removebg-preview.png" alt="Pitja Engineering Logo">
             </a>
             <nav>
                 <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#gallery">Gallery</a></li>
-                    <li><a href="#clients">Clients</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="contact.html">Contact</a></li>
                 </ul>
             </nav>
-            <div class="hamburger" onclick="toggleMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
+            <div class="mobile-menu" onclick="document.querySelector('nav ul').classList.toggle('active')">
+                <i class="fas fa-bars"></i>
             </div>
         </div>
     </header>
-    <section id="home" class="hero">
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <video class="hero-video" autoplay muted loop playsinline poster="https://i.postimg.cc/zBgR36mK/8744f892-6d03-463e-aeaf-f11e8d23ce5c.jpg">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-heavy-machinery-working-in-a-mining-area-1311-large.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
         <div class="hero-content">
-            <div class="hero-logo">
-                <img src="https://i.postimg.cc/C15GcRpW/PITJA-LOGO-removebg-preview.png" alt="Pitja Engineering Logo">
-            </div>
-            <h1 id="heroTitle"></h1>
-            <p id="heroSubtitle"></p>
-            <div class="hero-cta">
-                <a href="#services" class="cta">Explore Services</a>
-                <a href="#" class="cta job-cta">Apply for Jobs</a>
+            <h1>Pitja Engineering</h1>
+            <div class="subtitle">Engineering the Future of South African Mining</div>
+            <p>100% Black Female-Owned • Level 1 B-BBEE • Over R200 Million in Successful Projects Delivered</p>
+            <div class="cta-group">
+                <a href="contact.html" class="cta-primary">Request a Quote</a>
+                <a href="services.html" class="cta-secondary">Explore Our Services</a>
             </div>
         </div>
     </section>
-    <section id="about" class="fade-in">
-        <div class="about-hero">
-            <h2>Our Purpose</h2>
-            <p>Pitja Engineering (PTY) Ltd is a 100% female black-owned company established in 2017, with a purpose to explore opportunities in the male-dominated engineering field. We employ the highest level of integrity, values, morals, and standards.</p>
-        </div>
-        <div class="about-content">
-            <div class="about-text">
-                <p>The director of Pitja Engineering (PTY) Ltd, Ellen Shabangu, has acquired many leadership skills through programs and roles in a number of community initiatives. This experience provides a significant advantage to the company, as her knowledge and work ethic will add value in regard to leadership and experience.</p>
-                <p>Ellen is a woman who believes greatly in community upliftment. She has engaged in numerous community activities, such as crime awareness programs in Mapela and the Nkone community. She is renowned for her roles in bringing local women into agricultural projects and venturing into cosmetic and kitchen businesses historically. Refusing to be limited, she has broken into the male-dominated engineering world. Under Ellen's leadership, Pitja now boasts over one year of unbroken service to one of the reputable mines.</p>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="stats-container">
+            <div class="stat-item">
+                <h3>8+</h3>
+                <p>Years of Excellence</p>
             </div>
-            <div class="director-section">
-                <img src="https://i.postimg.cc/C5KTcTF3/d69e39c1-2426-479e-9807-3468bc518dd3.jpg" alt="Ellen Shabangu, Director" class="director-image">
-                <h3 class="director-name">Ellen Shabangu</h3>
-                <p class="director-title">Director & Founder</p>
+            <div class="stat-item">
+                <h3>50+</h3>
+                <p>Major Projects Completed</p>
             </div>
-        </div>
-        <div class="purpose-section">
-            <div class="vision-mission">
-                <div class="vm-card">
-                    <h3><i class="fas fa-eye"></i> Vision Statement</h3>
-                    <p>We ensure efficiency through quality service that we offer our clients.</p>
-                </div>
-                <div class="vm-card">
-                    <h3><i class="fas fa-bullseye"></i> Mission Statement</h3>
-                    <p>Pitja Engineering (PTY) Ltd is heading towards being recognized at the same level as top engineering companies in the country.</p>
-                </div>
+            <div class="stat-item">
+                <h3>100%</h3>
+                <p>Black Female Owned</p>
             </div>
-        </div>
-        <div class="values-section">
-            <h3 class="values-title">Our Core Values</h3>
-            <div class="values-grid">
-                <div class="value-item">
-                    <i class="fas fa-lightbulb value-icon"></i>
-                    <div>Innovative thinking</div>
-                </div>
-                <div class="value-item">
-                    <i class="fas fa-handshake value-icon"></i>
-                    <div>Integrity and Honesty</div>
-                </div>
-                <div class="value-item">
-                    <i class="fas fa-clock value-icon"></i>
-                    <div>Reliability & Honesty</div>
-                </div>
-                <div class="value-item">
-                    <i class="fas fa-ruler value-icon"></i>
-                    <div>Precision</div>
-                </div>
-                <div class="value-item">
-                    <i class="fas fa-users value-icon"></i>
-                    <div>Customer based</div>
-                </div>
+            <div class="stat-item">
+                <h3>Level 1</h3>
+                <p>B-BBEE Contributor</p>
             </div>
         </div>
     </section>
-    <section id="services" class="fade-in">
-        <h2 class="section-title">Our Services</h2>
+
+    <!-- Services Preview -->
+    <section class="services-preview">
+        <h2 class="section-title">Our Core Services</h2>
         <div class="services-grid">
             <div class="service-card">
-                <i class="fas fa-cogs service-icon"></i>
-                <h3>Hydraulic Cylinders</h3>
-                <p>Assemble cylinders from scratch to point of use. Tested for quality and efficiency.</p>
+                <div class="service-icon"><i class="fas fa-oil-can"></i></div>
+                <div class="service-content">
+                    <h3>Hydraulic Cylinders</h3>
+                    <p>Full rebuild, testing, and certification of all hydraulic cylinders for mining equipment.</p>
+                </div>
             </div>
             <div class="service-card">
-                <i class="fas fa-tools service-icon"></i>
-                <h3>Hoses and Fittings</h3>
-                <p>Supply and install to hydraulic sections. Connect hoses to components, valves, actuators.</p>
+                <div class="service-icon"><i class="fas fa-conveyor-belt"></i></div>
+                <div class="service-content">
+                    <h3>Conveyor Systems</h3>
+                    <p>Design, supply, installation, and maintenance of heavy-duty conveyor belts and structures.</p>
+                </div>
             </div>
             <div class="service-card">
-                <i class="fas fa-conveyor-belt service-icon"></i>
-                <h3>Conveyor Belts</h3>
-                <p>Supply new belts, rollers, guides, guards. Engineering repairs to infrastructure.</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-drill service-icon"></i>
-                <h3>Line Boring</h3>
-                <p>Perfectly straight boring of propeller shafts, stern gears, gearboxes.</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-truck service-icon"></i>
-                <h3>Undercarriage</h3>
-                <p>Supply new sideframes, final drives, rollers, sprockets, links.</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-wrench service-icon"></i>
-                <h3>On-Site Duties</h3>
-                <p>Field services, shutdown maintenance, rebuilds of machinery.</p>
-            </div>
-        </div>
-    </section>
-    <section id="gallery" class="fade-in">
-        <h2 class="section-title">Our Gallery</h2>
-        <p class="gallery-subtitle">Explore our projects and engineering excellence through these images.</p>
-        <div class="gallery-grid">
-            <div class="gallery-item" onclick="openLightbox('https://i.postimg.cc/ryffSR7h/79764b7f-212a-4c89-a134-da9c554facad.jpg', 'Hydraulic cylinder assembly in workshop')">
-                <img src="https://i.postimg.cc/ryffSR7h/79764b7f-212a-4c89-a134-da9c554facad.jpg" alt="Hydraulic cylinder assembly in workshop" class="gallery-image">
-                <div class="gallery-overlay">
-                    <h3>Hydraulic Cylinder Assembly</h3>
-                    <p>Innovative workshop precision</p>
-                </div>
-            </div>
-            <div class="gallery-item" onclick="openLightbox('https://i.postimg.cc/zBgR36mK/8744f892-6d03-463e-aeaf-f11e8d23ce5c.jpg', 'Conveyor belt repair on site')">
-                <img src="https://i.postimg.cc/zBgR36mK/8744f892-6d03-463e-aeaf-f11e8d23ce5c.jpg" alt="Conveyor belt repair on site" class="gallery-image">
-                <div class="gallery-overlay">
-                    <h3>Conveyor Belt Repair</h3>
-                    <p>On-site efficiency at work</p>
-                </div>
-            </div>
-            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop', 'Line boring operation on machinery')">
-                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop" alt="Line boring operation on machinery" class="gallery-image">
-                <div class="gallery-overlay">
-                    <h3>Line Boring Operation</h3>
-                    <p>Precision engineering in action</p>
-                </div>
-            </div>
-            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1558618047-3c8c98a3e8a8?w=800&h=600&fit=crop', 'Engineering team working on excavator undercarriage')">
-                <img src="https://images.unsplash.com/photo-1558618047-3c8c98a3e8a8?w=400&h=300&fit=crop" alt="Engineering team working on excavator undercarriage" class="gallery-image">
-                <div class="gallery-overlay">
-                    <h3>Excavator Undercarriage</h3>
-                    <p>Team collaboration for reliability</p>
-                </div>
-            </div>
-            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', 'Hose and fitting installation in hydraulic system')">
-                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="Hose and fitting installation in hydraulic system" class="gallery-image">
-                <div class="gallery-overlay">
-                    <h3>Hydraulic System Installation</h3>
-                    <p>Seamless hose and fitting expertise</p>
-                </div>
-            </div>
-            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1581093450029-8cf7a098100e?w=800&h=600&fit=crop', 'On-site rebuild of industrial equipment')">
-                <img src="https://images.unsplash.com/photo-1581093450029-8cf7a098100e?w=400&h=300&fit=crop" alt="On-site rebuild of industrial equipment" class="gallery-image">
-                <div class="gallery-overlay">
-                    <h3>On-Site Equipment Rebuild</h3>
-                    <p>Industrial revival with precision</p>
-                </div>
-            </div>
-            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop', 'Precision honing of cylinders')">
-                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop" alt="Precision honing of cylinders" class="gallery-image">
-                <div class="gallery-overlay">
-                    <h3>Precision Cylinder Honing</h3>
-                    <p>Finishing touches for excellence</p>
-                </div>
-            </div>
-            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', 'General steel work and welding projects')">
-                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="General steel work and welding projects" class="gallery-image">
-                <div class="gallery-overlay">
-                    <h3>Steel Work & Welding</h3>
-                    <p>Robust fabrication and welding</p>
+                <div class="service-icon"><i class="fas fa-tools"></i></div>
+                <div class="service-content">
+                    <h3>Line Boring & Machining</h3>
+                    <p>Precision on-site and workshop line boring services for critical mining machinery.</p>
                 </div>
             </div>
         </div>
     </section>
-    <section id="clients" class="fade-in">
-        <h2 class="section-title">Our Clients</h2>
+
+    <!-- Why Choose Pitja -->
+    <section class="why-choose">
+        <div class="why-grid">
+            <div class="why-text">
+                <h2>Why Top Mining Houses Choose Pitja</h2>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> 100% Black Female-Owned with Level 1 B-BBEE</li>
+                    <li><i class="fas fa-check-circle"></i> Proven track record with Anglo American Platinum & Ivanplats</li>
+                    <li><i class="fas fa-check-circle"></i> Zero lost-time injuries in over 8 years</li>
+                    <li><i class="fas fa-check-circle"></i> Fully equipped modern workshop in Mokopane</li>
+                    <li><i class="fas fa-check-circle"></i> 24/7 emergency breakdown support</li>
+                    <li><i class="fas fa-check-circle"></i> ISO 9001 & MHSA compliant operations</li>
+                </ul>
+            </div>
+            <div class="certifications">
+                <div class="cert-badge">
+                    <i class="fas fa-medal"></i>
+                    <div>Level 1<br>B-BBEE</div>
+                </div>
+                <div class="cert-badge">
+                    <i class="fas fa-female"></i>
+                    <div>100% Black<br>Female Owned</div>
+                </div>
+                <div class="cert-badge">
+                    <i class="fas fa-hard-hat"></i>
+                    <div>MHSA<br>Compliant</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Clients -->
+    <section class="clients-section">
+        <h2 class="section-title">Trusted by Industry Leaders</h2>
         <div class="clients-grid">
-            <img src="https://via.placeholder.com/150x100/FF6600/white?text=Anglo+American" alt="Anglo American" class="client-logo">
-            <img src="https://via.placeholder.com/150x100/FF6600/white?text=Ivanplats" alt="Ivanplats" class="client-logo">
-            <img src="https://via.placeholder.com/150x100/FF6600/white?text=SS+Hydraulics" alt="SS Hydraulics" class="client-logo">
-            <img src="https://via.placeholder.com/150x100/FF6600/white?text=G5+Mining+&+Supplies" alt="G5 Mining & Supplies" class="client-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/0b/Anglo_American_Platinum_logo.svg/1280px-Anglo_American_Platinum_logo.svg.png" alt="Anglo American Platinum" class="client-logo">
+            <img src="https://ivanplats.com/wp-content/uploads/2021/06/Ivanhoe-Mines-Logo.png" alt="Ivanplats Platinum" class="client-logo">
+            <img src="https://via.placeholder.com/200x100/333/fff?text=SS+Hydraulics" alt="SS Hydraulics" class="client-logo">
+            <img src="https://via.placeholder.com/200x100/333/fff?text=G5+Mining" alt="G5 Mining & Supplies" class="client-logo">
         </div>
     </section>
-    <footer id="contact">
-        <div class="contact-info">
-            <h2>Contact Us</h2>
-            <p>20 Simmentaler Street<br>Mokopane 0600</p>
-            <p>Tel: 015 004 2812 / 071 662 0873<br>Email: pitjaengineering@gmail.com<br>Website: www.pitjaengineerings.co.za</p>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>Pitja Engineering</h3>
+                <p>Leading the way in mining maintenance and heavy engineering solutions across South Africa.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <a href="about.html">About Us</a>
+                <a href="services.html">Services</a>
+                <a href="projects.html">Projects</a>
+                <a href="gallery.html">Gallery</a>
+            </div>
+            <div class="footer-col">
+                <h3>Contact Info</h3>
+                <p>20 Simmentaler Street<br>Mokopane, Limpopo 0600</p>
+                <p>Tel: 015 004 2812<br>Cell: 071 662 0873</p>
+                <p>Email: pitjaengineering@gmail.com</p>
+            </div>
+            <div class="footer-col">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
         </div>
-        <div class="social-links">
-            <a href="#"><i class="fab fa-linkedin"></i></a>
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
+        <div class="copyright">
+            &copy; 2025 Pitja Engineering (Pty) Ltd • Registration: 2017/4314/07 • VAT: 4002289348 • All Rights Reserved
         </div>
-        <p>&copy; 2025 Pitja Engineering (PTY) Ltd. REG NO: 2017/4314/07 | VAT NO: 4002289348. All rights reserved.</p>
     </footer>
-    <!-- Custom Alert Modal -->
-    <div id="customAlert" class="custom-alert">
-        <div class="alert-content">
-            <h2 class="alert-title">Job Portal</h2>
-            <p class="alert-message">Redirecting to Job Portal - Coming Soon!</p>
-            <button class="alert-close" onclick="closeCustomAlert()">OK</button>
-        </div>
-    </div>
-    <!-- Lightbox Modal -->
-    <div id="lightboxModal" class="lightbox-modal">
-        <div class="lightbox-content">
-            <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
-            <img id="lightboxImage" class="lightbox-image" src="" alt="">
-            <button class="prev-btn" onclick="changeImage(-1)">&#10094;</button>
-            <button class="next-btn" onclick="changeImage(1)">&#10095;</button>
-        </div>
-    </div>
+
     <script>
-        // Reusable typing function
-        function typeWriter(element, text, speed, callback) {
-            element.innerHTML = '';
-            element.classList.add('typing');
-            let i = 0;
-            function type() {
-                if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                } else {
-                    element.classList.remove('typing');
-                    if (callback) callback();
-                }
-            }
-            type();
-        }
-
-        // Hero Typing Effects (title then subtitle with a short pause)
-        window.addEventListener('load', () => {
-            const heroTitle = document.getElementById('heroTitle');
-            const heroSubtitle = document.getElementById('heroSubtitle');
-            typeWriter(heroTitle, 'Brewed To Fuel Efficiency', 120, () => {
-                setTimeout(() => {
-                    typeWriter(heroSubtitle, 'Engineering excellence for mining and industrial efficiency', 60);
-                }, 400); // Short pause after title completes
-            });
-        });
-
-        // Mobile Menu
-        function toggleMenu() {
-            const hamburger = document.querySelector('.hamburger');
-            const navUl = document.querySelector('nav ul');
-            hamburger.classList.toggle('active');
-            navUl.classList.toggle('active');
-        }
-        // Header Scroll Effect
+        // Smooth scroll header effect
         window.addEventListener('scroll', () => {
-            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
-        });
-        // Fade In on Scroll
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        });
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-        // Nav Active
-        document.querySelectorAll('nav a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-                toggleMenu();
-            });
-        });
-        // Custom Alert Functions
-        function showCustomAlert() {
-            document.getElementById('customAlert').classList.add('active');
-        }
-        function closeCustomAlert() {
-            document.getElementById('customAlert').classList.remove('active');
-        }
-        // Job CTA
-        document.querySelector('.job-cta').addEventListener('click', (e) => {
-            e.preventDefault();
-            showCustomAlert();
-        });
-        // Lightbox
-        let currentImageIndex = 0;
-        const imageSources = [
-            { src: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop', alt: 'Hydraulic cylinder assembly in workshop' },
-            { src: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop', alt: 'Conveyor belt repair on site' },
-            { src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop', alt: 'Line boring operation on machinery' },
-            { src: 'https://images.unsplash.com/photo-1558618047-3c8c98a3e8a8?w=800&h=600&fit=crop', alt: 'Engineering team working on excavator undercarriage' },
-            { src: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', alt: 'Hose and fitting installation in hydraulic system' },
-            { src: 'https://images.unsplash.com/photo-1581093450029-8cf7a098100e?w=800&h=600&fit=crop', alt: 'On-site rebuild of industrial equipment' },
-            { src: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop', alt: 'Precision honing of cylinders' },
-            { src: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', alt: 'General steel work and welding projects' }
-        ];
-        function openLightbox(src, alt) {
-            currentImageIndex = imageSources.findIndex(img => img.src === src);
-            document.getElementById('lightboxImage').src = src;
-            document.getElementById('lightboxImage').alt = alt;
-            document.getElementById('lightboxModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeLightbox() {
-            document.getElementById('lightboxModal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-        function changeImage(direction) {
-            currentImageIndex = (currentImageIndex + direction + imageSources.length) % imageSources.length;
-            const lightboxImage = document.getElementById('lightboxImage');
-            lightboxImage.src = imageSources[currentImageIndex].src;
-            lightboxImage.alt = imageSources[currentImageIndex].alt;
-        }
-        document.getElementById('lightboxModal').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) closeLightbox();
-        });
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeLightbox();
-            else if (e.key === 'ArrowLeft') changeImage(-1);
-            else if (e.key === 'ArrowRight') changeImage(1);
+            document.getElementById('header').style.background = window.scrollY > 50 
+                ? 'rgba(17,17,17,0.98)' 
+                : 'rgba(17,17,17,0.95)';
         });
     </script>
 </body>
