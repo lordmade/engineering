@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services | Pitja Engineering</title>
+    <meta name="description" content="Specialised hydraulic cylinders, hoses, conveyor systems, line boring, undercarriage and on-site engineering services for mining and heavy industry.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF6600;
+            --primary-dark: #E55A00;
+            --accent: #FFD700;
+            --dark: #1A1A1A;
+            --light: #F8F9FA;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Inter', sans-serif; color: var(--dark); line-height: 1.7; background:#fff; overflow-x:hidden; }
+        img { max-width:100%; display:block; }
+        a { text-decoration:none; }
+        .container { width:90%; max-width:1400px; margin:0 auto; padding:0 20px; }
+
+        /* Header - Same as others */
+        header { position:fixed; top:0; left:0; right:0; z-index:1000; background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); transition:var(--transition); box-shadow:0 4px 20px rgba(0,0,0,0.1); }
+        header.scrolled { background:rgba(255,102,0,0.98); }
+        header.scrolled a, header.scrolled .logo img { filter: brightness(0) invert(1); }
+        header.scrolled .hamburger span { background:white; }
+        .nav { display:flex; justify-content:space-between; align-items:center; padding:1.5rem 0; }
+        .logo img { height:65px; }
+        nav ul { display:flex; gap:3rem; list-style:none; }
+        nav a { color:var(--dark); font-weight:600; font-size:1.1rem; position:relative; }
+        nav a::after { content:''; position:absolute; width:0; height:3px; background:var(--primary); bottom:-10px; left:50%; transition:var(--transition); }
+        nav a:hover::after, nav a.active::after { width:100%; left:0; }
+        header.scrolled nav a:hover, header.scrolled nav a.active { color:var(--accent); }
+        .hamburger { display:none; cursor:pointer; }
+        .hamburger span { display:block; width:30px; height:3px; background:var(--dark); margin:6px 0; transition:0.3s; }
+        .hamburger.active span:nth-child(1) { transform:rotate(45deg) translate(8px,8px); }
+        .hamburger.active span:nth-child(2) { opacity:0; }
+        .hamburger.active span:nth-child(3) { transform:rotate(-45deg) translate(7px,-6px); }
+
+        /* Hero */
+        .hero { height:90vh; min-height:650px; background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.7)), url('https://i.postimg.cc/ryffSR7h/79764b7f-212a-4c89-a134-da9c554facad.jpg') center/cover no-repeat fixed; display:flex; align-items:center; color:white; text-align:center; }
+        .hero h1 { font-size:clamp(3.5rem,8vw,6.5rem); font-weight:900; letter-spacing:-2px; }
+        .typing-cursor { display:inline-block; background:white; margin-left:4px; width:4px; height:0.8em; animation:blink 0.8s infinite; }
+        @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+
+        .section { padding:120px 0; }
+        .section-alt { background:var(--light); }
+        .section-title { font-size:3.5rem; text-align:center; margin-bottom:4rem; position:relative; }
+        .section-title::after { content:''; width:120px; height:5px; background:var(--primary); position:absolute; bottom:-20px; left:50%; transform:translateX(-50%); }
+
+        /* Services Grid */
+        .services-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(380px,1fr)); gap:3rem; }
+        .service-card { 
+            background:white; 
+            border-radius:25px; 
+            overflow:hidden; 
+            box-shadow:0 15px 50px rgba(0,0,0,0.12); 
+            transition:var(--transition); 
+            position:relative;
+        }
+        .service-card:hover { transform:translateY(-20px); box-shadow:0 30px 70px rgba(0,0,0,0.2); }
+        .service-icon { 
+            height:180px; 
+            background:linear-gradient(135deg, var(--primary), var(--primary-dark)); 
+            display:flex; align-items:center; justify-content:center; 
+        }
+        .service-icon i { font-size:5rem; color:white; }
+        .service-content { padding:2.5rem; text-align:center; }
+        .service-content h3 { font-size:1.8rem; margin-bottom:1rem; color:var(--primary-dark); }
+        .service-content ul { text-align:left; margin:1.5rem 0; padding-left:1.5rem; }
+        .service-content li { margin:0.7rem 0; opacity:0.9; }
+
+        /* Why Choose Section */
+        .why-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:3rem; margin-top:5rem; }
+        .why-item { text-align:center; }
+        .why-item i { font-size:4rem; color:var(--primary); margin-bottom:1.5rem; }
+
+        /* CTA Section */
+        .cta-section { padding:100px 0; background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:white; text-align:center; }
+        .cta-section h2 { font-size:3.5rem; margin-bottom:1.5rem; }
+        .cta-section p { font-size:1.3rem; max-width:800px; margin:0 auto 3rem; opacity:0.9; }
+        .cta-btn-large { padding:1.5rem 4rem; font-size:1.3rem; border-radius:60px; }
+
+        footer { background:#111; color:white; padding:80px 0 40px; text-align:center; }
+
+        .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; }
+        .modal.active { display:flex; }
+        .modal-content { background:white; padding:3rem; border-radius:20px; max-width:500px; width:90%; text-align:center; animation:modalIn 0.4s; }
+        @keyframes modalIn { from { transform:scale(0.7); } to { transform:scale(1); } }
+
+        @media (max-width:992px) {
+            .hamburger { display:block; }
+            nav ul { position:fixed; top:0; left:0; width:100%; height:100vh; background:white; flex-direction:column; justify-content:center; align-items:center; transform:translateX(-100%); opacity:0; transition:0.5s; }
+            nav ul.active { transform:translateX(0); opacity:1; }
+            .services-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="header">
+        <div class="container nav">
+            <a href="index.html" class="logo">
+                <img src="https://i.postimg.cc/C15GcRpW/PITJA-LOGO-removebg-preview.png" alt="Pitja Engineering">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="services.html" class="active">Services</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="clients.html">Clients</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="hamburger" onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('active')">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <h1 id="typingTitle">Engineering Excellence<span class="typing-cursor"></span></h1>
+            <p style="font-size:1.8rem; margin-top:2rem; opacity:0.9;">Precision hydraulic & mechanical solutions trusted by South Africa’s largest mines</p>
+        </div>
+    </section>
+
+    <!-- ALL SERVICES -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Our Specialised Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-cogs"></i></div>
+                    <div class="service-content">
+                        <h3>Hydraulic Cylinders</h3>
+                        <p>Complete rebuilds from disassembly to final testing</p>
+                        <ul>
+                            <li>Chrome plating & honing</li>
+                            <li>Seal kits & rod replacement</li>
+                            <li>Pressure testing to OEM spec</li>
+                            <li>Custom modifications</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-tools"></i></div>
+                    <div class="service-content">
+                        <h3>Hoses & Fittings</h3>
+                        <p>High-pressure hydraulic hose manufacturing & installation</p>
+                        <ul>
+                            <li>On-site hose crimping</li>
+                            <li>Parker & Eaton certified</li>
+                            <li>Burst pressure testing</li>
+                            <li>Emergency 24/7 supply</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-conveyor-belt"></i></div>
+                    <div class="service-content">
+                        <h3>Conveyor Systems</h3>
+                        <p>Full conveyor belt maintenance & upgrades</p>
+                        <ul>
+                            <li>New belt splicing (hot/cold)</li>
+                            <li>Roller & idler replacement</li>
+                            <li>Pulley lagging</li>
+                            <li>Structural repairs</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-drill"></i></div>
+                    <div class="service-content">
+                        <h3>Line Boring</h3>
+                        <p>Precision portable line boring on-site or in workshop</p>
+                        <ul>
+                            <li>Boom & stick repairs</li>
+                            <li>Bucket pivot bores</li>
+                            <li>Tolerance ±0.02mm</li>
+                            <li>Full certification</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-truck-monster"></i></div>
+                    <div class="service-content">
+                        <h3>Undercarriage</h3>
+                        <p>Complete track frame & component solutions</p>
+                        <ul>
+                            <li>Track chain supply & install</li>
+                            <li>Roller & idler rebuilds</li>
+                            <li>Sprocket & final drive repairs</li>
+                            <li>Berco & ITM parts</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-wrench"></i></div>
+                    <div class="service-content">
+                        <h3>On-Site & Shutdown Services</h3>
+                        <p>Full shutdown planning and execution</p>
+                        <ul>
+                            <li>24/7 breakdown response</li>
+                            <li>Component change-outs</li>
+                            <li>Preventative maintenance</li>
+                            <li>Safety-compliant teams</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE OUR SERVICES -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Why Mines Trust Pitja</h2>
+            <div class="why-grid">
+                <div class="why-item">
+                    <i class="fas fa-clock"></i>
+                    <h3>24/7 Availability</h3>
+                    <p>Emergency teams on standby nationwide</p>
+                </div>
+                <div class="why-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>OEM Standards</h3>
+                    <p>ISO-certified workshop & processes</p>
+                </div>
+                <div class="why-item">
+                    <i class="fas fa-medal"></i>
+                    <h3>Level 1 B-BBEE</h3>
+                    <p>Maximum procurement recognition</p>
+                </div>
+                <div class="why-item">
+                    <i class="fas fa-truck"></i>
+                    <h3>Rapid Response</h3>
+                    <p>On-site within hours, anywhere in SA</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Reduce Downtime?</h2>
+            <p>Contact us today for a free assessment and custom maintenance plan</p>
+            <a href="contact.html" class="cta-btn btn-primary cta-btn-large">Get Your Quote Now</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Pitja Engineering (PTY) Ltd • Reg: 2017/4314/07 • VAT: 4002289348 • All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- JOB MODAL -->
+    <div id="jobModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="document.getElementById('jobModal').classList.remove('active')">&times;</span>
+            <h2>Join Our Team</h2>
+            <p style="margin:1.5rem 0;">We are always looking for skilled artisans, fitters, boilermakers, and engineers.</p>
+            <p>Email your CV to: <strong>careers@pitjaengineering.co.za</strong></p>
+            <p style="margin-top:1rem;">Or WhatsApp: <strong>071 662 0873</strong></p>
+            <button onclick="document.getElementById('jobModal').classList.remove('active')" style="margin-top:2rem;padding:1rem 2.5rem;background:var(--primary);color:white;border:none;border-radius:50px;cursor:pointer;font-weight:600;">Close</button>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        function typeWriter(element, text, speed) {
+            let i = 0;
+            element.style.opacity = 1;
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        window.addEventListener('load', () => {
+            typeWriter(document.getElementById('typingTitle'), "Engineering Excellence", 100);
+        });
+    </script>
+</body>
+</html>
