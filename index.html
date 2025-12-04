@@ -41,10 +41,10 @@
         .hamburger.active span:nth-child(2) { opacity:0; }
         .hamburger.active span:nth-child(3) { transform:rotate(-45deg) translate(7px,-6px); }
 
-        /* Hero with Typing Effect */
+        /* Hero */
         .hero { height:100vh; min-height:750px; background:linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.65)), url('https://i.postimg.cc/dt3P98Rx/Whats-App-Image-2025-12-03-at-14-53-42.jpg') center/cover no-repeat fixed; display:flex; align-items:center; color:white; text-align:center; }
         .hero-content { max-width:1100px; margin:0 auto; }
-        #typingTitle, #typingSubtitle { opacity:0; }
+        #typingTitle, #typingSubtitle { opacity:0; white-space: nowrap; overflow: hidden; }
         .typing-cursor { display:inline-block; background:white; margin-left:4px; width:4px; height:0.8em; animation:blink 0.8s infinite; vertical-align:middle; }
         @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
 
@@ -54,7 +54,7 @@
         .btn-secondary { background:transparent; border:2px solid white; color:white; }
         .btn-secondary:hover { background:white; color:var(--primary); }
 
-        /* General */
+        /* Sections */
         .section-title { font-size:3.5rem; text-align:center; margin-bottom:4rem; position:relative; color:var(--dark); }
         .section-title::after { content:''; width:120px; height:5px; background:var(--primary); position:absolute; bottom:-20px; left:50%; transform:translateX(-50%); }
         .features, .stats, .quick-services, .latest-projects { padding:120px 0; }
@@ -69,34 +69,60 @@
         .service-card:hover, .project-card:hover { transform:translateY(-15px); box-shadow:0 20px 50px rgba(0,0,0,0.18); }
         .service-card i { font-size:3.8rem; color:var(--primary); margin:2rem 0 1.5rem; }
         .service-card a { color:var(--primary); font-weight:600; }
-
         .project-card img { height:280px; object-fit:cover; }
 
-        .partners { padding:100px 0; background:#0a0a0a; color:white; text-align:center; }
+        /* PARTNERS — FIXED & BEAUTIFUL */
+        .partners {
+            padding: 100px 0;
+            background: #0a0a0a;
+            color: white;
+            text-align:center;
+        }
         .partners h2 { font-size:2.8rem; margin-bottom:1rem; }
-        .partners p { opacity:0.7; margin-bottom:3rem; }
+        .partners p { opacity:0.8; margin-bottom:3rem; font-size:1.1rem; }
+
         .partners-wrapper { overflow:hidden; }
-        .partners-track { display:flex; gap:5rem; animation:scroll 40s linear infinite; width:max-content; }
-        .partner-logo { height:80px; filter:grayscale(100%) brightness(0.8); transition:var(--transition); }
-        .partner-logo:hover { filter:grayscale(0%) brightness(1); transform:scale(1.2); }
-        @keyframes scroll { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
-        .partners-track:hover { animation-play-state:paused; }
+        .partners-track {
+            display:flex;
+            gap:5rem;
+            animation: scroll 45s linear infinite;
+            width:max-content;
+        }
+        .partner-logo {
+            height:85px;
+            filter: brightness(0) saturate(100%) invert(1) brightness(1.1) drop-shadow(0 4px 12px rgba(255,255,255,0.3));
+            transition: var(--transition);
+            flex-shrink: 0;
+            padding: 0 15px;
+        }
+        .partner-logo:hover {
+            filter: brightness(0) saturate(100%) invert(1) hue-rotate(30deg) drop-shadow(0 0 20px rgba(255,102,0,0.8));
+            transform: scale(1.35);
+        }
+        @keyframes scroll {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .partners-track:hover { animation-play-state: paused; }
 
-        footer { background:#111; color:white; padding:80px 0 40px; text-align:center; }
+        /* Footer */
+        footer { background:#111; color:#aaa; padding:80px 0 40px; text-align:center; font-size:0.95rem; }
 
-        /* Job Modal */
-        .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; }
+        /* Modal */
+        .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.9); align-items:center; justify-content:center; }
         .modal.active { display:flex; }
-        .modal-content { background:white; padding:3rem; border-radius:20px; max-width:500px; width:90%; text-align:center; animation:modalIn 0.4s; position:relative; }
-        .close-modal { position:absolute; top:15px; right:20px; font-size:2rem; cursor:pointer; color:#999; }
+        .modal-content { background:white; color:#333; padding:3rem; border-radius:20px; max-width:500px; width:90%; text-align:center; animation:modalIn 0.4s; position:relative; }
+        .close-modal { position:absolute; top:15px; right:20px; font-size:2.5rem; cursor:pointer; color:#999; transition:0.3s; }
+        .close-modal:hover { color:#000; }
         @keyframes modalIn { from { transform:scale(0.7); opacity:0; } to { transform:scale(1); opacity:1; } }
 
         @media (max-width:992px) {
             .hamburger { display:block; }
-            nav ul { position:fixed; top:0; left:0; width:100%; height:100vh; background:white; flex-direction:column; justify-content:center; align-items:center; transform:translateX(-100%); opacity:0; transition:0.5s; }
-            nav ul.active { transform:translateX(0); opacity:1; }
+            nav ul { position:fixed; top:0; left:-100%; width:100%; height:100vh; background:white; flex-direction:column; justify-content:center; align-items:center; transition:0.5s; opacity:0; visibility:hidden; }
+            nav ul.active { left:0; opacity:1; visibility:visible; }
             nav a { font-size:2rem; color:var(--dark); }
             header.scrolled nav a { color:white; }
+            .section-title { font-size:2.8rem; }
         }
     </style>
 </head>
@@ -124,7 +150,7 @@
         </div>
     </header>
 
-    <!-- HERO WITH TYPING EFFECT -->
+    <!-- HERO -->
     <section class="hero">
         <div class="container hero-content">
             <h1 id="typingTitle">Brewed To Fuel Efficiency<span class="typing-cursor"></span></h1>
@@ -160,7 +186,7 @@
         </div>
     </section>
 
-    <!-- STATS COUNTER -->
+    <!-- STATS -->
     <section class="stats">
         <div class="container">
             <div class="grid">
@@ -179,7 +205,7 @@
             <div class="service-grid">
                 <div class="service-card"><div style="padding:2rem;"><i class="fas fa-cogs"></i><h3>Hydraulic Cylinders</h3><p>Full rebuild, testing & honing</p><a href="services.html">Learn More →</a></div></div>
                 <div class="service-card"><div style="padding:2rem;"><i class="fas fa-tools"></i><h3>Hoses & Fittings</h3><p>Supply, crimping & installation</p><a href="services.html">Learn More →</a></div></div>
-                <div class="service-card"><div style="padding:2rem;"><i class="fas fa-conveyor-belt"></i><h3>Conveyor Systems</h3><p>New belts, rollers & repairs</p><a href="services.html">Learn More →</a></div></div>
+                <div class="service-card"><div style="padding:2rem;"><i class="fa-solid fa-conveyor-belt"></i><h3>Conveyor Systems</h3><p>New belts, rollers & repairs</p><a href="services.html">Learn More →</a></div></div>
                 <div class="service-card"><div style="padding:2rem;"><i class="fas fa-drill"></i><h3>Line Boring</h3><p>On-site & workshop precision</p><a href="services.html">Learn More →</a></div></div>
                 <div class="service-card"><div style="padding:2rem;"><i class="fas fa-truck-monster"></i><h3>Undercarriage</h3><p>Tracks, rollers, sprockets supply</p><a href="services.html">Learn More →</a></div></div>
                 <div class="service-card"><div style="padding:2rem;"><i class="fas fa-wrench"></i><h3>On-Site Shutdowns</h3><p>Planned maintenance & rebuilds</p><a href="services.html">Learn More →</a></div></div>
@@ -211,7 +237,7 @@
         </div>
     </section>
 
-    <!-- PARTNERS CAROUSEL -->
+    <!-- PARTNERS CAROUSEL — NOW PERFECTLY VISIBLE -->
     <section class="partners">
         <div class="container">
             <h2>Trusted By Industry Giants</h2>
@@ -220,13 +246,12 @@
                 <div class="partners-track">
                     <img src="https://www.angloamerican.com/~/media/Images/A/Anglo-American-Group-v9/Universal/logo/anglo-american-logo-color.svg" alt="Anglo American" class="partner-logo">
                     <img src="https://ivpjobs.com/img/logo.svg" alt="Ivanplats" class="partner-logo">
-                    <img src="https://www.valterraplatinum.com/~/media/Images/V/Valterra-Platinum/Universal/logo/valterra-platinum-logo-color.svg" alt="Glencore" class="partner-logo">
-                   
-                    <!-- Duplicate for seamless loop -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Glencore_logo.svg" alt="Glencore" class="partner-logo">
+
+                    <!-- Duplicated for seamless loop -->
                     <img src="https://www.angloamerican.com/~/media/Images/A/Anglo-American-Group-v9/Universal/logo/anglo-american-logo-color.svg" alt="Anglo American" class="partner-logo">
                     <img src="https://ivpjobs.com/img/logo.svg" alt="Ivanplats" class="partner-logo">
-                    <img src="https://www.valterraplatinum.com/~/media/Images/V/Valterra-Platinum/Universal/logo/valterra-platinum-logo-color.svg" alt="Glencore" class="partner-logo">
-                   
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Glencore_logo.svg" alt="Glencore" class="partner-logo">
                 </div>
             </div>
         </div>
@@ -235,11 +260,11 @@
     <!-- FOOTER -->
     <footer>
         <div class="container">
-            <p>&copy; 2025 Pitja Engineering (PTY) Ltd • Reg: 2017/4314/07 • VAT: 4002289348 • All Rights Reserved</p>
+            <p>© 2025 Pitja Engineering (PTY) Ltd • Reg: 2017/4314/07 • VAT: 4002289348 • All Rights Reserved</p>
         </div>
     </footer>
 
-    <!-- JOB APPLICATION MODAL -->
+    <!-- JOB MODAL -->
     <div id="jobModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="document.getElementById('jobModal').classList.remove('active')">&times;</span>
@@ -252,7 +277,7 @@
     </div>
 
     <script>
-        // Header scroll effect
+        // Header scroll
         window.addEventListener('scroll', () => {
             document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
         });
@@ -261,6 +286,7 @@
         function typeWriter(element, text, speed, callback) {
             let i = 0;
             element.style.opacity = 1;
+            element.innerHTML = '';
             const cursor = document.createElement('span');
             cursor.className = 'typing-cursor';
             element.appendChild(cursor);
@@ -270,8 +296,8 @@
                     element.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
                     i++;
                     setTimeout(type, speed);
-                } else {
-                    if (callback) setTimeout(callback, 500);
+                } else if (callback) {
+                    setTimeout(callback, 500);
                 }
             }
             type();
@@ -287,30 +313,30 @@
             });
         });
 
-        // Counter animation
+        // Counter Animation
         const counters = document.querySelectorAll('.counter');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const target = entry.target;
-                    const count = +target.getAttribute('data-target');
-                    let current = 0;
-                    const inc = count / 200;
-                    const update = () => {
-                        if (current < count) {
-                            current += inc;
-                            target.innerText = Math.ceil(current) + (count === 100 ? '%' : '+');
-                            requestAnimationFrame(update);
+                    const countTo = parseInt(target.getAttribute('data-target'));
+                    let count = 0;
+                    const increment = countTo / 200;
+                    const timer = setInterval(() => {
+                        count += increment;
+                        if (count >= countTo) {
+                            clearInterval(timer);
+                            target.innerText = countTo === 100 ? '100%' : countTo + '+';
                         } else {
-                            target.innerText = count === 100 ? '100%' : count + '+';
+                            target.innerText = Math.ceil(count) + (countTo === 100 ? '%' : (countTo > 100 ? '+' : ''));
                         }
-                    };
-                    update();
+                    }, 15);
                     observer.unobserve(target);
                 }
             });
-        }, { threshold: 0.7 });
-        counters.forEach(c => observer.observe(c));
+        }, { threshold: 0.6 });
+
+        counters.forEach(counter => observer.observe(counter));
     </script>
 </body>
 </html>
