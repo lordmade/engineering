@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Vynix AI • CAPS Education Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Vynix AI • Education</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
   
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -15,19 +17,31 @@
 
   <style>
     :root {
-      --bg-page: #f8fafc;
-      --bg-card: #ffffff;
-      --primary: #2563eb; /* Educational Blue */
-      --primary-hover: #1d4ed8;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      --user-msg: #f1f5f9;
-      --ai-msg: #eff6ff;
+      --bg-page: #FDFDFF;
+      --bg-chat: #FFFFFF;
+      --primary: #111111;
+      --accent: #4F46E5;
+      --text-main: #1A1C1E;
+      --text-muted: #6C7278;
+      --border: #F1F2F4;
+      --ai-bubble: #F4F7FB;
+      --user-bubble: #FFFFFF;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
+    * { 
+      margin: 0; padding: 0; box-sizing: border-box; 
+      /* Prevent long press highlight/context menu on UI elements */
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Allow text selection only in chat bubbles so students can copy notes */
+    .msg-content {
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
     body {
       background-color: var(--bg-page);
       color: var(--text-main);
@@ -36,182 +50,174 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      /* Prevent elastic scrolling/bounce on some browsers */
+      position: fixed;
+      width: 100%;
     }
 
-    /* Header */
+    /* Header Styling */
     .header {
-      padding: 1rem 2rem;
-      background: var(--bg-card);
+      background: #FFFFFF;
+      padding: 12px 20px;
       border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      z-index: 10;
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 700;
-      font-size: 1.2rem;
-      color: var(--primary);
-    }
+    .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 36px; height: 36px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; }
+    .brand-name h1 { font-size: 1rem; font-weight: 700; }
+    .brand-name p { font-size: 0.7rem; color: #10B981; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+    .brand-name p::before { content: ""; width: 6px; height: 6px; background: #10B981; border-radius: 50%; display: inline-block; }
 
-    .cap-badge {
-      background: #dcfce7;
-      color: #166534;
-      font-size: 0.7rem;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-weight: 600;
+    .selector-group { display: flex; gap: 8px; }
+    select {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: #FAFBFC;
+      outline: none;
+      appearance: none;
     }
 
     /* Chat Area */
     .chat-container {
       flex: 1;
       overflow-y: auto;
-      padding: 2rem;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
-      max-width: 900px;
-      margin: 0 auto;
-      width: 100%;
+      gap: 20px;
+      padding-bottom: 100px; /* Space for floating input */
     }
 
-    .message {
-      max-width: 80%;
-      display: flex;
-      flex-direction: column;
-      animation: fadeIn 0.3s ease-out;
-    }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } }
-
+    .message { max-width: 85%; display: flex; flex-direction: column; }
     .message.user { align-self: flex-end; }
     .message.ai { align-self: flex-start; }
 
     .msg-content {
-      padding: 1rem 1.25rem;
-      border-radius: 18px;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      position: relative;
+      padding: 14px 18px;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      border-radius: 20px;
     }
 
     .message.user .msg-content {
-      background: var(--user-msg);
+      background: var(--user-bubble);
       color: var(--text-main);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
       border-bottom-right-radius: 4px;
     }
 
     .message.ai .msg-content {
-      background: var(--ai-msg);
+      background: var(--ai-bubble);
       color: var(--text-main);
-      border: 1px solid #dbeafe;
       border-bottom-left-radius: 4px;
     }
 
-    .sender-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
-    }
+    .msg-time { font-size: 0.65rem; color: var(--text-muted); margin-top: 6px; font-weight: 500; }
+    .message.user .msg-time { align-self: flex-end; }
 
-    /* Input Area */
-    .footer {
-      background: var(--bg-card);
-      border-top: 1px solid var(--border);
-      padding: 1.5rem;
-    }
-
-    .input-wrapper {
-      max-width: 800px;
-      margin: 0 auto;
-      display: flex;
-      gap: 12px;
-      background: #f1f5f9;
-      padding: 6px;
-      border-radius: 14px;
+    /* Floating Input Styling */
+    .input-bar {
+      position: absolute;
+      bottom: 24px;
+      left: 20px;
+      right: 20px;
+      background: #FFFFFF;
       border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 8px 8px 8px 20px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      z-index: 20;
     }
 
-    .input-field {
+    .input-bar input {
       flex: 1;
       border: none;
-      background: transparent;
-      padding: 0.75rem 1rem;
-      font-family: inherit;
-      font-size: 1rem;
       outline: none;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      padding-right: 10px;
     }
 
     .send-btn {
+      width: 44px;
+      height: 44px;
       background: var(--primary);
       color: white;
       border: none;
-      border-radius: 10px;
-      width: 45px;
-      height: 45px;
-      cursor: pointer;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
+      cursor: pointer;
+      transition: transform 0.2s;
     }
-    .send-btn:hover { background: var(--primary-hover); }
-    .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* Loading dots */
-    .loader { display: none; gap: 4px; }
-    .loading .loader { display: flex; }
-    .loading .icon { display: none; }
-    .dot { width: 5px; height: 5px; background: white; border-radius: 50%; animation: bounce 0.5s infinite alternate; }
-    @keyframes bounce { to { transform: translateY(-4px); } }
+    .send-btn:active { transform: scale(0.9); }
 
-    /* Custom scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    /* Loading Animation */
+    .typing-indicator { display: none; gap: 4px; padding: 14px 18px; background: var(--ai-bubble); border-radius: 20px; width: fit-content; }
+    .dot { width: 5px; height: 5px; background: var(--text-muted); border-radius: 50%; animation: pulse 1s infinite alternate; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes pulse { to { opacity: 0.3; transform: translateY(-2px); } }
+
   </style>
 </head>
 <body>
 
   <header class="header">
-    <div class="logo">
-      <span class="material-symbols-rounded">menu_book</span>
-      VYNIX AI
-      <span class="cap-badge">CAPS CURRICULUM</span>
+    <div class="header-top">
+      <div class="brand">
+        <div class="avatar"><span class="material-symbols-rounded">bolt</span></div>
+        <div class="brand-name">
+          <h1>Vynix AI</h1>
+          <p>Online Support</p>
+        </div>
+      </div>
+      <button onclick="firebase.auth().signOut()" style="border:none; background:none; color:var(--text-muted);"><span class="material-symbols-rounded">logout</span></button>
     </div>
-    <button onclick="firebase.auth().signOut()" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:0.8rem;">Sign Out</button>
+    <div class="selector-group">
+      <select id="gradeSelect">
+        <option>Grade 10</option><option>Grade 11</option><option selected>Grade 12</option>
+      </select>
+      <select id="subjectSelect">
+        <option>Mathematics</option><option>Physical Sciences</option><option>Life Sciences</option><option>CAT/IT</option>
+      </select>
+    </div>
   </header>
 
   <main class="chat-container" id="chatContainer">
     <div class="message ai">
-      <div class="sender-label">Vynix AI</div>
       <div class="msg-content">
-        Hello! I am <strong>Vynix AI</strong>, your educational assistant. I specialize in the South African CAPS curriculum. How can I help you with your studies today?
+        Hello Vynix Lingua. I am your CAPS educational assistant. How can I help you with your studies today?
       </div>
+      <div class="msg-time">Just now</div>
+    </div>
+    <div class="typing-indicator" id="typingIndicator">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
     </div>
   </main>
 
-  <footer class="footer">
-    <div class="input-wrapper" id="inputWrapper">
-      <input type="text" id="userInput" class="input-field" placeholder="Ask about a CAPS subject (e.g. Grade 12 Math)..." autocomplete="off">
-      <button id="sendBtn" class="send-btn">
-        <span class="material-symbols-rounded icon">send</span>
-        <div class="loader">
-          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-        </div>
-      </button>
-    </div>
-  </footer>
+  <div class="input-bar">
+    <input type="text" id="userInput" placeholder="Ask anything about CAPS..." autocomplete="off">
+    <button id="sendBtn" class="send-btn">
+      <span class="material-symbols-rounded">arrow_upward</span>
+    </button>
+  </div>
 
   <script>
-    // 1. Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
       authDomain: "fire-b-a8878.firebaseapp.com",
@@ -224,19 +230,6 @@
 
     let XAI_API_KEY = "";
     const MODEL_ID = "grok-4-1-fast-reasoning";
-    
-    // 2. Strict Educational System Instruction
-    const SYSTEM_PROMPT = `You are Vynix AI, a helpful and professional educational assistant. 
-    Your primary goal is to help students with the South African CAPS curriculum (Grades R-12). 
-    1. Always identify as Vynix AI. 
-    2. Be helpful, encouraging, and clear in educational explanations.
-    3. If the user asks about anything NOT related to education or the CAPS curriculum, politely decline and request an educative request instead. 
-    4. Provide structured information (bullet points) for complex topics.`;
-
-    const chatContainer = document.getElementById('chatContainer');
-    const userInput = document.getElementById('userInput');
-    const sendBtn = document.getElementById('sendBtn');
-    const inputWrapper = document.getElementById('inputWrapper');
 
     auth.onAuthStateChanged(user => {
       if (!user) window.location.href = 'index.html';
@@ -248,68 +241,59 @@
       try {
         await remoteConfig.fetchAndActivate();
         XAI_API_KEY = remoteConfig.getValue('xai_api_key').asString();
-      } catch (err) { console.error("Config fetch failed"); }
+      } catch (e) { console.error("Config Error"); }
     }
 
     function appendMessage(role, text) {
-      const msgDiv = document.createElement('div');
-      msgDiv.className = `message ${role}`;
-      msgDiv.innerHTML = `
-        <div class="sender-label">${role === 'user' ? 'Student' : 'Vynix AI'}</div>
+      const chat = document.getElementById('chatContainer');
+      const indicator = document.getElementById('typingIndicator');
+      
+      const msg = document.createElement('div');
+      msg.className = `message ${role}`;
+      msg.innerHTML = `
         <div class="msg-content">${text.replace(/\n/g, '<br>')}</div>
+        <div class="msg-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
       `;
-      chatContainer.appendChild(msgDiv);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
+      
+      chat.insertBefore(msg, indicator);
+      chat.scrollTop = chat.scrollHeight;
     }
 
     async function sendMessage() {
-      const query = userInput.value.trim();
+      const input = document.getElementById('userInput');
+      const query = input.value.trim();
       if (!query || !XAI_API_KEY) return;
 
       appendMessage('user', query);
-      userInput.value = '';
-      sendBtn.disabled = true;
-      inputWrapper.classList.add('loading');
+      input.value = '';
+      document.getElementById('typingIndicator').style.display = 'flex';
+      
+      const sysPrompt = `You are Vynix AI, an expert in the South African CAPS Curriculum. 
+      Student is in ${document.getElementById('gradeSelect').value}, Subject: ${document.getElementById('subjectSelect').value}.
+      Help ONLY with education. Politely decline non-academic chat.`;
 
       try {
         const response = await fetch("https://api.x.ai/v1/chat/completions", {
           method: "POST",
-          headers: {
-            "Authorization": `Bearer ${XAI_API_KEY}`,
-            "Content-Type": "application/json"
-          },
+          headers: { "Authorization": `Bearer ${XAI_API_KEY}`, "Content-Type": "application/json" },
           body: JSON.stringify({
             model: MODEL_ID,
-            messages: [
-              { role: "system", content: SYSTEM_PROMPT },
-              { role: "user", content: query }
-            ],
-            max_completion_tokens: 2048,
+            messages: [{role: "system", content: sysPrompt}, {role: "user", content: query}],
             temperature: 0.7
           })
         });
 
         const data = await response.json();
-        
-        if (!response.ok) {
-          throw new Error(data.error?.message || "Connection Error");
-        }
-
-        if (data.choices && data.choices[0]) {
-          appendMessage('ai', data.choices[0].message.content);
-        }
+        if (data.choices) appendMessage('ai', data.choices[0].message.content);
       } catch (err) {
-        appendMessage('ai', "I encountered a technical issue. Please try again or check your internet connection.");
-        console.error(err);
+        appendMessage('ai', "I'm having trouble connecting. Please try again.");
       } finally {
-        sendBtn.disabled = false;
-        inputWrapper.classList.remove('loading');
-        userInput.focus();
+        document.getElementById('typingIndicator').style.display = 'none';
       }
     }
 
-    sendBtn.onclick = sendMessage;
-    userInput.onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
+    document.getElementById('sendBtn').onclick = sendMessage;
+    document.getElementById('userInput').onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
   </script>
 </body>
 </html>
