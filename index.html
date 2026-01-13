@@ -27,16 +27,17 @@
       --ai-bubble: #F4F7FB;
       --user-bubble: #FFFFFF;
       --shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      --sidebar-width: 260px;
+      --sidebar-collapsed-width: 72px;
+      --header-height: 64px;
     }
 
     * { 
       margin: 0; padding: 0; box-sizing: border-box; 
-      /* Prevent long press highlight/context menu on UI elements */
       -webkit-touch-callout: none;
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Allow text selection only in chat bubbles so students can copy notes */
     .msg-content {
       -webkit-user-select: text;
       user-select: text;
@@ -48,32 +49,189 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       height: 100vh;
       display: flex;
-      flex-direction: column;
       overflow: hidden;
-      /* Prevent elastic scrolling/bounce on some browsers */
-      position: fixed;
       width: 100%;
+    }
+
+    /* --- SIDEBAR STYLING --- */
+    .sidebar {
+      background: #FFFFFF;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 50;
+      position: relative;
+    }
+
+    /* Desktop Sidebar State */
+    @media (min-width: 769px) {
+      .sidebar {
+        width: var(--sidebar-collapsed-width);
+      }
+      .sidebar:hover {
+        width: var(--sidebar-width);
+      }
+      /* Hide text when collapsed */
+      .sidebar:not(:hover) .nav-text,
+      .sidebar:not(:hover) .brand-text {
+        opacity: 0;
+        pointer-events: none;
+        white-space: nowrap;
+      }
+      .hamburger { display: none; }
+      .overlay { display: none; }
+    }
+
+    /* Mobile Sidebar State (Drawer) */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: var(--sidebar-width);
+        transform: translateX(-100%);
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 40;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s;
+      }
+      .overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    /* Sidebar Content */
+    .sidebar-header {
+      height: var(--header-height);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: max-content; /* prevents logo squishing */
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      font-weight: 700;
+      font-size: 1rem;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 20px 12px;
+      flex: 1;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background: var(--ai-bubble);
+      color: var(--primary);
+    }
+
+    .nav-item .material-symbols-rounded {
+      font-size: 22px;
+      flex-shrink: 0; /* Prevents icon shrinking */
+    }
+
+    .nav-text {
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: opacity 0.2s;
+    }
+
+    .sidebar-footer {
+      padding: 20px;
+      border-top: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    /* --- MAIN CONTENT LAYOUT --- */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
     }
 
     /* Header Styling */
     .header {
+      height: var(--header-height);
       background: #FFFFFF;
-      padding: 12px 20px;
+      padding: 0 20px;
       border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       z-index: 10;
     }
 
-    .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    
-    .brand { display: flex; align-items: center; gap: 10px; }
-    .avatar { width: 36px; height: 36px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; }
-    .brand-name h1 { font-size: 1rem; font-weight: 700; }
-    .brand-name p { font-size: 0.7rem; color: #10B981; font-weight: 600; display: flex; align-items: center; gap: 4px; }
-    .brand-name p::before { content: ""; width: 6px; height: 6px; background: #10B981; border-radius: 50%; display: inline-block; }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+
+    .hamburger {
+      background: none;
+      border: none;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 4px;
+    }
+
+    .page-title {
+      font-size: 1rem;
+      font-weight: 700;
+    }
 
     .selector-group { display: flex; gap: 8px; }
     select {
-      flex: 1;
       padding: 8px 12px;
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -83,6 +241,11 @@
       background: #FAFBFC;
       outline: none;
       appearance: none;
+      cursor: pointer;
+    }
+    
+    @media (max-width: 500px) {
+      .selector-group select { max-width: 100px; text-overflow: ellipsis; }
     }
 
     /* Chat Area */
@@ -93,7 +256,7 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-      padding-bottom: 100px; /* Space for floating input */
+      padding-bottom: 100px; 
     }
 
     .message { max-width: 85%; display: flex; flex-direction: column; }
@@ -138,6 +301,8 @@
       align-items: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.08);
       z-index: 20;
+      max-width: 800px;
+      margin: 0 auto;
     }
 
     .input-bar input {
@@ -177,47 +342,96 @@
 </head>
 <body>
 
-  <header class="header">
-    <div class="header-top">
-      <div class="brand">
-        <div class="avatar"><span class="material-symbols-rounded">bolt</span></div>
-        <div class="brand-name">
-          <h1>Vynix AI</h1>
-          <p>Online Support</p>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <div class="brand-logo"><span class="material-symbols-rounded">bolt</span></div>
+        <span class="brand-text">Vynix AI</span>
+      </div>
+    </div>
+
+    <div class="nav-links">
+      <a href="#" class="nav-item active">
+        <span class="material-symbols-rounded">chat_bubble</span>
+        <span class="nav-text">Chat</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="material-symbols-rounded">school</span>
+        <span class="nav-text">Lessons</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="material-symbols-rounded">quiz</span>
+        <span class="nav-text">Quizzes</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="material-symbols-rounded">history</span>
+        <span class="nav-text">History</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="material-symbols-rounded">settings</span>
+        <span class="nav-text">Settings</span>
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <a href="#" class="nav-item" onclick="firebase.auth().signOut()">
+        <span class="material-symbols-rounded">logout</span>
+        <span class="nav-text">Sign Out</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="main-wrapper">
+    <header class="header">
+      <div class="header-left">
+        <button class="hamburger" onclick="toggleSidebar()">
+          <span class="material-symbols-rounded">menu</span>
+        </button>
+        <h1 class="page-title">Education AI</h1>
+      </div>
+      
+      <div class="selector-group">
+        <select id="gradeSelect">
+          <option>Grade 10</option><option>Grade 11</option><option selected>Grade 12</option>
+        </select>
+        <select id="subjectSelect">
+          <option>Maths</option><option>Physics</option><option>Life Sci</option><option>IT/CAT</option>
+        </select>
+      </div>
+    </header>
+
+    <main class="chat-container" id="chatContainer">
+      <div class="message ai">
+        <div class="msg-content">
+          Hello Vynix Lingua. I am your CAPS educational assistant. How can I help you with your studies today?
         </div>
+        <div class="msg-time">Just now</div>
       </div>
-      <button onclick="firebase.auth().signOut()" style="border:none; background:none; color:var(--text-muted);"><span class="material-symbols-rounded">logout</span></button>
-    </div>
-    <div class="selector-group">
-      <select id="gradeSelect">
-        <option>Grade 10</option><option>Grade 11</option><option selected>Grade 12</option>
-      </select>
-      <select id="subjectSelect">
-        <option>Mathematics</option><option>Physical Sciences</option><option>Life Sciences</option><option>CAT/IT</option>
-      </select>
-    </div>
-  </header>
-
-  <main class="chat-container" id="chatContainer">
-    <div class="message ai">
-      <div class="msg-content">
-        Hello Vynix Lingua. I am your CAPS educational assistant. How can I help you with your studies today?
+      <div class="typing-indicator" id="typingIndicator">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
       </div>
-      <div class="msg-time">Just now</div>
-    </div>
-    <div class="typing-indicator" id="typingIndicator">
-      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-    </div>
-  </main>
+    </main>
 
-  <div class="input-bar">
-    <input type="text" id="userInput" placeholder="Ask anything about CAPS..." autocomplete="off">
-    <button id="sendBtn" class="send-btn">
-      <span class="material-symbols-rounded">arrow_upward</span>
-    </button>
+    <div class="input-bar">
+      <input type="text" id="userInput" placeholder="Ask anything about CAPS..." autocomplete="off">
+      <button id="sendBtn" class="send-btn">
+        <span class="material-symbols-rounded">arrow_upward</span>
+      </button>
+    </div>
   </div>
 
   <script>
+    // --- UI Logic ---
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('active');
+    }
+
+    // --- Firebase & AI Logic ---
     const firebaseConfig = {
       apiKey: "AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
       authDomain: "fire-b-a8878.firebaseapp.com",
