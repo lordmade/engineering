@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="theme-color" content="#000000"/>
+  <title>Vynix AI • Neural Access</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
+  
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+  <style>
+    :root {
+      /* AI / Cyberpunk Palette */
+      --bg-void: #030305;
+      --bg-grid: #0a0a12;
+      
+      /* Neon Cyan & Electric Purple */
+      --neon-primary: #00f3ff; 
+      --neon-secondary: #bc13fe;
+      
+      --glass-surface: rgba(10, 10, 16, 0.65);
+      --glass-border: rgba(0, 243, 255, 0.15);
+      
+      --text-main: #ffffff;
+      --text-muted: #8892b0;
+      
+      --radius-sm: 4px; /* Sharper corners for tech feel */
+      --radius-md: 8px;
+      
+      --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-void);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ─── Animated Grid Background ────────────────────────────── */
+    .cyber-grid {
+      position: absolute;
+      width: 200vw;
+      height: 200vh;
+      left: -50%;
+      top: -50%;
+      background-image: 
+        linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+      transform: perspective(500px) rotateX(60deg);
+      animation: gridMove 20s linear infinite;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    .vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 0%, var(--bg-void) 90%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    @keyframes gridMove {
+      0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+      100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+    }
+
+    /* ─── Layout ─────────────────────────────────────────────── */
+    .navbar {
+      padding: 2rem 5%;
+      position: absolute;
+      width: 100%;
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .brand-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: -1px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo span {
+      color: var(--neon-primary);
+      text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+    }
+
+    /* Status Indicator Dot */
+    .system-status {
+      height: 8px;
+      width: 8px;
+      background-color: var(--neon-primary);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--neon-primary);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.4; }
+      100% { opacity: 1; }
+    }
+
+    .main-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* ─── HUD Card ───────────────────────────────────────────── */
+    .auth-card {
+      background: var(--glass-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 3rem;
+      width: 100%;
+      max-width: 440px;
+      position: relative;
+      box-shadow: 0 0 40px rgba(0,0,0,0.5);
+      transition: var(--transition);
+    }
+
+    /* Decorative HUD Corners */
+    .auth-card::before, .auth-card::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--neon-primary);
+      transition: var(--transition);
+    }
+
+    .auth-card::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+    .auth-card::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+    h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #fff, #b4b4b4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 2.5rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ─── Tech Inputs ────────────────────────────────────────── */
+    .input-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 1rem 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-sm);
+      color: var(--neon-primary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    /* Active State Glow */
+    .input-field:focus {
+      border-color: var(--neon-primary);
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.15);
+      background: rgba(0, 243, 255, 0.02);
+    }
+
+    .input-label {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      pointer-events: none;
+      transition: var(--transition);
+      background-color: transparent;
+      padding: 0 4px;
+    }
+
+    .input-field:focus ~ .input-label,
+    .input-field:not(:placeholder-shown) ~ .input-label {
+      top: 0;
+      font-size: 0.75rem;
+      color: var(--neon-primary);
+      background-color: var(--bg-grid); /* Mask line behind label */
+      transform: translateY(-50%);
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    
+    .toggle-password:hover { color: var(--neon-primary); }
+
+    /* ─── Cyber Buttons ──────────────────────────────────────── */
+    .btn-primary {
+      width: 100%;
+      padding: 1rem;
+      background: rgba(0, 243, 255, 0.1);
+      border: 1px solid var(--neon-primary);
+      color: var(--neon-primary);
+      border-radius: var(--radius-sm);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary:hover {
+      background: var(--neon-primary);
+      color: #000;
+      box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
+    }
+
+    .btn-google {
+      width: 100%;
+      padding: 0.9rem;
+      background: #fff;
+      color: #000;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 1rem;
+      transition: var(--transition);
+    }
+
+    .btn-google:hover {
+      background: #f0f0f0;
+      transform: translateY(-1px);
+    }
+
+    /* ─── Utilities ──────────────────────────────────────────── */
+    .divider {
+      display: flex;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin: 1.5rem 0;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+    }
+    .divider::before { margin-right: 15px; }
+    .divider::after { margin-left: 15px; }
+
+    .links-area {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .text-link {
+      color: var(--neon-primary);
+      text-decoration: none;
+      transition: 0.2s;
+    }
+    .text-link:hover {
+      text-decoration: underline;
+      text-shadow: 0 0 8px var(--neon-primary);
+    }
+
+    .forgot-link {
+      display: block;
+      text-align: right;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-top: -1rem;
+      margin-bottom: 1.5rem;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+    .forgot-link:hover { color: var(--text-main); }
+
+    .hidden { display: none !important; }
+
+    /* Modal Styling for AI Theme */
+    #forgotModal .auth-card {
+      border: 1px solid var(--neon-secondary);
+      box-shadow: 0 0 30px rgba(188, 19, 254, 0.2);
+    }
+    #forgotModal h2 {
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cyber-grid"></div>
+  <div class="vignette"></div>
+
+  <nav class="navbar">
+    <div class="brand-logo">
+      VYNIX <span>// AI</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span style="font-size:0.7rem; color:var(--text-muted); font-family:'JetBrains Mono'">SYSTEM ONLINE</span>
+      <div class="system-status"></div>
+    </div>
+  </nav>
+
+  <main class="main-container">
+    <div class="auth-card">
+      
+      <div id="signinView">
+        <h1>> INITIALIZE</h1>
+        <p class="subtitle">Enter credentials to access neural link.</p>
+
+        <form id="signinForm">
+          <div class="input-group">
+            <input type="email" id="signinEmail" class="input-field" placeholder=" " required autofocus />
+            <label for="signinEmail" class="input-label">User ID / Email</label>
+          </div>
+          <div class="input-group">
+            <input type="password" id="signinPassword" class="input-field" placeholder=" " required />
+            <label for="signinPassword" class="input-label">Access Key</label>
+            <button type="button" class="toggle-password material-symbols-rounded" data-target="signinPassword">visibility</button>
+          </div>
+          <a class="forgot-link" id="forgotPasswordLink">Recover Access Key?</a>
+          <button type="submit" class="btn-primary" id="signInBtn">
+            <span>> Execute Login</span>
+          </button>
+        </form>
+
+        <div class="divider">OR CONNECT VIA</div>
+        <button type="button" class="btn-google" id="googleSignInBtn">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="20">
+          Google Neural Net
+        </button>
+
+        <div class="links-area">
+          New Unit? <a href="#" id="switchToSignup" class="text-link">Register Protocol</a>
+        </div>
+      </div>
+
+      <div id="signupView" class="hidden">
+        <h1>> NEW PROTOTYPE</h1>
+        <p class="subtitle">Create a new identity in the mainframe.</p>
+
+        <form id="signupForm">
+          <div class="input-group">
+            <input type="text" id="signupName" class="input-field" placeholder=" " required />
+            <label for="signupName" class="input-label">Designation (Name)</label>
+          </div>
+          <div class="input-group">
+            <input type="email" id="signupEmail" class="input-field" placeholder=" " required />
+            <label for="signupEmail" class="input-label">Email Node</label>
+          </div>
+          <div class="input-group">
+            <input type="password" id="signupPassword" class="input-field" placeholder=" " required minlength="6"/>
+            <label for="signupPassword" class="input-label">Set Access Key (6+ chars)</label>
+            <button type="button" class="toggle-password material-symbols-rounded" data-target="signupPassword">visibility</button>
+          </div>
+          <button type="submit" class="btn-primary" id="signUpBtn">
+            <span>> Compile Account</span>
+          </button>
+        </form>
+
+        <div class="divider">OR CONNECT VIA</div>
+        <button type="button" class="btn-google" id="googleSignupBtn">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="20">
+          Google Neural Net
+        </button>
+
+        <div class="links-area">
+          Already Active? <a href="#" id="switchToSignin" class="text-link">Login Sequence</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="forgotModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(5px); z-index:2000; align-items:center; justify-content:center;">
+    <div class="auth-card" style="max-width:420px; padding:2.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <h2 style="font-size:1.5rem; color: var(--neon-secondary);">> RECOVERY</h2>
+        <button id="closeModal" style="background:none; border:none; color:var(--text-muted); font-size:2rem; cursor:pointer;">×</button>
+      </div>
+      <p style="color:var(--text-muted); margin-bottom:1.5rem; font-family:'JetBrains Mono'; font-size: 0.85rem;">Initiate reset protocol via email verification.</p>
+      <form id="resetForm">
+        <div class="input-group">
+          <input type="email" id="resetEmail" class="input-field" placeholder=" " required />
+          <label for="resetEmail" class="input-label">Target Email</label>
+        </div>
+        <button type="submit" class="btn-primary" id="sendResetBtn" style="border-color: var(--neon-secondary); color: var(--neon-secondary);">
+          <span>> Send Signal</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ==================== Firebase Config ====================
+    // NOTE: Keep your existing config here.
+    const firebaseConfig = {
+      apiKey: "AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
+      authDomain: "fire-b-a8878.firebaseapp.com",
+      databaseURL: "https://fire-b-a8878.firebaseio.com",
+      projectId: "fire-b-a8878",
+      appId: "1:658673187627:web:6e4c29af661785f0afa36e"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const TARGET_PAGE = "index.html"; 
+
+    // ==================== DOM Elements ====================
+    const signinView = document.getElementById('signinView');
+    const signupView = document.getElementById('signupView');
+    const signinForm = document.getElementById('signinForm');
+    const signupForm = document.getElementById('signupForm');
+    const signInBtn = document.getElementById('signInBtn');
+    const signUpBtn = document.getElementById('signUpBtn');
+    const googleSignIn = document.getElementById('googleSignInBtn');
+    const googleSignup = document.getElementById('googleSignupBtn');
+    const switchToSignup = document.getElementById('switchToSignup');
+    const switchToSignin = document.getElementById('switchToSignin');
+    const forgotModal = document.getElementById('forgotModal');
+    const closeModal = document.getElementById('closeModal');
+    const resetForm = document.getElementById('resetForm');
+    const sendResetBtn = document.getElementById('sendResetBtn');
+    const resetEmail = document.getElementById('resetEmail');
+    const forgotLink = document.getElementById('forgotPasswordLink');
+
+    // ==================== UI Toggles ====================
+    function showSignIn() {
+      signinView.classList.remove('hidden');
+      signupView.classList.add('hidden');
+    }
+
+    function showSignUp() {
+      signupView.classList.remove('hidden');
+      signinView.classList.add('hidden');
+    }
+
+    switchToSignup.onclick = e => { e.preventDefault(); showSignUp(); };
+    switchToSignin.onclick = e => { e.preventDefault(); showSignIn(); };
+
+    forgotLink.onclick = () => {
+      forgotModal.style.display = 'flex';
+      resetEmail.focus();
+    };
+
+    closeModal.onclick = () => forgotModal.style.display = 'none';
+    forgotModal.onclick = e => {
+      if (e.target === forgotModal) forgotModal.style.display = 'none';
+    };
+
+    // Password visibility toggle
+    document.querySelectorAll('.toggle-password').forEach(btn => {
+      btn.onclick = () => {
+        const input = document.getElementById(btn.dataset.target);
+        input.type = input.type === 'password' ? 'text' : 'password';
+        btn.textContent = input.type === 'password' ? 'visibility' : 'visibility_off';
+      };
+    });
+
+    // ==================== Auth Logic ====================
+    
+    // Sign In
+    signinForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('signinEmail').value.trim();
+      const password = document.getElementById('signinPassword').value;
+      try {
+        signInBtn.disabled = true;
+        signInBtn.querySelector('span').textContent = 'Authenticating...';
+        await auth.signInWithEmailAndPassword(email, password);
+        window.location.href = TARGET_PAGE;
+      } catch (err) {
+        alert("Error: " + err.message);
+      } finally {
+        signInBtn.disabled = false;
+        signInBtn.querySelector('span').textContent = '> Execute Login';
+      }
+    };
+
+    // Sign Up
+    signupForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('signupName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPassword').value;
+      try {
+        signUpBtn.disabled = true;
+        signUpBtn.querySelector('span').textContent = 'Compiling...';
+        const cred = await auth.createUserWithEmailAndPassword(email, password);
+        await cred.user.updateProfile({ displayName: name });
+        await cred.user.sendEmailVerification();
+        alert("Identity Compiled! Verification link sent to node.");
+        showSignIn();
+      } catch (err) {
+        alert("Error: " + err.message);
+      } finally {
+        signUpBtn.disabled = false;
+        signUpBtn.querySelector('span').textContent = '> Compile Account';
+      }
+    };
+
+    // Google Auth
+    const handleGoogleAuth = async () => {
+      try {
+        await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+        window.location.href = TARGET_PAGE;
+      } catch (err) {
+        alert("Connection Failed: " + err.message);
+      }
+    };
+
+    googleSignIn.onclick = handleGoogleAuth;
+    googleSignup.onclick = handleGoogleAuth;
+
+    // Password Reset
+    resetForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const email = resetEmail.value.trim();
+      try {
+        sendResetBtn.disabled = true;
+        sendResetBtn.querySelector('span').textContent = 'Transmitting...';
+        await auth.sendPasswordResetEmail(email);
+        alert("Reset signal transmitted. Check external feeds.");
+        forgotModal.style.display = 'none';
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        sendResetBtn.disabled = false;
+        sendResetBtn.querySelector('span').textContent = '> Send Signal';
+      }
+    };
+
+    // Start with Sign In view
+    showSignIn();
+  </script>
+</body>
+</html>
