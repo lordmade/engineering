@@ -230,7 +230,7 @@
     .dot:nth-child(3) { animation-delay: 0.4s; }
     @keyframes pulse { to { opacity: 0.3; transform: translateY(-2px); } }
 
-    /* ── AUTH UI (Modal + Bottom Sheet) ── */
+    /* ── AUTH UI ── */
     .auth-backdrop {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.5);
@@ -254,7 +254,6 @@
     .auth-container.active {
       transform: scale(1); opacity: 1;
     }
-    /* Initial shimmer on appear */
     .auth-container.shimmer-once {
       animation: authShimmer 2.5s ease-out forwards;
       background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 50%);
@@ -312,16 +311,40 @@
       gap: 12px; background: #ffffff; transition: all 0.2s;
       box-shadow: 0 1px 2px rgba(0,0,0,0.05);
       font-family: 'Roboto', sans-serif;
+      position: relative;
     }
     .auth-btn.google {
       background: #1a73e8; color: white; border: none;
     }
-    .auth-btn.google:hover {
+    .auth-btn.google:hover:not(:disabled) {
       background: #185abc; box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .auth-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
     }
     .auth-btn svg {
       width: 24px; height: 24px;
       flex-shrink: 0;
+    }
+    .auth-btn .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    .auth-btn.loading .spinner {
+      display: inline-block;
+    }
+    .auth-btn.loading span:not(.spinner) {
+      display: none;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
     .auth-footer {
       text-align: center; margin-top: 24px;
@@ -346,15 +369,16 @@
       </div>
       
       <div class="auth-body">
-        <button class="auth-btn google" onclick="signInWithGoogle()">
-          <!-- Official Google "G" logo SVG (multicolor – do NOT recolor) -->
+        <button class="auth-btn google" id="googleSignInBtn" onclick="signInWithGoogle()">
+          <!-- Official Google "G" logo -->
           <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
             <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
             <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
             <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
           </svg>
-          Continue with Google
+          <span>Continue with Google</span>
+          <div class="spinner"></div>
         </button>
         
         <p class="auth-footer">
@@ -458,11 +482,8 @@
       backdrop.classList.add('active');
       container.classList.add('active');
       
-      // Trigger shimmer only on first appear / after sign-out
       container.classList.add('shimmer-once');
-      setTimeout(() => {
-        container.classList.remove('shimmer-once');
-      }, 3000); // slightly longer than animation duration
+      setTimeout(() => container.classList.remove('shimmer-once'), 3000);
     }
 
     function closeAuth() {
@@ -484,14 +505,22 @@
     let XAI_API_KEY = "";
     const MODEL_ID = "grok-4-1-fast-reasoning";
 
-    // ── Google Sign In ──
+    // ── Google Sign In with Loading State ──
+    const googleBtn = document.getElementById('googleSignInBtn');
+
     function signInWithGoogle() {
+      googleBtn.classList.add('loading');
+      googleBtn.disabled = true;
+
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider)
         .catch(err => {
           console.error("Google sign-in failed", err);
-          alert("Sign in failed: " + err.message);
+          alert("Sign in failed: " + (err.message || "Please try again"));
+          googleBtn.classList.remove('loading');
+          googleBtn.disabled = false;
         });
+      // → on success: onAuthStateChanged will close modal & proceed
     }
 
     // ── Auth State Listener ──
