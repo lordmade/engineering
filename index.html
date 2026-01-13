@@ -17,6 +17,7 @@
 
   <style>
     :root {
+      /* Palette */
       --bg-void: #030305;
       --bg-grid: #0a0a12;
       --neon-primary: #00f3ff; 
@@ -25,10 +26,13 @@
       --glass-border: rgba(0, 243, 255, 0.15);
       --text-main: #ffffff;
       --text-muted: #8892b0;
+      
+      /* Message Bubbles */
       --msg-user-bg: rgba(188, 19, 254, 0.15);
       --msg-user-border: rgba(188, 19, 254, 0.4);
       --msg-ai-bg: rgba(0, 243, 255, 0.08);
       --msg-ai-border: rgba(0, 243, 255, 0.3);
+      
       --radius: 12px;
     }
 
@@ -173,7 +177,7 @@
       border: 1px solid var(--msg-ai-border);
       color: var(--neon-primary);
       border-top-left-radius: 2px;
-      font-family: 'JetBrains Mono', monospace; /* Tech feel for AI */
+      font-family: 'JetBrains Mono', monospace; 
     }
 
     .cursor {
@@ -260,7 +264,7 @@
   <header class="chat-header">
     <div class="brand-logo">
       <span class="material-symbols-rounded" style="font-size:20px;">terminal</span>
-      VYNIX // GROK
+      VYNIX // xAI
     </div>
     <div class="status-badge">
       <div class="status-dot" id="connectionStatus"></div>
@@ -288,7 +292,7 @@
 
   <script>
     // ==================== Firebase Config ====================
-    // 1. Initialize Firebase
+    // NOTE: Replace these with your project specific keys if they changed
     const firebaseConfig = {
       apiKey: "AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
       authDomain: "fire-b-a8878.firebaseapp.com",
@@ -301,8 +305,8 @@
     const remoteConfig = firebase.remoteConfig();
 
     // ==================== State & Elements ====================
-    let GROK_API_KEY = "";
-    let GROK_MODEL = "grok-2-latest"; // Default
+    let XAI_API_KEY = "";
+    let GROK_MODEL = "grok-4-1-fast-reasoning"; // Default model
     let SYSTEM_PROMPT = "You are Vynix AI, a helpful and precise assistant.";
 
     const chatContainer = document.getElementById('chatContainer');
@@ -330,23 +334,24 @@
         minimumFetchIntervalMillis: 3600000,
       };
 
-      // Default values in case fetch fails
+      // UPDATED: Using xai_api_key in defaults
       remoteConfig.defaultConfig = {
-        "grok_api_key": "",
-        "grok_model": "grok-2-latest",
+        "xai_api_key": "",
+        "grok_model": "grok-4-1-fast-reasoning",
         "system_prompt": "You are Vynix."
       };
 
       try {
         await remoteConfig.fetchAndActivate();
         
-        GROK_API_KEY = remoteConfig.getValue('grok_api_key').asString();
+        // UPDATED: Fetching the specific parameter "xai_api_key"
+        XAI_API_KEY = remoteConfig.getValue('xai_api_key').asString();
         GROK_MODEL = remoteConfig.getValue('grok_model').asString();
         SYSTEM_PROMPT = remoteConfig.getValue('system_prompt').asString();
 
-        if(!GROK_API_KEY) {
-          console.warn("No Grok API Key found in Remote Config.");
-          appendMessage('ai', "Error: API Key parameter missing in Remote Config.");
+        if(!XAI_API_KEY) {
+          console.warn("No xai_api_key found in Remote Config.");
+          appendMessage('ai', "Error: 'xai_api_key' parameter missing in Remote Config.");
           statusText.innerText = "CONFIG ERROR";
           statusDot.style.background = "red";
         } else {
@@ -392,12 +397,11 @@
     // Typewriter Effect for AI
     function typewriterEffect(element, text) {
       let i = 0;
-      element.innerHTML = '<span class="cursor"></span>'; // Start with cursor
+      element.innerHTML = '<span class="cursor"></span>';
       const speed = 20; // ms per char
 
       function type() {
         if (i < text.length) {
-          // Check for newline
           const char = text.charAt(i);
           if (char === '\n') {
             element.innerHTML = text.substring(0, i + 1).replace(/\n/g, '<br>') + '<span class="cursor"></span>';
@@ -406,10 +410,9 @@
             element.innerHTML += '<span class="cursor"></span>';
           }
           i++;
-          chatContainer.scrollTop = chatContainer.scrollHeight; // Keep scrolling
+          chatContainer.scrollTop = chatContainer.scrollHeight; 
           setTimeout(type, speed);
         } else {
-          // Remove cursor after done
           element.innerHTML = element.innerHTML.replace('<span class="cursor"></span>', '');
         }
       }
@@ -432,7 +435,7 @@
     // ==================== 3. Grok API Logic ====================
 
     async function callGrokAPI(userMessage) {
-      if (!GROK_API_KEY) {
+      if (!XAI_API_KEY) {
         appendMessage('ai', "System Alert: API Key not initialized.");
         return;
       }
@@ -445,7 +448,7 @@
           { role: "user", content: userMessage }
         ],
         model: GROK_MODEL,
-        stream: false, // Keeping false for simpler implementation (fetching full response then typing it)
+        stream: false, 
         temperature: 0.7
       };
 
@@ -454,7 +457,7 @@
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${GROK_API_KEY}`
+            "Authorization": `Bearer ${XAI_API_KEY}`
           },
           body: JSON.stringify(payload)
         });
