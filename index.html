@@ -46,28 +46,25 @@
       overflow: hidden;
       width: 100%;
     }
-
     /* ── SIDEBAR ── */
     .sidebar {
       background: #FFFFFF;
       border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
       transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 50;
       position: relative;
     }
-
     @media (min-width: 769px) {
       .sidebar { width: var(--sidebar-collapsed-width); }
       .sidebar:hover { width: var(--sidebar-width); }
       .sidebar:not(:hover) .nav-text,
-      .sidebar:not(:hover) .brand-text { opacity: 0; pointer-events: none; white-space: nowrap; }
+      .sidebar:not(:hover) .brand-text,
+      .sidebar:not(:hover) .user-info { opacity: 0; pointer-events: none; white-space: nowrap; }
       .hamburger { display: none; }
       .overlay { display: none; }
     }
-
     @media (max-width: 768px) {
       .sidebar {
         position: fixed;
@@ -86,19 +83,16 @@
       }
       .overlay.active { opacity: 1; visibility: visible; }
     }
-
     .sidebar-header {
       height: var(--header-height);
       display: flex; align-items: center;
       padding: 0 20px;
       overflow: hidden;
     }
-
     .logo-container {
       display: flex; align-items: center; gap: 12px;
       min-width: max-content;
     }
-
     .brand-logo {
       width: 32px; height: 32px;
       background: var(--primary);
@@ -106,14 +100,11 @@
       display: flex; align-items: center; justify-content: center;
       color: white; flex-shrink: 0;
     }
-
     .brand-text { font-weight: 700; font-size: 1rem; transition: opacity 0.2s; }
-
     .nav-links {
       display: flex; flex-direction: column; gap: 8px;
       padding: 20px 12px; flex: 1;
     }
-
     .nav-item {
       display: flex; align-items: center; gap: 14px;
       padding: 12px 14px; border-radius: 12px;
@@ -121,50 +112,53 @@
       transition: background 0.2s, color 0.2s;
       white-space: nowrap; overflow: hidden; cursor: pointer;
     }
-
     .nav-item:hover, .nav-item.active {
       background: var(--ai-bubble); color: var(--primary);
     }
-
     .nav-item .material-symbols-rounded { font-size: 22px; flex-shrink: 0; }
     .nav-text { font-weight: 500; font-size: 0.9rem; transition: opacity 0.2s; }
 
-    /* ── USER AVATAR IN SIDEBAR ── */
-    .sidebar-user {
-      padding: 12px 16px;
+    /* ── USER SECTION IN SIDEBAR FOOTER ── */
+    .sidebar-footer {
+      padding: 16px 12px 20px;
+      border-top: 1px solid var(--border);
+    }
+    .user-profile {
       display: flex;
       align-items: center;
       gap: 12px;
-      border-top: 1px solid var(--border);
-      margin: 0 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      transition: background 0.2s;
+      margin-bottom: 8px;
     }
-
+    .user-profile:hover {
+      background: var(--ai-bubble);
+    }
     .user-avatar {
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      background: #e0e0ff;
+      background: #e0e7ff;
       background-size: cover;
       background-position: center;
       flex-shrink: 0;
-      border: 2px solid #e0e7ff;
-      box-shadow: 0 2px 8px rgba(79,70,229,0.12);
+      border: 2px solid #c7d2fe;
+      box-shadow: 0 2px 8px rgba(79,70,229,0.1);
     }
-
     .user-info {
       flex: 1;
       min-width: 0;
+      transition: opacity 0.2s;
     }
-
     .user-name {
       font-weight: 600;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       color: var(--text-main);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
     .user-email {
       font-size: 0.78rem;
       color: var(--text-muted);
@@ -173,18 +167,11 @@
       text-overflow: ellipsis;
     }
 
-    .sidebar-footer {
-      padding: 12px 12px 20px;
-      border-top: 1px solid var(--border);
-      overflow: hidden;
-    }
-
     /* ── MAIN LAYOUT ── */
     .main-wrapper {
       flex: 1; display: flex; flex-direction: column;
       height: 100%; position: relative;
     }
-
     .header {
       height: var(--header-height);
       background: #FFFFFF;
@@ -193,19 +180,14 @@
       display: flex; align-items: center; justify-content: space-between;
       z-index: 10;
     }
-
     .header-left { display: flex; align-items: center; gap: 16px; }
-
     .hamburger {
       background: none; border: none;
       color: var(--text-main); cursor: pointer;
       display: flex; align-items: center; padding: 4px;
     }
-
     .page-title { font-size: 1rem; font-weight: 700; }
-
     .selector-group { display: flex; gap: 8px; }
-
     select {
       padding: 8px 12px;
       border: 1px solid var(--border);
@@ -214,47 +196,38 @@
       color: var(--text-muted); background: #FAFBFC;
       outline: none; appearance: none; cursor: pointer;
     }
-
     @media (max-width: 500px) {
       .selector-group select { max-width: 100px; text-overflow: ellipsis; }
     }
-
     .chat-container {
       flex: 1; overflow-y: auto;
       padding: 20px;
       display: flex; flex-direction: column;
       gap: 20px; padding-bottom: 100px;
     }
-
     .message { max-width: 85%; display: flex; flex-direction: column; }
     .message.user { align-self: flex-end; }
     .message.ai { align-self: flex-start; }
-
     .msg-content {
       padding: 14px 18px;
       font-size: 0.92rem; line-height: 1.5;
       border-radius: 20px;
     }
-
     .message.user .msg-content {
       background: var(--user-bubble); color: var(--text-main);
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
       border-bottom-right-radius: 4px;
     }
-
     .message.ai .msg-content {
       background: var(--ai-bubble); color: var(--text-main);
       border-bottom-left-radius: 4px;
     }
-
     .msg-time {
       font-size: 0.65rem; color: var(--text-muted);
       margin-top: 6px; font-weight: 500;
     }
-
     .message.user .msg-time { align-self: flex-end; }
-
     .input-bar {
       position: absolute; bottom: 24px;
       left: 20px; right: 20px;
@@ -266,13 +239,11 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.08);
       z-index: 20; max-width: 800px; margin: 0 auto;
     }
-
     .input-bar input {
       flex: 1; border: none; outline: none;
       font-family: inherit; font-size: 0.95rem;
       color: var(--text-main); padding-right: 10px;
     }
-
     .send-btn {
       width: 44px; height: 44px;
       background: var(--primary); color: white;
@@ -280,25 +251,20 @@
       display: flex; align-items: center; justify-content: center;
       cursor: pointer; transition: transform 0.2s;
     }
-
     .send-btn:active { transform: scale(0.9); }
-
     .typing-indicator {
       display: none; gap: 4px;
       padding: 14px 18px;
       background: var(--ai-bubble); border-radius: 20px;
       width: fit-content;
     }
-
     .dot {
       width: 5px; height: 5px;
       background: var(--text-muted); border-radius: 50%;
       animation: pulse 1s infinite alternate;
     }
-
     .dot:nth-child(2) { animation-delay: 0.2s; }
     .dot:nth-child(3) { animation-delay: 0.4s; }
-
     @keyframes pulse { to { opacity: 0.3; transform: translateY(-2px); } }
 
     /* ── AUTH UI ── */
@@ -310,12 +276,10 @@
       transition: opacity 0.4s, visibility 0s 0.4s;
       backdrop-filter: blur(4px);
     }
-
     .auth-backdrop.active {
       opacity: 1; visibility: visible;
       transition: opacity 0.4s;
     }
-
     .auth-container {
       position: fixed; z-index: 1100;
       background: white; border-radius: 16px;
@@ -324,22 +288,18 @@
       transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       transform: scale(0.92); opacity: 0;
     }
-
     .auth-container.active {
       transform: scale(1); opacity: 1;
     }
-
     .auth-container.shimmer-once {
       animation: authShimmer 2.5s ease-out forwards;
       background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 50%);
       background-size: 200% 100%;
     }
-
     @keyframes authShimmer {
       0% { background-position: 200% 0; }
       100% { background-position: -200% 0; background: white; }
     }
-
     @media (min-width: 769px) {
       .auth-container {
         top: 50%; left: 50%;
@@ -350,7 +310,6 @@
         transform: translate(-50%, -50%) scale(1);
       }
     }
-
     @media (max-width: 768px) {
       .auth-container {
         bottom: 0; left: 0; right: 0;
@@ -362,30 +321,24 @@
         transform: translateY(0);
       }
     }
-
     .auth-content {
       position: relative; padding: 32px 24px 40px;
     }
-
     .auth-close {
       position: absolute; top: 16px; right: 16px;
       background: none; border: none;
       font-size: 28px; color: #999;
       cursor: pointer; line-height: 1;
     }
-
     .auth-header {
       text-align: center; margin-bottom: 32px;
     }
-
     .auth-header h2 {
       font-size: 1.6rem; margin-bottom: 8px;
     }
-
     .auth-header p {
       color: var(--text-muted); font-size: 0.95rem;
     }
-
     .auth-btn {
       width: 100%; padding: 14px 16px; margin: 12px 0;
       border: 1px solid #dadce0; border-radius: 8px;
@@ -396,25 +349,20 @@
       font-family: 'Roboto', sans-serif;
       position: relative;
     }
-
     .auth-btn.google {
       background: #1a73e8; color: white; border: none;
     }
-
     .auth-btn.google:hover:not(:disabled) {
       background: #185abc; box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
-
     .auth-btn:disabled {
       opacity: 0.7;
       cursor: not-allowed;
     }
-
     .auth-btn svg {
       width: 24px; height: 24px;
       flex-shrink: 0;
     }
-
     .auth-btn .spinner {
       display: none;
       width: 20px;
@@ -424,32 +372,26 @@
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
-
     .auth-btn.loading .spinner {
       display: inline-block;
     }
-
     .auth-btn.loading span:not(.spinner) {
       display: none;
     }
-
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
     .auth-footer {
       text-align: center; margin-top: 24px;
       font-size: 0.82rem; color: var(--text-muted);
     }
-
     .auth-footer a {
       color: var(--accent); text-decoration: none;
     }
   </style>
 </head>
 <body>
-
   <!-- Auth UI -->
   <div id="authBackdrop" class="auth-backdrop"></div>
   <div id="authContainer" class="auth-container">
@@ -463,7 +405,6 @@
     
       <div class="auth-body">
         <button class="auth-btn google" id="googleSignInBtn" onclick="signInWithGoogle()">
-          <!-- Official Google "G" logo -->
           <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
             <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
@@ -515,12 +456,11 @@
     </div>
 
     <div class="sidebar-footer">
-      <!-- Added user avatar section -->
-      <div class="sidebar-user">
+      <div class="user-profile" id="userProfile">
         <div class="user-avatar" id="userAvatar"></div>
         <div class="user-info">
-          <div class="user-name" id="userDisplayName">Student</div>
-          <div class="user-email" id="userEmail">guest@school.co.za</div>
+          <div class="user-name" id="userDisplayName">Guest</div>
+          <div class="user-email" id="userEmail">not signed in</div>
         </div>
       </div>
 
@@ -556,7 +496,7 @@
     </header>
 
     <main class="chat-container" id="chatContainer">
-      <div class="message ai">
+      <div class="message ai" id="welcomeMessage">
         <div class="msg-content">
           Hello! Please sign in to start learning with Vynix AI.
         </div>
@@ -610,7 +550,7 @@
     let XAI_API_KEY = "";
     const MODEL_ID = "grok-4-1-fast-reasoning";
 
-    // ── Google Sign In with Loading State ──
+    // ── Google Sign In ──
     const googleBtn = document.getElementById('googleSignInBtn');
 
     function signInWithGoogle() {
@@ -624,16 +564,20 @@
           googleBtn.classList.remove('loading');
           googleBtn.disabled = false;
         });
-      // → on success: onAuthStateChanged will close modal & proceed
     }
 
-    // ── Auth State Listener ── (updated to show user info)
+    // ── Auth State Listener ──
     auth.onAuthStateChanged(user => {
+      const welcomeBubble = document.getElementById('welcomeMessage').querySelector('.msg-content');
+      const avatarEl = document.getElementById('userAvatar');
+      const nameEl = document.getElementById('userDisplayName');
+      const emailEl = document.getElementById('userEmail');
+
       if (!user) {
         showAuthUI();
         document.getElementById('chatContainer').innerHTML = `
-          <div class="message ai">
-            <div class="msg-content">Please sign in to start learning with Vynix AI.</div>
+          <div class="message ai" id="welcomeMessage">
+            <div class="msg-content">Hello! Please sign in to start learning with Vynix AI.</div>
           </div>
           <div class="typing-indicator" id="typingIndicator">
             <div class="dot"></div><div class="dot"></div><div class="dot"></div>
@@ -642,10 +586,9 @@
         document.getElementById('userInput').disabled = true;
         document.getElementById('sendBtn').disabled = true;
 
-        // Reset avatar area
-        document.getElementById('userDisplayName').textContent = "Guest";
-        document.getElementById('userEmail').textContent = "not signed in";
-        document.getElementById('userAvatar').style.backgroundImage = "";
+        nameEl.textContent = "Guest";
+        emailEl.textContent = "not signed in";
+        avatarEl.style.backgroundImage = "";
       } else {
         closeAuth();
         initConfig();
@@ -653,14 +596,19 @@
         document.getElementById('userInput').disabled = false;
         document.getElementById('sendBtn').disabled = false;
 
-        // Show user info in sidebar
-        const name = user.displayName || "Student";
+        const displayName = user.displayName || "Student";
+        const firstName = displayName.split(" ")[0];
         const email = user.email || "no email";
-        const photo = user.photoURL || "https://ui-avatars.com/api/?name=" + encodeURIComponent(name) + "&background=4F46E5&color=fff";
+        const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=4F46E5&color=fff&size=128`;
 
-        document.getElementById('userDisplayName').textContent = name.split(" ")[0];
-        document.getElementById('userEmail').textContent = email;
-        document.getElementById('userAvatar').style.backgroundImage = `url("${photo}")`;
+        nameEl.textContent = firstName;
+        emailEl.textContent = email;
+        avatarEl.style.backgroundImage = `url("${photo}")`;
+
+        // Personalized welcome message
+        const grade = document.getElementById('gradeSelect').value;
+        const subject = document.getElementById('subjectSelect').value;
+        welcomeBubble.textContent = `Welcome back, ${firstName}! Ready to continue your ${grade} ${subject} journey? 🚀`;
       }
     });
 
