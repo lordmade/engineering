@@ -7,304 +7,376 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Vynix AI • Education</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-remote-config-compat.js"></script>
   <style>
     :root {
-      --bg-page: #f8f9fd;
-      --bg-chat: #ffffff;
-      --primary: #0f172a;
-      --accent: #6366f1;
-      --accent-light: #818cf8;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      --ai-bubble: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-      --user-bubble: #ffffff;
-      --shadow-sm: 0 4px 12px rgba(0,0,0,0.06);
-      --shadow-md: 0 10px 30px rgba(0,0,0,0.08);
-      --radius-lg: 24px;
-      --sidebar-width: 280px;
+      --bg-page: #FDFDFF;
+      --bg-chat: #FFFFFF;
+      --primary: #111111;
+      --accent: #4F46E5;
+      --text-main: #1A1C1E;
+      --text-muted: #6C7278;
+      --border: #F1F2F4;
+      --ai-bubble: #F4F7FB;
+      --user-bubble: #FFFFFF;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      --sidebar-width: 260px;
+      --sidebar-collapsed-width: 72px;
       --header-height: 64px;
     }
     * {
       margin: 0; padding: 0; box-sizing: border-box;
+      -webkit-touch-callout: none;
       -webkit-tap-highlight-color: transparent;
     }
-    body {
-      background: var(--bg-page);
-      color: var(--text-main);
-      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
+    .msg-content {
+      -webkit-user-select: text;
+      user-select: text;
     }
-    /* ── SIDEBAR (Drawer on mobile) ── */
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+      width: 100%;
+    }
+    /* ── SIDEBAR ── */
     .sidebar {
-      background: white;
+      background: #FFFFFF;
       border-right: 1px solid var(--border);
-      width: var(--sidebar-width);
-      flex-shrink: 0;
       display: flex;
       flex-direction: column;
-      transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
-      position: fixed;
-      top: 0; left: 0; bottom: 0;
-      z-index: 100;
-      transform: translateX(-100%);
+      justify-content: space-between;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 50;
+      position: relative;
     }
-    .sidebar.open { transform: translateX(0); }
-    @media (min-width: 1024px) {
-      .sidebar { position: static; transform: none; width: var(--sidebar-width); }
-      .overlay { display: none !important; }
+    @media (min-width: 769px) {
+      .sidebar { width: var(--sidebar-collapsed-width); }
+      .sidebar:hover { width: var(--sidebar-width); }
+      .sidebar:not(:hover) .nav-text,
+      .sidebar:not(:hover) .brand-text { opacity: 0; pointer-events: none; white-space: nowrap; }
+      .hamburger { display: none; }
+      .overlay { display: none; }
     }
-    .overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(4px);
-      z-index: 90;
-      opacity: 0; visibility: hidden;
-      transition: opacity 0.4s;
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        top: 0; left: 0; height: 100%;
+        width: var(--sidebar-width);
+        transform: translateX(-100%);
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .overlay {
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 40;
+        opacity: 0; visibility: hidden;
+        transition: opacity 0.3s;
+      }
+      .overlay.active { opacity: 1; visibility: visible; }
     }
-    .overlay.active { opacity: 1; visibility: visible; }
     .sidebar-header {
       height: var(--header-height);
-      padding: 0 24px;
       display: flex; align-items: center;
-      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      overflow: hidden;
     }
     .logo-container {
       display: flex; align-items: center; gap: 12px;
+      min-width: max-content;
     }
     .brand-logo {
-      width: 40px; height: 40px;
+      width: 32px; height: 32px;
       background: var(--primary);
-      border-radius: 12px;
-      color: white;
-      display: grid; place-items: center;
-      font-size: 1.4rem;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; flex-shrink: 0;
     }
-    .brand-text { font-weight: 700; font-size: 1.25rem; }
-    .nav-links { padding: 24px 16px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+    .brand-text { font-weight: 700; font-size: 1rem; transition: opacity 0.2s; }
+    .nav-links {
+      display: flex; flex-direction: column; gap: 8px;
+      padding: 20px 12px; flex: 1;
+    }
     .nav-item {
-      display: flex; align-items: center; gap: 16px;
-      padding: 14px 20px;
-      border-radius: 16px;
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: all 0.25s;
-      font-weight: 500;
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 14px; border-radius: 12px;
+      color: var(--text-muted); text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap; overflow: hidden; cursor: pointer;
     }
     .nav-item:hover, .nav-item.active {
-      background: rgba(99,102,241,0.1);
-      color: var(--accent);
+      background: var(--ai-bubble); color: var(--primary);
     }
-    .nav-item .material-symbols-rounded { font-size: 24px; }
-    .sidebar-footer { padding: 16px 24px; border-top: 1px solid var(--border); }
-
-    /* ── MAIN ── */
+    .nav-item .material-symbols-rounded { font-size: 22px; flex-shrink: 0; }
+    .nav-text { font-weight: 500; font-size: 0.9rem; transition: opacity 0.2s; }
+    .sidebar-footer {
+      padding: 20px;
+      border-top: 1px solid var(--border);
+      overflow: hidden;
+    }
+    /* ── MAIN LAYOUT ── */
     .main-wrapper {
-      flex: 1;
-      display: flex; flex-direction: column;
-      min-width: 0;
+      flex: 1; display: flex; flex-direction: column;
+      height: 100%; position: relative;
     }
     .header {
       height: var(--header-height);
-      background: white;
+      background: #FFFFFF;
+      padding: 0 20px;
       border-bottom: 1px solid var(--border);
-      padding: 0 16px;
       display: flex; align-items: center; justify-content: space-between;
       z-index: 10;
     }
     .header-left { display: flex; align-items: center; gap: 16px; }
-    .hamburger { background: none; border: none; font-size: 1.6rem; color: var(--primary); cursor: pointer; }
-    .page-title { font-size: 1.1rem; font-weight: 700; }
-    .selector-group {
-      display: flex; gap: 8px; flex-wrap: wrap;
+    .hamburger {
+      background: none; border: none;
+      color: var(--text-main); cursor: pointer;
+      display: flex; align-items: center; padding: 4px;
     }
-    .chip {
-      padding: 8px 14px;
-      background: #f1f5f9;
-      border-radius: 999px;
-      font-size: 0.82rem; font-weight: 500;
-      color: var(--text-muted);
+    .page-title { font-size: 1rem; font-weight: 700; }
+    .selector-group { display: flex; gap: 8px; }
+    select {
+      padding: 8px 12px;
       border: 1px solid var(--border);
-      cursor: pointer;
-      transition: all 0.2s;
+      border-radius: 10px;
+      font-size: 0.75rem; font-weight: 500;
+      color: var(--text-muted); background: #FAFBFC;
+      outline: none; appearance: none; cursor: pointer;
     }
-    .chip.active { background: var(--accent); color: white; border-color: var(--accent); }
-
+    @media (max-width: 500px) {
+      .selector-group select { max-width: 100px; text-overflow: ellipsis; }
+    }
     .chat-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px 16px;
-      display: flex; flex-direction: column; gap: 20px;
-      padding-bottom: 140px;
+      flex: 1; overflow-y: auto;
+      padding: 20px;
+      display: flex; flex-direction: column;
+      gap: 20px; padding-bottom: 100px;
     }
-    .message {
-      display: flex; flex-direction: column; max-width: 80%;
-    }
+    .message { max-width: 85%; display: flex; flex-direction: column; }
     .message.user { align-self: flex-end; }
     .message.ai { align-self: flex-start; }
-    .msg-bubble {
+    .msg-content {
       padding: 14px 18px;
-      border-radius: var(--radius-lg);
-      font-size: 0.96rem; line-height: 1.5;
-      position: relative;
+      font-size: 0.92rem; line-height: 1.5;
+      border-radius: 20px;
     }
-    .message.user .msg-bubble {
-      background: var(--user-bubble);
+    .message.user .msg-content {
+      background: var(--user-bubble); color: var(--text-main);
       border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      border-bottom-right-radius: 8px;
+      box-shadow: var(--shadow);
+      border-bottom-right-radius: 4px;
     }
-    .message.ai .msg-bubble {
-      background: var(--ai-bubble);
-      box-shadow: var(--shadow-sm);
-      border-bottom-left-radius: 8px;
+    .message.ai .msg-content {
+      background: var(--ai-bubble); color: var(--text-main);
+      border-bottom-left-radius: 4px;
     }
-    .avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin-top: 8px;
-      display: grid; place-items: center;
-      font-size: 1.1rem;
-    }
-    .ai-avatar { background: var(--accent); color: white; }
-    .user-avatar { background: #cbd5e1; color: #1e293b; }
     .msg-time {
-      font-size: 0.68rem; color: var(--text-muted);
-      margin-top: 6px; opacity: 0.8;
+      font-size: 0.65rem; color: var(--text-muted);
+      margin-top: 6px; font-weight: 500;
     }
-    .message.user .msg-time { text-align: right; }
-
+    .message.user .msg-time { align-self: flex-end; }
+    .input-bar {
+      position: absolute; bottom: 24px;
+      left: 20px; right: 20px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 8px 8px 8px 20px;
+      display: flex; align-items: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      z-index: 20; max-width: 800px; margin: 0 auto;
+    }
+    .input-bar input {
+      flex: 1; border: none; outline: none;
+      font-family: inherit; font-size: 0.95rem;
+      color: var(--text-main); padding-right: 10px;
+    }
+    .send-btn {
+      width: 44px; height: 44px;
+      background: var(--primary); color: white;
+      border: none; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: transform 0.2s;
+    }
+    .send-btn:active { transform: scale(0.9); }
     .typing-indicator {
-      display: none;
-      align-self: flex-start;
+      display: none; gap: 4px;
       padding: 14px 18px;
-      background: var(--ai-bubble);
-      border-radius: var(--radius-lg);
+      background: var(--ai-bubble); border-radius: 20px;
       width: fit-content;
-      gap: 6px;
     }
     .dot {
-      width: 8px; height: 8px;
-      background: var(--text-muted);
-      border-radius: 50%;
-      animation: typing 1.4s infinite ease-in-out;
+      width: 5px; height: 5px;
+      background: var(--text-muted); border-radius: 50%;
+      animation: pulse 1s infinite alternate;
     }
     .dot:nth-child(2) { animation-delay: 0.2s; }
     .dot:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes typing { 0%,100% { transform: translateY(0); opacity: 0.4; } 50% { transform: translateY(-6px); opacity: 1; } }
-
-    /* ── INPUT BAR (floating, glassmorphic) ── */
-    .input-bar {
-      position: fixed; bottom: 16px; left: 16px; right: 16px;
-      background: rgba(255,255,255,0.85);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(226,232,240,0.6);
-      border-radius: 999px;
-      padding: 10px 12px 10px 20px;
-      display: flex; align-items: center;
-      box-shadow: var(--shadow-md);
-      z-index: 50;
-      max-width: 720px; margin: 0 auto;
+    @keyframes pulse { to { opacity: 0.3; transform: translateY(-2px); } }
+    /* ── AUTH UI ── */
+    .auth-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.4s, visibility 0s 0.4s;
+      backdrop-filter: blur(4px);
     }
-    .input-bar textarea {
-      flex: 1;
-      border: none; outline: none; resize: none;
-      font-family: inherit; font-size: 0.98rem;
-      color: var(--text-main);
-      background: transparent;
-      max-height: 140px; min-height: 24px;
-      line-height: 1.4;
-      padding: 8px 0;
+    .auth-backdrop.active {
+      opacity: 1; visibility: visible;
+      transition: opacity 0.4s;
     }
-    .send-btn {
-      width: 48px; height: 48px;
-      background: var(--accent);
-      color: white;
-      border: none; border-radius: 50%;
-      display: grid; place-items: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-left: 8px;
-    }
-    .send-btn:hover { background: var(--accent-light); transform: scale(1.05); }
-    .send-btn:active { transform: scale(0.92); }
-
-    /* ── AUTH (bottom sheet on mobile) ── */
-    .auth-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); z-index: 200; opacity: 0; visibility: hidden; transition: opacity 0.4s; }
-    .auth-backdrop.active { opacity: 1; visibility: visible; }
     .auth-container {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: white; border-radius: 32px 32px 0 0;
-      max-height: 90vh; overflow-y: auto;
-      transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.32,0.72,0,1);
-      box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
-      z-index: 210;
+      position: fixed; z-index: 1100;
+      background: white; border-radius: 16px;
+      box-shadow: 0 20px 70px rgba(0,0,0,0.25);
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform: scale(0.92); opacity: 0;
     }
-    .auth-container.active { transform: translateY(0); }
-    @media (min-width: 640px) {
+    .auth-container.active {
+      transform: scale(1); opacity: 1;
+    }
+    .auth-container.shimmer-once {
+      animation: authShimmer 2.5s ease-out forwards;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 50%);
+      background-size: 200% 100%;
+    }
+    @keyframes authShimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; background: white; }
+    }
+    @media (min-width: 769px) {
       .auth-container {
-        top: 50%; left: 50%; right: auto; bottom: auto;
-        transform: translate(-50%, -50%) scale(0.95);
-        width: 440px; border-radius: 24px; max-height: 90vh;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%) scale(0.92);
+        width: 420px; max-width: 90vw;
       }
-      .auth-container.active { transform: translate(-50%, -50%) scale(1); }
+      .auth-container.active {
+        transform: translate(-50%, -50%) scale(1);
+      }
     }
-    .auth-content { padding: 40px 28px 48px; position: relative; }
-    .auth-close { position: absolute; top: 16px; right: 20px; font-size: 32px; color: #94a3b8; background: none; border: none; cursor: pointer; }
-    .auth-header { text-align: center; margin-bottom: 36px; }
-    .auth-header h2 { font-size: 1.8rem; margin-bottom: 8px; font-weight: 700; }
-    .auth-header p { color: var(--text-muted); font-size: 0.98rem; }
+    @media (max-width: 768px) {
+      .auth-container {
+        bottom: 0; left: 0; right: 0;
+        width: 100%; max-height: 85vh;
+        border-radius: 24px 24px 0 0;
+        transform: translateY(100%);
+      }
+      .auth-container.active {
+        transform: translateY(0);
+      }
+    }
+    .auth-content {
+      position: relative; padding: 32px 24px 40px;
+    }
+    .auth-close {
+      position: absolute; top: 16px; right: 16px;
+      background: none; border: none;
+      font-size: 28px; color: #999;
+      cursor: pointer; line-height: 1;
+    }
+    .auth-header {
+      text-align: center; margin-bottom: 32px;
+    }
+    .auth-header h2 {
+      font-size: 1.6rem; margin-bottom: 8px;
+    }
+    .auth-header p {
+      color: var(--text-muted); font-size: 0.95rem;
+    }
     .auth-btn {
-      width: 100%; padding: 16px; margin: 12px 0;
-      border-radius: 16px; font-size: 1rem; font-weight: 600;
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      background: white; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      transition: all 0.25s;
+      width: 100%; padding: 14px 16px; margin: 12px 0;
+      border: 1px solid #dadce0; border-radius: 8px;
+      font-size: 1rem; font-weight: 500;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      gap: 12px; background: #ffffff; transition: all 0.2s;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      font-family: 'Roboto', sans-serif;
+      position: relative;
     }
-    .auth-btn.google { background: #4285f4; color: white; border: none; }
-    .auth-btn.google:hover { background: #3367d6; }
-    .auth-btn.loading .text { visibility: hidden; }
+    .auth-btn.google {
+      background: #1a73e8; color: white; border: none;
+    }
+    .auth-btn.google:hover:not(:disabled) {
+      background: #185abc; box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .auth-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    .auth-btn svg {
+      width: 24px; height: 24px;
+      flex-shrink: 0;
+    }
     .auth-btn .spinner {
-      display: none; width: 24px; height: 24px;
-      border: 4px solid rgba(255,255,255,0.3); border-top-color: white;
-      border-radius: 50%; animation: spin 1s linear infinite;
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
     }
-    .auth-btn.loading .spinner { display: inline-block; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .auth-btn.loading .spinner {
+      display: inline-block;
+    }
+    .auth-btn.loading span:not(.spinner) {
+      display: none;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .auth-footer {
+      text-align: center; margin-top: 24px;
+      font-size: 0.82rem; color: var(--text-muted);
+    }
+    .auth-footer a {
+      color: var(--accent); text-decoration: none;
+    }
   </style>
 </head>
 <body>
-
   <!-- Auth UI -->
   <div id="authBackdrop" class="auth-backdrop"></div>
   <div id="authContainer" class="auth-container">
     <div class="auth-content">
       <button class="auth-close" onclick="closeAuth()">×</button>
+     
       <div class="auth-header">
         <h2 id="authTitle">Welcome to Vynix AI</h2>
-        <p id="authSubtitle">Sign in to unlock your learning journey</p>
+        <p id="authSubtitle">Sign in to continue your learning journey</p>
       </div>
-      <button class="auth-btn google" id="googleSignInBtn" onclick="signInWithGoogle()">
-        <svg width="24" height="24" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-        <span class="text">Continue with Google</span>
-        <div class="spinner"></div>
-      </button>
-      <p style="text-align:center; margin-top:24px; font-size:0.85rem; color:var(--text-muted);">
-        By continuing, you agree to our <a href="#" style="color:var(--accent);">Terms</a> & <a href="#" style="color:var(--accent);">Privacy</a>
-      </p>
+     
+      <div class="auth-body">
+        <button class="auth-btn google" id="googleSignInBtn" onclick="signInWithGoogle()">
+          <!-- Official Google "G" logo -->
+          <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          <span>Continue with Google</span>
+          <div class="spinner"></div>
+        </button>
+       
+        <p class="auth-footer">
+          By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
+        </p>
+      </div>
     </div>
   </div>
-
   <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="logo-container">
@@ -313,46 +385,74 @@
       </div>
     </div>
     <div class="nav-links">
-      <div class="nav-item active"><span class="material-symbols-rounded">chat_bubble</span><span>Chat</span></div>
-      <div class="nav-item"><span class="material-symbols-rounded">school</span><span>Lessons</span></div>
-      <div class="nav-item"><span class="material-symbols-rounded">quiz</span><span>Quizzes</span></div>
-      <div class="nav-item"><span class="material-symbols-rounded">history</span><span>History</span></div>
-      <div class="nav-item"><span class="material-symbols-rounded">settings</span><span>Settings</span></div>
+      <a href="#" class="nav-item active">
+        <span class="material-symbols-rounded">chat_bubble</span>
+        <span class="nav-text">Chat</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="material-symbols-rounded">school</span>
+        <span class="nav-text">Lessons</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="material-symbols-rounded">quiz</span>
+        <span class="nav-text">Quizzes</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="material-symbols-rounded">history</span>
+        <span class="nav-text">History</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="material-symbols-rounded">settings</span>
+        <span class="nav-text">Settings</span>
+      </a>
     </div>
     <div class="sidebar-footer">
-      <div class="nav-item" id="signOutBtn"><span class="material-symbols-rounded">logout</span><span>Sign Out</span></div>
+      <a href="#" class="nav-item" id="signOutBtn">
+        <span class="material-symbols-rounded">logout</span>
+        <span class="nav-text">Sign Out</span>
+      </a>
     </div>
   </nav>
-
   <div class="main-wrapper">
     <header class="header">
       <div class="header-left">
-        <button class="hamburger" onclick="toggleSidebar()"><span class="material-symbols-rounded">menu</span></button>
+        <button class="hamburger" onclick="toggleSidebar()">
+          <span class="material-symbols-rounded">menu</span>
+        </button>
         <h1 class="page-title">Education AI</h1>
       </div>
+    
       <div class="selector-group">
-        <div class="chip active">Grade 12</div>
-        <div class="chip">Maths</div>
+        <select id="gradeSelect">
+          <option>Grade 10</option>
+          <option>Grade 11</option>
+          <option selected>Grade 12</option>
+        </select>
+        <select id="subjectSelect">
+          <option>Maths</option>
+          <option>Physics</option>
+          <option>Life Sci</option>
+          <option>IT/CAT</option>
+        </select>
       </div>
     </header>
-
     <main class="chat-container" id="chatContainer">
       <div class="message ai">
-        <div class="avatar ai-avatar"><span class="material-symbols-rounded">smart_toy</span></div>
-        <div class="msg-bubble">Hello! Sign in to begin your CAPS learning session 🚀</div>
-        <div class="msg-time">Just now</div>
+        <div class="msg-content">
+          Hello! Please sign in to start learning with Vynix AI.
+        </div>
       </div>
       <div class="typing-indicator" id="typingIndicator">
         <div class="dot"></div><div class="dot"></div><div class="dot"></div>
       </div>
     </main>
-
     <div class="input-bar">
-      <textarea id="userInput" rows="1" placeholder="Ask anything about your subjects..."></textarea>
-      <button id="sendBtn" class="send-btn"><span class="material-symbols-rounded">arrow_upward</span></button>
+      <input type="text" id="userInput" placeholder="Ask anything about CAPS..." autocomplete="off">
+      <button id="sendBtn" class="send-btn">
+        <span class="material-symbols-rounded">arrow_upward</span>
+      </button>
     </div>
   </div>
-
   <script>
     // ── UI Helpers ──
     function toggleSidebar() {
@@ -360,14 +460,18 @@
       document.getElementById('overlay').classList.toggle('active');
     }
     function showAuthUI() {
-      document.getElementById('authBackdrop').classList.add('active');
-      document.getElementById('authContainer').classList.add('active');
+      const backdrop = document.getElementById('authBackdrop');
+      const container = document.getElementById('authContainer');
+      backdrop.classList.add('active');
+      container.classList.add('active');
+     
+      container.classList.add('shimmer-once');
+      setTimeout(() => container.classList.remove('shimmer-once'), 3000);
     }
     function closeAuth() {
       document.getElementById('authBackdrop').classList.remove('active');
       document.getElementById('authContainer').classList.remove('active');
     }
-
     // ── Firebase ──
     const firebaseConfig = {
       apiKey: "AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
@@ -379,30 +483,32 @@
     const auth = firebase.auth();
     const remoteConfig = firebase.remoteConfig();
     let XAI_API_KEY = "";
-
-    // Google Sign-in
+    const MODEL_ID = "grok-4-1-fast-reasoning";
+    // ── Google Sign In with Loading State ──
     const googleBtn = document.getElementById('googleSignInBtn');
     function signInWithGoogle() {
       googleBtn.classList.add('loading');
       googleBtn.disabled = true;
       const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider).catch(err => {
-        console.error(err);
-        alert("Sign in failed: " + (err.message || "Try again"));
-        googleBtn.classList.remove('loading');
-        googleBtn.disabled = false;
-      });
+      auth.signInWithPopup(provider)
+        .catch(err => {
+          console.error("Google sign-in failed", err);
+          alert("Sign in failed: " + (err.message || "Please try again"));
+          googleBtn.classList.remove('loading');
+          googleBtn.disabled = false;
+        });
+      // → on success: onAuthStateChanged will close modal & proceed
     }
-
-    // Auth Listener
+    // ── Auth State Listener ──
     auth.onAuthStateChanged(user => {
       if (!user) {
         showAuthUI();
         document.getElementById('chatContainer').innerHTML = `
           <div class="message ai">
-            <div class="avatar ai-avatar"><span class="material-symbols-rounded">smart_toy</span></div>
-            <div class="msg-bubble">Please sign in to start learning with Vynix AI.</div>
-            <div class="msg-time">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
+            <div class="msg-content">Please sign in to start learning with Vynix AI.</div>
+          </div>
+          <div class="typing-indicator" id="typingIndicator">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
           </div>
         `;
         document.getElementById('userInput').disabled = true;
@@ -414,91 +520,81 @@
         document.getElementById('sendBtn').disabled = false;
       }
     });
-
-    // Remote Config
+    // ── Remote Config ──
     async function initConfig() {
-      remoteConfig.settings.minimumFetchIntervalMillis = 0;
+      remoteConfig.settings = { minimumFetchIntervalMillis: 0 };
       try {
         await remoteConfig.fetchAndActivate();
-        XAI_API_KEY = remoteConfig.getValue('xai_api_key').asString() || "";
-      } catch (e) { console.error("Remote config failed:", e); }
+        XAI_API_KEY = remoteConfig.getValue('xai_api_key').asString();
+      } catch (e) {
+        console.error("Remote config error:", e);
+      }
     }
-
-    // ── Chat ──
+    // ── Chat Logic ──
     function appendMessage(role, text) {
       const chat = document.getElementById('chatContainer');
       const indicator = document.getElementById('typingIndicator');
-      const time = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-
-      const div = document.createElement('div');
-      div.className = `message ${role}`;
-      div.innerHTML = `
-        ${role === 'ai' ? '<div class="avatar ai-avatar"><span class="material-symbols-rounded">smart_toy</span></div>' : ''}
-        <div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>
-        <div class="msg-time">${time}</div>
-        ${role === 'user' ? '<div class="avatar user-avatar"><span class="material-symbols-rounded">person</span></div>' : ''}
+    
+      const msg = document.createElement('div');
+      msg.className = `message ${role}`;
+      msg.innerHTML = `
+        <div class="msg-content">${text.replace(/\n/g, '<br>')}</div>
+        <div class="msg-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
       `;
-      chat.insertBefore(div, indicator);
+    
+      chat.insertBefore(msg, indicator);
       chat.scrollTop = chat.scrollHeight;
     }
-
     async function sendMessage() {
-      const textarea = document.getElementById('userInput');
-      const query = textarea.value.trim();
+      const input = document.getElementById('userInput');
+      const query = input.value.trim();
       if (!query || !XAI_API_KEY) return;
-
       appendMessage('user', query);
-      textarea.value = '';
-      textarea.style.height = 'auto';
-
+      input.value = '';
       document.getElementById('typingIndicator').style.display = 'flex';
-
-      const grade = document.querySelector('.chip.active')?.textContent || 'Grade 12';
-      const subject = 'Maths'; // can be dynamic later
-      const sysPrompt = `You are Vynix AI, expert in South African CAPS curriculum for ${grade}, subject ${subject}. Answer education questions only. Politely decline unrelated topics. Use clear, encouraging language suitable for students.`;
-
+      const sysPrompt = `You are Vynix AI, an expert in the South African CAPS Curriculum.
+      Student is in ${document.getElementById('gradeSelect').value}, Subject: ${document.getElementById('subjectSelect').value}.
+      Help ONLY with education. Politely decline non-academic chat.`;
       try {
-        const res = await fetch("https://api.x.ai/v1/chat/completions", {
+        const response = await fetch("https://api.x.ai/v1/chat/completions", {
           method: "POST",
           headers: {
             "Authorization": `Bearer ${XAI_API_KEY}`,
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            model: "grok-4-fast-reasoning",  // Updated to more current fast variant placeholder
+            model: MODEL_ID,
             messages: [
               {role: "system", content: sysPrompt},
               {role: "user", content: query}
             ],
-            temperature: 0.7,
-            max_tokens: 2048
+            temperature: 0.7
           })
         });
-        const data = await res.json();
-        const reply = data.choices?.[0]?.message?.content || "Sorry, couldn't get a response. Try again?";
-        appendMessage('ai', reply);
+        const data = await response.json();
+        if (data.choices && data.choices[0]?.message?.content) {
+          appendMessage('ai', data.choices[0].message.content);
+        } else {
+          appendMessage('ai', "Sorry, I couldn't get a response. Please try again.");
+        }
       } catch (err) {
         console.error(err);
-        appendMessage('ai', "Connection issue — please try again later.");
+        appendMessage('ai', "I'm having trouble connecting. Please try again later.");
       } finally {
         document.getElementById('typingIndicator').style.display = 'none';
       }
     }
-
-    // Events
+    // ── Event Listeners ──
     document.getElementById('sendBtn').onclick = sendMessage;
-    const input = document.getElementById('userInput');
-    input.oninput = () => { input.style.height = 'auto'; input.style.height = input.scrollHeight + 'px'; };
-    input.onkeypress = e => {
+    document.getElementById('userInput').onkeypress = (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         sendMessage();
       }
     };
-    document.getElementById('signOutBtn').onclick = () => firebase.auth().signOut();
-
-    // Auto-resize textarea on load
-    input.style.height = input.scrollHeight + 'px';
+    document.getElementById('signOutBtn').onclick = () => {
+      firebase.auth().signOut();
+    };
   </script>
 </body>
 </html>
