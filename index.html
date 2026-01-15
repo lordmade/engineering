@@ -90,13 +90,13 @@
     }
 
     .sidebar-header {
-      height:84px; padding:0 24px;
+      height:84px;
       display:flex; align-items:center; justify-content:center;
       border-bottom:1px solid rgba(0,0,0,0.04);
     }
 
     .logo-container {
-      display:flex; align-items:center; gap:16px;
+      display:flex; align-items:center; justify-content:center;
     }
 
     .brand-logo {
@@ -106,13 +106,6 @@
       box-shadow: var(--shadow-convex);
       display:flex; align-items:center; justify-content:center;
       color:var(--accent); font-weight:700; font-size:1.5rem;
-      flex-shrink:0;
-    }
-
-    .sidebar-text.brand {
-      font-weight:700; font-size:1.2rem;
-      color:var(--text-primary);
-      transition:opacity 0.3s ease;
     }
 
     .nav-links {
@@ -124,7 +117,7 @@
     .nav-item {
       display:flex;
       align-items:center;
-      justify-content:center;           /* center icon when collapsed */
+      justify-content:center;
       padding:16px 0;
       position:relative;
       color:var(--text-secondary);
@@ -174,33 +167,35 @@
     }
 
     .sidebar-footer {
-      padding:24px 16px;
-      border-top:1px solid rgba(0,0,0,0.04);
+      padding:24px 0;
+      display:flex; justify-content:center;
     }
 
     .user-profile {
-      display:flex; align-items:center; gap:16px;
-      padding:16px 20px; border-radius:var(--radius);
-      background:var(--bg-surface); box-shadow:var(--shadow-convex);
-      transition:all 0.3s ease;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 18px;
+      background: var(--bg-surface);
+      box-shadow: var(--shadow-convex);
+      transition: all 0.3s ease;
+      overflow: hidden;
     }
 
     .user-profile:hover {
-      box-shadow:var(--shadow-concave);
-      transform:translateY(-2px);
+      box-shadow: var(--shadow-concave);
+      transform: scale(1.05);
     }
 
     .user-avatar {
-      width:52px; height:52px; border-radius:50%;
-      background-size:cover; background-position:center;
-      box-shadow:var(--shadow-convex); flex-shrink:0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .user-info { flex:1; min-width:0; }
-    .user-name { font-weight:600; font-size:1.05rem; color:var(--text-primary); }
-    .user-email { font-size:0.84rem; color:var(--text-secondary); opacity:0.9; }
-
-    /* ── Rest of the layout (unchanged from previous neumorphic version) ── */
+    /* ── Main Layout ── */
     .main-wrapper { flex:1; display:flex; flex-direction:column; background:var(--bg-main); }
 
     .header {
@@ -292,7 +287,81 @@
       40% { transform:scale(1.1); opacity:1; }
     }
 
-    /* Copy button */
+    /* ── Auth Modal / Bottom Sheet ── */
+    .auth-backdrop {
+      position:fixed; inset:0;
+      background:rgba(0,0,0,0.5);
+      backdrop-filter:blur(8px);
+      z-index:1000;
+      opacity:0; visibility:hidden;
+      transition:opacity 0.4s, visibility 0s 0.4s;
+    }
+    .auth-backdrop.active { opacity:1; visibility:visible; transition:opacity 0.4s; }
+
+    .auth-container {
+      position:fixed; z-index:1100;
+      background:var(--bg-surface);
+      box-shadow:0 -10px 40px rgba(0,0,0,0.15);
+      border-radius:32px 32px 0 0;
+      overflow:hidden;
+      transition:all 0.45s cubic-bezier(0.34,1.56,0.64,1);
+      transform:translateY(100%);
+      bottom:0; left:0; right:0;
+      max-height:85vh;
+      width:100%;
+    }
+
+    @media (min-width:769px) {
+      .auth-container {
+        top:50%; left:50%; right:auto; bottom:auto;
+        transform:translate(-50%,-50%) scale(0.92);
+        width:420px; max-width:90vw;
+        border-radius:32px;
+        box-shadow:var(--shadow-convex);
+      }
+      .auth-container.active {
+        transform:translate(-50%,-50%) scale(1);
+      }
+    }
+
+    .auth-container.active { transform:translateY(0); }
+
+    .auth-content { padding:40px 32px 60px; position:relative; }
+    .auth-close {
+      position:absolute; top:16px; right:20px;
+      background:none; border:none; font-size:32px;
+      color:#94a3b8; cursor:pointer;
+    }
+
+    .auth-header { text-align:center; margin-bottom:32px; }
+    .auth-header h2 { font-size:1.8rem; margin-bottom:8px; font-weight:700; }
+    .auth-header p { color:var(--text-secondary); font-size:1rem; }
+
+    .auth-btn {
+      width:100%; padding:16px;
+      border-radius:16px; font-size:1.05rem; font-weight:600;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      gap:12px; transition:all 0.25s;
+      box-shadow:var(--shadow-button);
+      background:linear-gradient(145deg, #ffffff, #f0f4ff);
+      color:var(--text-primary);
+    }
+
+    .auth-btn.google {
+      background:linear-gradient(145deg, #4285f4, #357ae8);
+      color:white;
+      box-shadow:6px 6px 12px #b3c0d1, -6px -6px 12px #ffffff;
+    }
+
+    .auth-btn.google:hover { transform:translateY(-2px); }
+
+    .auth-footer {
+      text-align:center; margin-top:24px;
+      font-size:0.88rem; color:var(--text-secondary);
+    }
+    .auth-footer a { color:var(--accent); text-decoration:none; }
+
+    /* ── Copy button ── */
     .katex-display .copy-btn {
       position:absolute; top:12px; right:12px;
       background:var(--bg-surface); border:none; border-radius:12px;
@@ -310,7 +379,7 @@
 </head>
 <body>
 
-  <!-- Auth UI -->
+  <!-- Auth Modal / Bottom Sheet -->
   <div id="authBackdrop" class="auth-backdrop"></div>
   <div id="authContainer" class="auth-container">
     <div class="auth-content">
@@ -340,7 +409,6 @@
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="brand-logo"><span class="material-symbols-rounded">bolt</span></div>
-      <span class="sidebar-text">Vynix AI</span>
     </div>
 
     <div class="nav-links">
@@ -377,17 +445,11 @@
     </div>
 
     <div class="sidebar-footer">
-      <div class="user-profile" id="userProfile">
-        <div class="user-avatar" id="userAvatar"></div>
-        <div class="user-info">
-          <div class="user-name" id="userDisplayName">Guest</div>
-          <div class="user-email" id="userEmail">not signed in</div>
-        </div>
-      </div>
-
       <a href="#" class="nav-item" id="signOutBtn">
-        <div class="icon-wrapper">
-          <span class="material-symbols-rounded">logout</span>
+        <div class="user-profile" id="userProfile">
+          <div class="icon-wrapper">
+            <div class="user-avatar" id="userAvatar"></div>
+          </div>
         </div>
         <span class="sidebar-text">Sign Out</span>
       </a>
@@ -447,10 +509,12 @@
     }
 
     function showAuthUI() {
-      document.getElementById('authBackdrop').classList.add('active');
-      document.getElementById('authContainer').classList.add('active');
-      document.getElementById('authContainer').classList.add('shimmer-once');
-      setTimeout(() => document.getElementById('authContainer').classList.remove('shimmer-once'), 3000);
+      const backdrop = document.getElementById('authBackdrop');
+      const container = document.getElementById('authContainer');
+      if (!backdrop.classList.contains('active')) {
+        backdrop.classList.add('active');
+        container.classList.add('active');
+      }
     }
 
     function closeAuth() {
@@ -489,8 +553,6 @@
     }
 
     // ── Auth State Listener ──
-    let isModalShown = false;
-
     auth.onAuthStateChanged(user => {
       const welcomeEl = document.getElementById('welcomeMessage');
       let welcomeBubble = welcomeEl ? welcomeEl.querySelector('.msg-content') : null;
@@ -499,10 +561,7 @@
       const emailEl = document.getElementById('userEmail');
 
       if (!user) {
-        if (!isModalShown) {
-          showAuthUI();
-          isModalShown = true;
-        }
+        showAuthUI();
         if (welcomeBubble) {
           welcomeBubble.innerHTML = "Hello! Please sign in to start learning with Vynix AI.";
         }
@@ -513,7 +572,6 @@
         avatarEl.style.backgroundImage = "";
       } else {
         closeAuth();
-        isModalShown = false;
         initConfig();
 
         document.getElementById('userInput').disabled = false;
