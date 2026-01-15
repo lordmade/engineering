@@ -16,6 +16,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-remote-config-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <style>
     :root {
       --bg-page: #FDFDFF;
@@ -74,13 +75,7 @@
     .brand-logo { width:32px; height:32px; background:var(--primary); border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; flex-shrink:0; }
     .brand-text { font-weight:700; font-size:1rem; transition:opacity 0.2s; }
     .nav-links { display:flex; flex-direction:column; gap:8px; padding:20px 12px; flex:1; }
-    .nav-item { 
-      display:flex; align-items:center; gap:14px; 
-      padding:12px 14px; border-radius:12px; 
-      color:var(--text-muted); 
-      transition:background 0.2s, color 0.2s; 
-      white-space:nowrap; overflow:hidden; cursor:pointer; 
-    }
+    .nav-item { display:flex; align-items:center; gap:14px; padding:12px 14px; border-radius:12px; color:var(--text-muted); text-decoration:none; transition:background 0.2s, color 0.2s; white-space:nowrap; overflow:hidden; cursor:pointer; }
     .nav-item:hover, .nav-item.active { background:var(--ai-bubble); color:var(--primary); }
     .nav-item .material-symbols-rounded { font-size:22px; flex-shrink:0; }
     .nav-text { font-weight:500; font-size:0.9rem; transition:opacity 0.2s; }
@@ -100,13 +95,9 @@
     .selector-group { display:flex; gap:8px; }
     select { padding:8px 12px; border:1px solid var(--border); border-radius:10px; font-size:0.75rem; font-weight:500; color:var(--text-muted); background:#FAFBFC; outline:none; appearance:none; cursor:pointer; }
     @media (max-width:500px) { .selector-group select { max-width:100px; text-overflow:ellipsis; } }
-    .view { display:none; flex:1; overflow:hidden; }
-    .view.active { display:flex; flex-direction:column; }
-    /* Chat View */
-    #chatView {
-      position:relative;
-    }
-    #chatContainer {
+    .view { display:none; flex-direction:column; flex:1; overflow:hidden; }
+    .view.active { display:flex; }
+    .chat-container {
       flex:1;
       overflow-y:auto;
       padding:20px;
@@ -115,18 +106,97 @@
       gap:20px;
       padding-bottom:100px;
     }
-    /* Community View */
-    #communityView {
-      background:#fefefe;
-      align-items:center;
-      justify-content:center;
-      color:var(--text-muted);
-      font-size:1.1rem;
-      text-align:center;
-      padding:40px;
+    .community-view {
+      flex:1;
+      display:flex;
+      overflow:hidden;
     }
-    #communityView h2 { color:var(--text-main); margin-bottom:16px; }
-    /* Shared input bar & message styles */
+    .channels-sidebar {
+      width:240px;
+      background:#fafafa;
+      border-right:1px solid var(--border);
+      overflow-y:auto;
+      padding:16px;
+    }
+    .channel-item {
+      padding:12px 16px;
+      border-radius:10px;
+      margin-bottom:6px;
+      cursor:pointer;
+      color:var(--text-muted);
+    }
+    .channel-item:hover,
+    .channel-item.active {
+      background:var(--ai-bubble);
+      color:var(--primary);
+    }
+    .community-main {
+      flex:1;
+      display:flex;
+      flex-direction:column;
+    }
+    .community-messages {
+      flex:1;
+      overflow-y:auto;
+      padding:20px;
+    }
+    .community-input {
+      padding:16px 20px;
+      border-top:1px solid var(--border);
+      background:white;
+    }
+    .community-input input {
+      width:100%;
+      padding:12px 16px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      font-size:0.95rem;
+    }
+    .community-send-btn {
+      background:var(--primary); color:white;
+      border:none; border-radius:50%;
+      width:40px; height:40px;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; margin-left:8px;
+    }
+    .community-input form {
+      display:flex;
+    }
+    .message { max-width:85%; display:flex; flex-direction:column; }
+    .message.user { align-self:flex-end; }
+    .message.ai, .message.community { align-self:flex-start; }
+    .msg-content { padding:14px 18px; font-size:0.92rem; line-height:1.6; border-radius:20px; }
+    .message.user .msg-content { background:var(--user-bubble); color:var(--text-main); border:1px solid var(--border); box-shadow:var(--shadow); border-bottom-right-radius:4px; }
+    .message.ai .msg-content { background:var(--ai-bubble); color:var(--text-main); border-bottom-left-radius:4px; }
+    .message.community .msg-content { background:#e8f0fe; border-bottom-left-radius:4px; }
+    .katex { font-size:1.05em !important; }
+    .katex-display { margin:1em 0; position:relative; }
+    .katex-display .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 0.78rem;
+      color: #444;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s;
+      opacity: 0.75;
+      z-index: 5;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    .katex-display:hover .copy-btn { opacity: 1; }
+    .katex-display .copy-btn:hover { background: #f0f0ff; }
+    .katex-display .copy-btn.copied {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .msg-time { font-size:0.65rem; color:var(--text-muted); margin-top:6px; font-weight:500; }
+    .message.user .msg-time { align-self:flex-end; }
     .input-bar {
       position:absolute; bottom:24px;
       left:20px; right:20px;
@@ -161,39 +231,6 @@
     .dot:nth-child(2) { animation-delay:0.2s; }
     .dot:nth-child(3) { animation-delay:0.4s; }
     @keyframes pulse { to { opacity:0.3; transform:translateY(-2px); } }
-    .message { max-width:85%; display:flex; flex-direction:column; }
-    .message.user { align-self:flex-end; }
-    .message.ai { align-self:flex-start; }
-    .msg-content { padding:14px 18px; font-size:0.92rem; line-height:1.6; border-radius:20px; }
-    .message.user .msg-content { background:var(--user-bubble); color:var(--text-main); border:1px solid var(--border); box-shadow:var(--shadow); border-bottom-right-radius:4px; }
-    .message.ai .msg-content { background:var(--ai-bubble); color:var(--text-main); border-bottom-left-radius:4px; }
-    .katex { font-size:1.05em !important; }
-    .katex-display { margin:1em 0; position:relative; }
-    .katex-display .copy-btn {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: rgba(255,255,255,0.92);
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      padding: 5px 10px;
-      font-size: 0.78rem;
-      color: #444;
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.15s;
-      opacity: 0.75;
-      z-index: 5;
-    }
-    .katex-display:hover .copy-btn { opacity: 1; }
-    .katex-display .copy-btn:hover { background: #f0f0ff; }
-    .katex-display .copy-btn.copied {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-    }
-    .msg-time { font-size:0.65rem; color:var(--text-muted); margin-top:6px; font-weight:500; }
-    .message.user .msg-time { align-self:flex-end; }
     /* AUTH UI */
     .auth-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; opacity:0; visibility:hidden; transition:opacity 0.4s, visibility 0s 0.4s; backdrop-filter:blur(4px); }
     .auth-backdrop.active { opacity:1; visibility:visible; transition:opacity 0.4s; }
@@ -222,7 +259,6 @@
   </style>
 </head>
 <body>
-
   <!-- Auth UI -->
   <div id="authBackdrop" class="auth-backdrop"></div>
   <div id="authContainer" class="auth-container">
@@ -249,7 +285,6 @@
       </div>
     </div>
   </div>
-
   <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
@@ -280,7 +315,6 @@
       </div>
     </div>
   </nav>
-
   <div class="main-wrapper">
     <header class="header">
       <div class="header-left">
@@ -303,10 +337,9 @@
         </select>
       </div>
     </header>
-
     <!-- Chat View -->
     <div id="chatView" class="view active">
-      <main id="chatContainer">
+      <main class="chat-container" id="chatContainer">
         <div class="message ai" id="welcomeMessage">
           <div class="msg-content">Hello! Please sign in to start learning with Vynix AI.</div>
         </div>
@@ -321,41 +354,46 @@
         </button>
       </div>
     </div>
-
-    <!-- Community View (separate / not inside chat) -->
-    <div id="communityView" class="view">
-      <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:40px; text-align:center;">
-        <div>
-          <h2>Community</h2>
-          <p style="margin:16px 0; max-width:500px;">
-            A place for learners to discuss CAPS topics, share notes, ask questions and help each other.<br><br>
-            <strong>Coming soon</strong> — we're working on bringing real-time community chat to Vynix AI! 🚀
-          </p>
+    <!-- Community View -->
+    <div id="communityView" class="view community-view">
+      <aside class="channels-sidebar">
+        <h3 style="padding:0 16px 12px; color:var(--text-muted); font-size:0.9rem;">Channels</h3>
+        <div class="channel-item active" data-channel="general">General</div>
+        <div class="channel-item" data-channel="maths">Maths</div>
+        <div class="channel-item" data-channel="physics">Physics</div>
+        <div class="channel-item" data-channel="life-sci">Life Sci</div>
+        <div class="channel-item" data-channel="it-cat">IT/CAT</div>
+      </aside>
+      <div class="community-main">
+        <div class="community-messages" id="communityMessages"></div>
+        <div class="community-input">
+          <form id="communityForm">
+            <input type="text" id="communityInput" placeholder="Type a message..." autocomplete="off">
+            <button type="submit" class="community-send-btn">
+              <span class="material-symbols-rounded">arrow_upward</span>
+            </button>
+          </form>
         </div>
       </div>
     </div>
   </div>
-
   <script>
-    // ── UI Helpers ───────────────────────────────────────────────────────────────
+    // ── UI Helpers ──
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('open');
       document.getElementById('overlay').classList.toggle('active');
     }
-
     function showAuthUI() {
       document.getElementById('authBackdrop').classList.add('active');
       document.getElementById('authContainer').classList.add('active');
       document.getElementById('authContainer').classList.add('shimmer-once');
       setTimeout(() => document.getElementById('authContainer').classList.remove('shimmer-once'), 3000);
     }
-
     function closeAuth() {
       document.getElementById('authBackdrop').classList.remove('active');
       document.getElementById('authContainer').classList.remove('active');
     }
-
-    // ── View Switching ───────────────────────────────────────────────────────────
+    // ── View switching ──
     document.querySelectorAll('.nav-item[data-view]').forEach(item => {
       item.addEventListener('click', () => {
         const viewId = item.dataset.view + 'View';
@@ -363,21 +401,16 @@
           chat: 'AI Tutor',
           community: 'Community'
         };
-
-        // Update active states
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
         item.classList.add('active');
-
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
-
-        // Update header title & selectors visibility
         document.getElementById('pageTitle').textContent = titleMap[item.dataset.view] || 'Vynix AI';
         document.getElementById('studySelectors').style.display = (item.dataset.view === 'chat') ? 'flex' : 'none';
+        if (item.dataset.view === 'community') loadCommunity();
       });
     });
-
-    // ── Firebase ─────────────────────────────────────────────────────────────────
+    // ── Firebase ──
     const firebaseConfig = {
       apiKey: "AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
       authDomain: "fire-b-a8878.firebaseapp.com",
@@ -387,10 +420,10 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const remoteConfig = firebase.remoteConfig();
+    const db = firebase.firestore();
     let XAI_API_KEY = "";
     const MODEL_ID = "grok-4-1-fast-reasoning";
-
-    // ── Google Sign In ───────────────────────────────────────────────────────────
+    // ── Google Sign In ──
     const googleBtn = document.getElementById('googleSignInBtn');
     function signInWithGoogle() {
       googleBtn.classList.add('loading');
@@ -404,15 +437,13 @@
           googleBtn.disabled = false;
         });
     }
-
-    // ── Auth State Listener ──────────────────────────────────────────────────────
+    // ── Auth State Listener ──
     auth.onAuthStateChanged(user => {
       const welcomeEl = document.getElementById('welcomeMessage');
       let welcomeBubble = welcomeEl ? welcomeEl.querySelector('.msg-content') : null;
       const avatarEl = document.getElementById('userAvatar');
       const nameEl = document.getElementById('userDisplayName');
       const emailEl = document.getElementById('userEmail');
-
       if (!user) {
         showAuthUI();
         if (welcomeBubble) welcomeBubble.innerHTML = "Hello! Please sign in to start learning with Vynix AI.";
@@ -444,19 +475,17 @@
         addCopyButtonsToFormulas(welcomeEl);
       }
     });
-
-    // ── Remote Config ────────────────────────────────────────────────────────────
+    // ── Remote Config ──
     async function initConfig() {
       remoteConfig.settings = { minimumFetchIntervalMillis: 0 };
       try {
         await remoteConfig.fetchAndActivate();
-        XAI_API_KEY = remoteConfig.getValue('xai_api_key').asString() || "";
+        XAI_API_KEY = remoteConfig.getValue('xai_api_key').asString();
       } catch (e) {
         console.error("Remote config error:", e);
       }
     }
-
-    // ── KaTeX Copy Button ────────────────────────────────────────────────────────
+    // ── Copy button logic for KaTeX display math ──
     function addCopyButtonsToFormulas(container = document) {
       const blocks = container.querySelectorAll('.katex-display');
       blocks.forEach(block => {
@@ -464,13 +493,26 @@
         const btn = document.createElement('button');
         btn.className = 'copy-btn';
         btn.textContent = 'Copy';
+        btn.type = 'button';
         btn.onclick = async () => {
           try {
-            let latex = block.querySelector('.katex-mathml annotation')?.textContent ||
-                        block.querySelector('annotation-xml')?.textContent ||
-                        block.getAttribute('data-tex') || '';
+            let latex = '';
+            // Try different ways to get the raw LaTeX
+            const mathml = block.querySelector('.katex-mathml annotation');
+            if (mathml) latex = mathml.textContent;
+            if (!latex) {
+              const annotationXml = block.querySelector('annotation-xml');
+              if (annotationXml) latex = annotationXml.textContent;
+            }
+            if (!latex) {
+              latex = block.getAttribute('data-tex') || '';
+            }
+            if (!latex) {
+              const mathEl = block.querySelector('math');
+              if (mathEl) latex = mathEl.getAttribute('aria-label') || '';
+            }
             latex = latex.trim();
-            if (latex && navigator.clipboard) {
+            if (latex) {
               await navigator.clipboard.writeText(latex);
               btn.textContent = 'Copied!';
               btn.classList.add('copied');
@@ -478,17 +520,19 @@
                 btn.textContent = 'Copy';
                 btn.classList.remove('copied');
               }, 2000);
+            } else {
+              alert('Could not extract LaTeX from this formula');
             }
           } catch (err) {
-            console.error('Copy failed:', err);
+            console.error('Clipboard copy failed:', err);
+            alert('Failed to copy formula to clipboard');
           }
         };
         block.style.position = 'relative';
         block.appendChild(btn);
       });
     }
-
-    // ── Append message (only used in chat view) ──────────────────────────────────
+    // ── Append message + render math + add copy buttons ──
     function appendMessage(role, text) {
       const chat = document.getElementById('chatContainer');
       const indicator = document.getElementById('typingIndicator');
@@ -500,7 +544,7 @@
       `;
       chat.insertBefore(msg, indicator);
       chat.scrollTop = chat.scrollHeight;
-
+      // Render KaTeX
       if (typeof renderMathInElement === 'function') {
         renderMathInElement(msg, {
           delimiters: [
@@ -512,25 +556,20 @@
           throwOnError: false
         });
       }
+      // Add copy buttons
       addCopyButtonsToFormulas(msg);
     }
-
-    // ── Send message to AI ───────────────────────────────────────────────────────
     async function sendMessage() {
       const input = document.getElementById('userInput');
       const query = input.value.trim();
       if (!query || !XAI_API_KEY) return;
-
       appendMessage('user', query);
       input.value = '';
       document.getElementById('typingIndicator').style.display = 'flex';
-
-      const sysPrompt = `You are Vynix AI, an expert tutor following the South African CAPS curriculum.
-Current grade: ${document.getElementById('gradeSelect').value}
-Subject: ${document.getElementById('subjectSelect').value}
-Focus only on educational content. Politely decline unrelated topics.
-Use proper LaTeX: $...$ for inline math, $$...$$ for display equations, proofs, derivations.`;
-
+      const sysPrompt = `You are Vynix AI, an expert in the South African CAPS Curriculum.
+Student is in ${document.getElementById('gradeSelect').value}, Subject: ${document.getElementById('subjectSelect').value}.
+Help ONLY with education. Politely decline non-academic chat.
+Use proper LaTeX notation inside $...$ for inline math and $$...$$ for display math / equations when explaining formulas, derivations, proofs or any mathematics / physics content.`;
       try {
         const response = await fetch("https://api.x.ai/v1/chat/completions", {
           method: "POST",
@@ -548,20 +587,79 @@ Use proper LaTeX: $...$ for inline math, $$...$$ for display equations, proofs, 
           })
         });
         const data = await response.json();
-        if (data.choices?.[0]?.message?.content) {
+        if (data.choices && data.choices[0]?.message?.content) {
           appendMessage('ai', data.choices[0].message.content);
         } else {
-          appendMessage('ai', "Sorry, I couldn't get a response right now. Try again?");
+          appendMessage('ai', "Sorry, I couldn't get a response. Please try again.");
         }
       } catch (err) {
         console.error(err);
-        appendMessage('ai', "Connection issue — please try again later.");
+        appendMessage('ai', "I'm having trouble connecting. Please try again later.");
       } finally {
         document.getElementById('typingIndicator').style.display = 'none';
       }
     }
-
-    // ── Event Listeners ──────────────────────────────────────────────────────────
+    // ── Community Chat Functions ──
+    let currentChannel = 'general';
+    let unsubscribeMessages = null;
+    function loadCommunity() {
+      const user = auth.currentUser;
+      if (!user) {
+        document.getElementById('communityMessages').innerHTML = '<div style="text-align:center; color:var(--text-muted);">Please sign in to join the community chat.</div>';
+        document.getElementById('communityInput').disabled = true;
+        return;
+      }
+      document.getElementById('communityInput').disabled = false;
+      switchChannel(currentChannel);
+      // Channel switching
+      document.querySelectorAll('.channel-item').forEach(item => {
+        item.addEventListener('click', () => {
+          document.querySelectorAll('.channel-item').forEach(el => el.classList.remove('active'));
+          item.classList.add('active');
+          currentChannel = item.dataset.channel;
+          switchChannel(currentChannel);
+        });
+      });
+    }
+    function switchChannel(channel) {
+      const messagesContainer = document.getElementById('communityMessages');
+      messagesContainer.innerHTML = '';
+      if (unsubscribeMessages) unsubscribeMessages();
+      unsubscribeMessages = db.collection('channels').doc(channel).collection('messages')
+        .orderBy('timestamp', 'asc')
+        .onSnapshot(snapshot => {
+          snapshot.docChanges().forEach(change => {
+            if (change.type === 'added') {
+              const data = change.doc.data();
+              const msg = document.createElement('div');
+              msg.className = 'message community';
+              msg.innerHTML = `
+                <div class="msg-content"><strong>${data.displayName || 'Anonymous'}:</strong> ${data.text.replace(/\n/g, '<br>')}</div>
+                <div class="msg-time">${data.timestamp ? new Date(data.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</div>
+              `;
+              messagesContainer.appendChild(msg);
+              messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+          });
+        });
+    }
+    function sendCommunityMessage(e) {
+      e.preventDefault();
+      const input = document.getElementById('communityInput');
+      const text = input.value.trim();
+      if (!text) return;
+      const user = auth.currentUser;
+      if (user) {
+        db.collection('channels').doc(currentChannel).collection('messages').add({
+          text: text,
+          userId: user.uid,
+          displayName: user.displayName,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        }).catch(err => console.error('Error sending message:', err));
+        input.value = '';
+      }
+    }
+    // ── Event Listeners ──
     document.getElementById('sendBtn').onclick = sendMessage;
     document.getElementById('userInput').onkeypress = (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
@@ -569,12 +667,11 @@ Use proper LaTeX: $...$ for inline math, $$...$$ for display equations, proofs, 
         sendMessage();
       }
     };
-
     document.getElementById('signOutBtn').onclick = () => {
       firebase.auth().signOut();
     };
-
-    // Initial math rendering on welcome message
+    document.getElementById('communityForm').addEventListener('submit', sendCommunityMessage);
+    // Initial math + copy buttons on welcome message
     document.addEventListener("DOMContentLoaded", () => {
       const welcome = document.getElementById('welcomeMessage');
       if (welcome && typeof renderMathInElement === 'function') {
