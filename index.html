@@ -9,16 +9,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
-  
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5SLR2/eh2F2x8fMXmT+Tw6+5u/3vA8yHSjXe2K3S9e" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkKLxaEwKk8+ijmC6yS0pG6qK0lE2bS8v3G6p4D2r/4j3p0a8eN0pD8zL" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
-
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-remote-config-compat.js"></script>
-
   <style>
     :root {
       --bg-page: #FDFDFF;
@@ -37,7 +34,6 @@
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     .msg-content { -webkit-user-select:text; user-select:text; line-height:1.6; }
-
     body {
       background:var(--bg-page);
       color:var(--text-main);
@@ -47,7 +43,6 @@
       overflow:hidden;
       width:100%;
     }
-
     /* SIDEBAR */
     .sidebar {
       background:#FFFFFF;
@@ -58,7 +53,6 @@
       z-index:50;
       position:relative;
     }
-
     @media (min-width:769px) {
       .sidebar { width:var(--sidebar-collapsed-width); }
       .sidebar:hover { width:var(--sidebar-width); }
@@ -68,7 +62,6 @@
       .hamburger { display:none !important; }
       .overlay { display:none; }
     }
-
     @media (max-width:768px) {
       .sidebar { position:fixed; top:0; left:0; height:100%; width:var(--sidebar-width); transform:translateX(-100%); box-shadow:2px 0 10px rgba(0,0,0,0.1); }
       .sidebar.open { transform:translateX(0); }
@@ -76,27 +69,22 @@
       .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:40; opacity:0; visibility:hidden; transition:opacity 0.3s; }
       .overlay.active { opacity:1; visibility:visible; }
     }
-
     .sidebar-header { height:var(--header-height); display:flex; align-items:center; padding:0 20px; overflow:hidden; }
     .logo-container { display:flex; align-items:center; gap:12px; min-width:max-content; }
     .brand-logo { width:32px; height:32px; background:var(--primary); border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; flex-shrink:0; }
     .brand-text { font-weight:700; font-size:1rem; transition:opacity 0.2s; }
-
     .nav-links { display:flex; flex-direction:column; gap:8px; padding:20px 12px; flex:1; }
     .nav-item { display:flex; align-items:center; gap:14px; padding:12px 14px; border-radius:12px; color:var(--text-muted); text-decoration:none; transition:background 0.2s, color 0.2s; white-space:nowrap; overflow:hidden; cursor:pointer; }
     .nav-item:hover, .nav-item.active { background:var(--ai-bubble); color:var(--primary); }
     .nav-item .material-symbols-rounded { font-size:22px; flex-shrink:0; }
     .nav-text { font-weight:500; font-size:0.9rem; transition:opacity 0.2s; }
-
     .sidebar-footer { padding:16px 12px 20px; border-top:1px solid var(--border); }
-
     .user-profile { display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:12px; transition:background 0.2s; margin-bottom:8px; }
     .user-profile:hover { background:var(--ai-bubble); }
     .user-avatar { width:44px; height:44px; border-radius:50%; background:#e0e7ff; background-size:cover; background-position:center; flex-shrink:0; border:2px solid #c7d2fe; box-shadow:0 2px 8px rgba(79,70,229,0.1); }
     .user-info { flex:1; min-width:0; transition:opacity 0.2s; }
     .user-name { font-weight:600; font-size:0.95rem; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .user-email { font-size:0.78rem; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-
     /* MAIN LAYOUT */
     .main-wrapper { flex:1; display:flex; flex-direction:column; height:100%; position:relative; }
     .header { height:var(--header-height); background:#FFFFFF; padding:0 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; z-index:10; }
@@ -105,22 +93,73 @@
     .page-title { font-size:1rem; font-weight:700; }
     .selector-group { display:flex; gap:8px; }
     select { padding:8px 12px; border:1px solid var(--border); border-radius:10px; font-size:0.75rem; font-weight:500; color:var(--text-muted); background:#FAFBFC; outline:none; appearance:none; cursor:pointer; }
-
     @media (max-width:500px) { .selector-group select { max-width:100px; text-overflow:ellipsis; } }
-
-    .chat-container { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:20px; padding-bottom:100px; }
+    .view { display:none; flex-direction:column; flex:1; }
+    .view.active { display:flex; }
+    .chat-container {
+      flex:1;
+      overflow-y:auto;
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+      padding-bottom:100px;
+    }
+    .community-view {
+      flex:1;
+      display:flex;
+      overflow:hidden;
+    }
+    .channels-sidebar {
+      width:240px;
+      background:#fafafa;
+      border-right:1px solid var(--border);
+      overflow-y:auto;
+      padding:16px;
+    }
+    .channel-item {
+      padding:12px 16px;
+      border-radius:10px;
+      margin-bottom:6px;
+      cursor:pointer;
+      color:var(--text-muted);
+    }
+    .channel-item:hover,
+    .channel-item.active {
+      background:var(--ai-bubble);
+      color:var(--primary);
+    }
+    .community-main {
+      flex:1;
+      display:flex;
+      flex-direction:column;
+    }
+    .community-messages {
+      flex:1;
+      overflow-y:auto;
+      padding:20px;
+    }
+    .community-input {
+      padding:16px 20px;
+      border-top:1px solid var(--border);
+      background:white;
+    }
+    .community-input input {
+      width:100%;
+      padding:12px 16px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      font-size:0.95rem;
+    }
     .message { max-width:85%; display:flex; flex-direction:column; }
     .message.user { align-self:flex-end; }
-    .message.ai { align-self:flex-start; }
-
+    .message.ai, .message.community { align-self:flex-start; }
     .msg-content { padding:14px 18px; font-size:0.92rem; line-height:1.6; border-radius:20px; }
     .message.user .msg-content { background:var(--user-bubble); color:var(--text-main); border:1px solid var(--border); box-shadow:var(--shadow); border-bottom-right-radius:4px; }
     .message.ai .msg-content { background:var(--ai-bubble); color:var(--text-main); border-bottom-left-radius:4px; }
-
+    .message.community .msg-content { background:#e8f0fe; border-bottom-left-radius:4px; }
     .katex { font-size:1.05em !important; }
     .katex-display { margin:1em 0; position:relative; }
-
-    /* Copy button for display math */
     .katex-display .copy-btn {
       position: absolute;
       top: 8px;
@@ -138,7 +177,6 @@
       z-index: 5;
       font-family: system-ui, -apple-system, sans-serif;
     }
-
     .katex-display:hover .copy-btn { opacity: 1; }
     .katex-display .copy-btn:hover { background: #f0f0ff; }
     .katex-display .copy-btn.copied {
@@ -146,10 +184,8 @@
       color: white;
       border-color: var(--accent);
     }
-
     .msg-time { font-size:0.65rem; color:var(--text-muted); margin-top:6px; font-weight:500; }
     .message.user .msg-time { align-self:flex-end; }
-
     .input-bar {
       position:absolute; bottom:24px;
       left:20px; right:20px;
@@ -161,13 +197,11 @@
       box-shadow:0 10px 30px rgba(0,0,0,0.08);
       z-index:20; max-width:800px; margin:0 auto;
     }
-
     .input-bar input {
       flex:1; border:none; outline:none;
       font-family:inherit; font-size:0.95rem;
       color:var(--text-main); padding-right:10px;
     }
-
     .send-btn {
       width:44px; height:44px;
       background:var(--primary); color:white;
@@ -175,21 +209,17 @@
       display:flex; align-items:center; justify-content:center;
       cursor:pointer; transition:transform 0.2s;
     }
-
     .send-btn:active { transform:scale(0.9); }
-
     .typing-indicator {
       display:none; gap:4px;
       padding:14px 18px;
       background:var(--ai-bubble); border-radius:20px;
       width:fit-content;
     }
-
     .dot { width:5px; height:5px; background:var(--text-muted); border-radius:50%; animation:pulse 1s infinite alternate; }
     .dot:nth-child(2) { animation-delay:0.2s; }
     .dot:nth-child(3) { animation-delay:0.4s; }
     @keyframes pulse { to { opacity:0.3; transform:translateY(-2px); } }
-
     /* AUTH UI */
     .auth-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; opacity:0; visibility:hidden; transition:opacity 0.4s, visibility 0s 0.4s; backdrop-filter:blur(4px); }
     .auth-backdrop.active { opacity:1; visibility:visible; transition:opacity 0.4s; }
@@ -218,7 +248,6 @@
   </style>
 </head>
 <body>
-
   <!-- Auth UI -->
   <div id="authBackdrop" class="auth-backdrop"></div>
   <div id="authContainer" class="auth-container">
@@ -247,7 +276,6 @@
   </div>
 
   <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="logo-container">
@@ -256,11 +284,12 @@
       </div>
     </div>
     <div class="nav-links">
-      <a href="#" class="nav-item active"><span class="material-symbols-rounded">chat_bubble</span><span class="nav-text">Chat</span></a>
-      <a href="#" class="nav-item"><span class="material-symbols-rounded">school</span><span class="nav-text">Lessons</span></a>
-      <a href="#" class="nav-item"><span class="material-symbols-rounded">quiz</span><span class="nav-text">Quizzes</span></a>
-      <a href="#" class="nav-item"><span class="material-symbols-rounded">history</span><span class="nav-text">History</span></a>
-      <a href="#" class="nav-item"><span class="material-symbols-rounded">settings</span><span class="nav-text">Settings</span></a>
+      <div class="nav-item active" data-view="chat"><span class="material-symbols-rounded">chat_bubble</span><span class="nav-text">Chat</span></div>
+      <div class="nav-item" data-view="community"><span class="material-symbols-rounded">group</span><span class="nav-text">Community</span></div>
+      <div class="nav-item"><span class="material-symbols-rounded">school</span><span class="nav-text">Lessons</span></div>
+      <div class="nav-item"><span class="material-symbols-rounded">quiz</span><span class="nav-text">Quizzes</span></div>
+      <div class="nav-item"><span class="material-symbols-rounded">history</span><span class="nav-text">History</span></div>
+      <div class="nav-item"><span class="material-symbols-rounded">settings</span><span class="nav-text">Settings</span></div>
     </div>
     <div class="sidebar-footer">
       <div class="user-profile" id="userProfile">
@@ -270,10 +299,10 @@
           <div class="user-email" id="userEmail">not signed in</div>
         </div>
       </div>
-      <a href="#" class="nav-item" id="signOutBtn">
+      <div class="nav-item" id="signOutBtn">
         <span class="material-symbols-rounded">logout</span>
         <span class="nav-text">Sign Out</span>
-      </a>
+      </div>
     </div>
   </nav>
 
@@ -283,9 +312,9 @@
         <button class="hamburger" onclick="toggleSidebar()">
           <span class="material-symbols-rounded">menu</span>
         </button>
-        <h1 class="page-title">Education AI</h1>
+        <h1 class="page-title" id="pageTitle">Education AI</h1>
       </div>
-      <div class="selector-group">
+      <div class="selector-group" id="studySelectors">
         <select id="gradeSelect">
           <option>Grade 10</option>
           <option>Grade 11</option>
@@ -300,20 +329,54 @@
       </div>
     </header>
 
-    <main class="chat-container" id="chatContainer">
-      <div class="message ai" id="welcomeMessage">
-        <div class="msg-content">Hello! Please sign in to start learning with Vynix AI.</div>
+    <!-- Chat View -->
+    <div id="chatView" class="view active">
+      <main class="chat-container" id="chatContainer">
+        <div class="message ai" id="welcomeMessage">
+          <div class="msg-content">Hello! Please sign in to start learning with Vynix AI.</div>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </main>
+      <div class="input-bar" id="chatInputBar">
+        <input type="text" id="userInput" placeholder="Ask anything about CAPS..." autocomplete="off">
+        <button id="sendBtn" class="send-btn">
+          <span class="material-symbols-rounded">arrow_upward</span>
+        </button>
       </div>
-      <div class="typing-indicator" id="typingIndicator">
-        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-      </div>
-    </main>
+    </div>
 
-    <div class="input-bar">
-      <input type="text" id="userInput" placeholder="Ask anything about CAPS..." autocomplete="off">
-      <button id="sendBtn" class="send-btn">
-        <span class="material-symbols-rounded">arrow_upward</span>
-      </button>
+    <!-- Community View (placeholder) -->
+    <div id="communityView" class="view community-view">
+      <aside class="channels-sidebar">
+        <h3 style="padding:0 16px 12px; color:var(--text-muted); font-size:0.9rem;">Channels</h3>
+        <div class="channel-item active">General</div>
+        <div class="channel-item">Maths Grade 12</div>
+        <div class="channel-item">Physics Help</div>
+        <div class="channel-item">Past Papers</div>
+        <div class="channel-item">Study Tips</div>
+        <div class="channel-item">Memes & Motivation</div>
+      </aside>
+      <div class="community-main">
+        <div class="community-messages" id="communityMessages">
+          <div class="message community">
+            <div class="msg-content"><strong>ThaboM:</strong> Anyone writing Maths Paper 2 tomorrow? 🔥</div>
+            <div class="msg-time">13:42</div>
+          </div>
+          <div class="message community">
+            <div class="msg-content"><strong>LeratoK:</strong> Yes! I'm so nervous about Euclidean Geometry</div>
+            <div class="msg-time">13:45</div>
+          </div>
+          <div class="message community">
+            <div class="msg-content"><strong>VynixBot:</strong> Remember: prove similarity with AA or SAS similarity theorems. Good luck! 🍀</div>
+            <div class="msg-time">13:47</div>
+          </div>
+        </div>
+        <div class="community-input">
+          <input type="text" placeholder="Type a message... (coming soon)" disabled>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -336,6 +399,26 @@
       document.getElementById('authContainer').classList.remove('active');
     }
 
+    // View switching
+    document.querySelectorAll('.nav-item[data-view]').forEach(item => {
+      item.addEventListener('click', () => {
+        const viewId = item.dataset.view + 'View';
+        const titleMap = {
+          chat: 'Education AI',
+          community: 'Community'
+        };
+
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        item.classList.add('active');
+
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+
+        document.getElementById('pageTitle').textContent = titleMap[item.dataset.view] || 'Vynix AI';
+        document.getElementById('studySelectors').style.display = (item.dataset.view === 'chat') ? 'flex' : 'none';
+      });
+    });
+
     // ── Firebase ──
     const firebaseConfig = {
       apiKey: "AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
@@ -343,7 +426,6 @@
       projectId: "fire-b-a8878",
       appId: "1:658673187627:web:6e4c29af661785f0afa36e"
     };
-
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const remoteConfig = firebase.remoteConfig();
@@ -352,7 +434,6 @@
 
     // ── Google Sign In ──
     const googleBtn = document.getElementById('googleSignInBtn');
-
     function signInWithGoogle() {
       googleBtn.classList.add('loading');
       googleBtn.disabled = true;
@@ -387,23 +468,19 @@
         initConfig();
         document.getElementById('userInput').disabled = false;
         document.getElementById('sendBtn').disabled = false;
-
         const displayName = user.displayName || "Student";
         const firstName = displayName.split(" ")[0];
         const email = user.email || "no email";
         const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=4F46E5&color=fff&size=128`;
-
         nameEl.textContent = firstName;
         emailEl.textContent = email;
         avatarEl.style.backgroundImage = `url("${photo}")`;
-
         if (welcomeBubble) {
           const grade = document.getElementById('gradeSelect').value;
           const subject = document.getElementById('subjectSelect').value;
           welcomeBubble.innerHTML = `Welcome back, ${firstName}! Ready to continue your ${grade} ${subject} journey? 🚀`;
         }
       }
-
       if (welcomeEl && typeof renderMathInElement === 'function') {
         renderMathInElement(welcomeEl);
         addCopyButtonsToFormulas(welcomeEl);
@@ -421,41 +498,21 @@
       }
     }
 
-    // ── Copy button logic for KaTeX display math ──
+    // ── Copy button logic for KaTeX ──
     function addCopyButtonsToFormulas(container = document) {
       const blocks = container.querySelectorAll('.katex-display');
       blocks.forEach(block => {
         if (block.querySelector('.copy-btn')) return;
-
         const btn = document.createElement('button');
         btn.className = 'copy-btn';
         btn.textContent = 'Copy';
         btn.type = 'button';
-
         btn.onclick = async () => {
           try {
-            let latex = '';
-
-            // Try different ways to get the raw LaTeX
-            const mathml = block.querySelector('.katex-mathml annotation');
-            if (mathml) latex = mathml.textContent;
-
-            if (!latex) {
-              const annotationXml = block.querySelector('annotation-xml');
-              if (annotationXml) latex = annotationXml.textContent;
-            }
-
-            if (!latex) {
-              latex = block.getAttribute('data-tex') || '';
-            }
-
-            if (!latex) {
-              const mathEl = block.querySelector('math');
-              if (mathEl) latex = mathEl.getAttribute('aria-label') || '';
-            }
-
+            let latex = block.querySelector('.katex-mathml annotation')?.textContent ||
+                        block.querySelector('annotation-xml')?.textContent ||
+                        block.getAttribute('data-tex') || '';
             latex = latex.trim();
-
             if (latex) {
               await navigator.clipboard.writeText(latex);
               btn.textContent = 'Copied!';
@@ -464,36 +521,28 @@
                 btn.textContent = 'Copy';
                 btn.classList.remove('copied');
               }, 2000);
-            } else {
-              alert('Could not extract LaTeX from this formula');
             }
           } catch (err) {
             console.error('Clipboard copy failed:', err);
-            alert('Failed to copy formula to clipboard');
           }
         };
-
         block.style.position = 'relative';
         block.appendChild(btn);
       });
     }
 
-    // ── Append message + render math + add copy buttons ──
+    // ── Append message (chat) ──
     function appendMessage(role, text) {
       const chat = document.getElementById('chatContainer');
       const indicator = document.getElementById('typingIndicator');
-
       const msg = document.createElement('div');
       msg.className = `message ${role}`;
       msg.innerHTML = `
         <div class="msg-content">${text.replace(/\n/g, '<br>')}</div>
         <div class="msg-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
       `;
-
       chat.insertBefore(msg, indicator);
       chat.scrollTop = chat.scrollHeight;
-
-      // Render KaTeX
       if (typeof renderMathInElement === 'function') {
         renderMathInElement(msg, {
           delimiters: [
@@ -505,8 +554,6 @@
           throwOnError: false
         });
       }
-
-      // Add copy buttons
       addCopyButtonsToFormulas(msg);
     }
 
@@ -540,7 +587,6 @@ Use proper LaTeX notation inside $...$ for inline math and $$...$$ for display m
             temperature: 0.7
           })
         });
-
         const data = await response.json();
         if (data.choices && data.choices[0]?.message?.content) {
           appendMessage('ai', data.choices[0].message.content);
@@ -568,7 +614,7 @@ Use proper LaTeX notation inside $...$ for inline math and $$...$$ for display m
       firebase.auth().signOut();
     };
 
-    // Initial math + copy buttons on welcome message
+    // Initial math rendering on welcome
     document.addEventListener("DOMContentLoaded", () => {
       const welcome = document.getElementById('welcomeMessage');
       if (welcome && typeof renderMathInElement === 'function') {
