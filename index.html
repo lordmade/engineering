@@ -77,7 +77,7 @@
     .nav-item { 
       display:flex; align-items:center; gap:14px; 
       padding:12px 14px; border-radius:12px; 
-      color:var(--text-muted); text-decoration:none; 
+      color:var(--text-muted); 
       transition:background 0.2s, color 0.2s; 
       white-space:nowrap; overflow:hidden; cursor:pointer; 
     }
@@ -100,7 +100,12 @@
     .selector-group { display:flex; gap:8px; }
     select { padding:8px 12px; border:1px solid var(--border); border-radius:10px; font-size:0.75rem; font-weight:500; color:var(--text-muted); background:#FAFBFC; outline:none; appearance:none; cursor:pointer; }
     @media (max-width:500px) { .selector-group select { max-width:100px; text-overflow:ellipsis; } }
-    /* Chat Container */
+    .view { display:none; flex:1; overflow:hidden; }
+    .view.active { display:flex; flex-direction:column; }
+    /* Chat View */
+    #chatView {
+      position:relative;
+    }
     #chatContainer {
       flex:1;
       overflow-y:auto;
@@ -110,6 +115,18 @@
       gap:20px;
       padding-bottom:100px;
     }
+    /* Community View */
+    #communityView {
+      background:#fefefe;
+      align-items:center;
+      justify-content:center;
+      color:var(--text-muted);
+      font-size:1.1rem;
+      text-align:center;
+      padding:40px;
+    }
+    #communityView h2 { color:var(--text-main); margin-bottom:16px; }
+    /* Shared input bar & message styles */
     .input-bar {
       position:absolute; bottom:24px;
       left:20px; right:20px;
@@ -144,7 +161,6 @@
     .dot:nth-child(2) { animation-delay:0.2s; }
     .dot:nth-child(3) { animation-delay:0.4s; }
     @keyframes pulse { to { opacity:0.3; transform:translateY(-2px); } }
-    /* Message Styles */
     .message { max-width:85%; display:flex; flex-direction:column; }
     .message.user { align-self:flex-end; }
     .message.ai { align-self:flex-start; }
@@ -243,11 +259,12 @@
       </div>
     </div>
     <div class="nav-links">
-      <a href="#" class="nav-item active"><span class="material-symbols-rounded">chat_bubble</span><span class="nav-text">Chat</span></a>
-      <a href="#" class="nav-item"><span class="material-symbols-rounded">school</span><span class="nav-text">Lessons</span></a>
-      <a href="#" class="nav-item"><span class="material-symbols-rounded">quiz</span><span class="nav-text">Quizzes</span></a>
-      <a href="#" class="nav-item"><span class="material-symbols-rounded">history</span><span class="nav-text">History</span></a>
-      <a href="#" class="nav-item"><span class="material-symbols-rounded">settings</span><span class="nav-text">Settings</span></a>
+      <div class="nav-item active" data-view="chat"><span class="material-symbols-rounded">chat_bubble</span><span class="nav-text">Chat</span></div>
+      <div class="nav-item" data-view="community"><span class="material-symbols-rounded">group</span><span class="nav-text">Community</span></div>
+      <div class="nav-item"><span class="material-symbols-rounded">school</span><span class="nav-text">Lessons</span></div>
+      <div class="nav-item"><span class="material-symbols-rounded">quiz</span><span class="nav-text">Quizzes</span></div>
+      <div class="nav-item"><span class="material-symbols-rounded">history</span><span class="nav-text">History</span></div>
+      <div class="nav-item"><span class="material-symbols-rounded">settings</span><span class="nav-text">Settings</span></div>
     </div>
     <div class="sidebar-footer">
       <div class="user-profile" id="userProfile">
@@ -257,10 +274,10 @@
           <div class="user-email" id="userEmail">not signed in</div>
         </div>
       </div>
-      <a href="#" class="nav-item" id="signOutBtn">
+      <div class="nav-item" id="signOutBtn">
         <span class="material-symbols-rounded">logout</span>
         <span class="nav-text">Sign Out</span>
-      </a>
+      </div>
     </div>
   </nav>
 
@@ -270,7 +287,7 @@
         <button class="hamburger" onclick="toggleSidebar()">
           <span class="material-symbols-rounded">menu</span>
         </button>
-        <h1 class="page-title">AI Tutor</h1>
+        <h1 class="page-title" id="pageTitle">AI Tutor</h1>
       </div>
       <div class="selector-group" id="studySelectors">
         <select id="gradeSelect">
@@ -287,25 +304,40 @@
       </div>
     </header>
 
-    <main class="chat-container" id="chatContainer">
-      <div class="message ai" id="welcomeMessage">
-        <div class="msg-content">Hello! Please sign in to start learning with Vynix AI.</div>
+    <!-- Chat View -->
+    <div id="chatView" class="view active">
+      <main id="chatContainer">
+        <div class="message ai" id="welcomeMessage">
+          <div class="msg-content">Hello! Please sign in to start learning with Vynix AI.</div>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </main>
+      <div class="input-bar" id="chatInputBar">
+        <input type="text" id="userInput" placeholder="Ask anything about CAPS..." autocomplete="off">
+        <button id="sendBtn" class="send-btn">
+          <span class="material-symbols-rounded">arrow_upward</span>
+        </button>
       </div>
-      <div class="typing-indicator" id="typingIndicator">
-        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-      </div>
-    </main>
+    </div>
 
-    <div class="input-bar">
-      <input type="text" id="userInput" placeholder="Ask anything about CAPS..." autocomplete="off">
-      <button id="sendBtn" class="send-btn">
-        <span class="material-symbols-rounded">arrow_upward</span>
-      </button>
+    <!-- Community View (separate / not inside chat) -->
+    <div id="communityView" class="view">
+      <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:40px; text-align:center;">
+        <div>
+          <h2>Community</h2>
+          <p style="margin:16px 0; max-width:500px;">
+            A place for learners to discuss CAPS topics, share notes, ask questions and help each other.<br><br>
+            <strong>Coming soon</strong> — we're working on bringing real-time community chat to Vynix AI! 🚀
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
-    // ── UI Helpers ──
+    // ── UI Helpers ───────────────────────────────────────────────────────────────
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('open');
       document.getElementById('overlay').classList.toggle('active');
@@ -323,7 +355,29 @@
       document.getElementById('authContainer').classList.remove('active');
     }
 
-    // ── Firebase ──
+    // ── View Switching ───────────────────────────────────────────────────────────
+    document.querySelectorAll('.nav-item[data-view]').forEach(item => {
+      item.addEventListener('click', () => {
+        const viewId = item.dataset.view + 'View';
+        const titleMap = {
+          chat: 'AI Tutor',
+          community: 'Community'
+        };
+
+        // Update active states
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        item.classList.add('active');
+
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+
+        // Update header title & selectors visibility
+        document.getElementById('pageTitle').textContent = titleMap[item.dataset.view] || 'Vynix AI';
+        document.getElementById('studySelectors').style.display = (item.dataset.view === 'chat') ? 'flex' : 'none';
+      });
+    });
+
+    // ── Firebase ─────────────────────────────────────────────────────────────────
     const firebaseConfig = {
       apiKey: "AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
       authDomain: "fire-b-a8878.firebaseapp.com",
@@ -336,7 +390,7 @@
     let XAI_API_KEY = "";
     const MODEL_ID = "grok-4-1-fast-reasoning";
 
-    // ── Google Sign In ──
+    // ── Google Sign In ───────────────────────────────────────────────────────────
     const googleBtn = document.getElementById('googleSignInBtn');
     function signInWithGoogle() {
       googleBtn.classList.add('loading');
@@ -351,7 +405,7 @@
         });
     }
 
-    // ── Auth State Listener ──
+    // ── Auth State Listener ──────────────────────────────────────────────────────
     auth.onAuthStateChanged(user => {
       const welcomeEl = document.getElementById('welcomeMessage');
       let welcomeBubble = welcomeEl ? welcomeEl.querySelector('.msg-content') : null;
@@ -391,7 +445,7 @@
       }
     });
 
-    // ── Remote Config ──
+    // ── Remote Config ────────────────────────────────────────────────────────────
     async function initConfig() {
       remoteConfig.settings = { minimumFetchIntervalMillis: 0 };
       try {
@@ -402,7 +456,7 @@
       }
     }
 
-    // ── KaTeX Copy Button ──
+    // ── KaTeX Copy Button ────────────────────────────────────────────────────────
     function addCopyButtonsToFormulas(container = document) {
       const blocks = container.querySelectorAll('.katex-display');
       blocks.forEach(block => {
@@ -434,7 +488,7 @@
       });
     }
 
-    // ── Append message ──
+    // ── Append message (only used in chat view) ──────────────────────────────────
     function appendMessage(role, text) {
       const chat = document.getElementById('chatContainer');
       const indicator = document.getElementById('typingIndicator');
@@ -461,6 +515,7 @@
       addCopyButtonsToFormulas(msg);
     }
 
+    // ── Send message to AI ───────────────────────────────────────────────────────
     async function sendMessage() {
       const input = document.getElementById('userInput');
       const query = input.value.trim();
@@ -506,7 +561,7 @@ Use proper LaTeX: $...$ for inline math, $$...$$ for display equations, proofs, 
       }
     }
 
-    // ── Event Listeners ──
+    // ── Event Listeners ──────────────────────────────────────────────────────────
     document.getElementById('sendBtn').onclick = sendMessage;
     document.getElementById('userInput').onkeypress = (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
@@ -519,7 +574,7 @@ Use proper LaTeX: $...$ for inline math, $$...$$ for display equations, proofs, 
       firebase.auth().signOut();
     };
 
-    // Initial math rendering on welcome
+    // Initial math rendering on welcome message
     document.addEventListener("DOMContentLoaded", () => {
       const welcome = document.getElementById('welcomeMessage');
       if (welcome && typeof renderMathInElement === 'function') {
