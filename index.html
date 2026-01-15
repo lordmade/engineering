@@ -7,9 +7,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Vynix AI • Education</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
-
+  
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5SLR2/eh2F2x8fMXmT+Tw6+5u/3vA8yHSjXe2K3S9e" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkKLxaEwKk8+ijmC6yS0pG6qK0lE2bS8v3G6p4D2r/4j3p0a8eN0pD8zL" crossorigin="anonymous"></script>
@@ -21,386 +21,228 @@
 
   <style>
     :root {
-      --bg-main:        #e8ebf2;
-      --bg-surface:     #e8ebf2;
-      --neumo-light:    #ffffff;
-      --neumo-dark:     #c5cee0;
-      --text-primary:   #2d3748;
-      --text-secondary: #4a5568;
-      --accent:         #6366f1;
-      --accent-dark:    #4f46e5;
-      --radius:         22px;
-      --sidebar-collapsed: 76px;
-      --sidebar-open:    260px;
-      --shadow-convex:   10px 10px 20px #d1d9e6, -10px -10px 20px #ffffff;
-      --shadow-concave:  inset 8px 8px 16px #d1d9e6, inset -8px -8px 16px #ffffff;
-      --shadow-button:   6px 6px 12px #d1d9e6, -6px -6px 12px #ffffff;
-      --shadow-soft:     0 4px 12px rgba(0,0,0,0.06);
+      --bg-page: #FDFDFF;
+      --bg-chat: #FFFFFF;
+      --primary: #111111;
+      --accent: #4F46E5;
+      --text-main: #1A1C1E;
+      --text-muted: #6C7278;
+      --border: #F1F2F4;
+      --ai-bubble: #F4F7FB;
+      --user-bubble: #FFFFFF;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      --sidebar-width: 260px;
+      --sidebar-collapsed-width: 72px;
+      --header-height: 64px;
     }
-
     * { margin:0; padding:0; box-sizing:border-box; }
+    .msg-content { -webkit-user-select:text; user-select:text; line-height:1.6; }
 
     body {
-      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-      background: var(--bg-main);
-      color: var(--text-primary);
-      min-height: 100vh;
-      display: flex;
-      overflow: hidden;
-    }
-
-    /* ── SIDEBAR ── */
-    .sidebar {
-      width: var(--sidebar-collapsed);
-      background: var(--bg-surface);
-      box-shadow: var(--shadow-convex);
-      transition: width 0.45s cubic-bezier(0.34,1.56,0.64,1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      z-index: 100;
-      border-top-right-radius: var(--radius);
-      border-bottom-right-radius: var(--radius);
-    }
-
-    @media (min-width:769px) {
-      .sidebar:hover { width: var(--sidebar-open); }
-      .sidebar:not(:hover) .sidebar-text { opacity:0; pointer-events:none; }
-      .hamburger { display:none; }
-    }
-
-    @media (max-width:768px) {
-      .sidebar {
-        position:fixed; top:0; left:0; bottom:0;
-        width: var(--sidebar-open);
-        transform: translateX(-100%);
-        transition: transform 0.42s ease-out;
-        border-radius: 0;
-      }
-      .sidebar.open { transform: translateX(0); }
-      .overlay {
-        position:fixed; inset:0;
-        background: rgba(0,0,0,0.3);
-        backdrop-filter: blur(8px);
-        z-index:90;
-        opacity:0; visibility:hidden;
-        transition: all 0.42s;
-      }
-      .overlay.active { opacity:1; visibility:visible; }
-    }
-
-    .sidebar-header {
-      height:84px;
-      display:flex; align-items:center; justify-content:center;
-      border-bottom:1px solid rgba(0,0,0,0.04);
-    }
-
-    .logo-container {
-      display:flex; align-items:center; justify-content:center;
-    }
-
-    .brand-logo {
-      width:48px; height:48px;
-      background: linear-gradient(145deg, #f0f4ff, #e0e6f5);
-      border-radius:18px;
-      box-shadow: var(--shadow-convex);
-      display:flex; align-items:center; justify-content:center;
-      color:var(--accent); font-weight:700; font-size:1.5rem;
-    }
-
-    .nav-links {
-      padding:28px 0;
-      flex:1;
-      display:flex; flex-direction:column; gap:10px;
-    }
-
-    .nav-item {
+      background:var(--bg-page);
+      color:var(--text-main);
+      font-family:'Plus Jakarta Sans',sans-serif;
+      height:100vh;
       display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:16px 0;
-      position:relative;
-      color:var(--text-secondary);
-      text-decoration:none;
-      transition:all 0.3s ease;
-    }
-
-    .nav-item .icon-wrapper {
-      width: 56px;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 18px;
-      background: var(--bg-surface);
-      box-shadow: var(--shadow-convex);
-      transition: all 0.3s ease;
-    }
-
-    .nav-item:hover .icon-wrapper,
-    .nav-item.active .icon-wrapper {
-      box-shadow: var(--shadow-concave);
-      background: linear-gradient(145deg, #eef2ff, #e2e8f5);
-    }
-
-    .nav-item .material-symbols-rounded {
-      font-size: 28px;
-      color: inherit;
-    }
-
-    .nav-item .sidebar-text {
-      position: absolute;
-      left: 76px;
-      white-space: nowrap;
-      font-weight: 600;
-      font-size: 0.98rem;
-      color: var(--text-primary);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
-
-    @media (min-width:769px) {
-      .sidebar:hover .nav-item .sidebar-text { opacity: 1; pointer-events: auto; }
-      .sidebar:hover .nav-item { justify-content: flex-start; padding: 16px 20px; }
-      .sidebar:hover .nav-item .icon-wrapper { box-shadow: none; background: transparent; }
-    }
-
-    .sidebar-footer {
-      padding:24px 0;
-      display:flex; justify-content:center;
-    }
-
-    .user-profile {
-      width: 56px;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 18px;
-      background: var(--bg-surface);
-      box-shadow: var(--shadow-convex);
-      transition: all 0.3s ease;
-      overflow: hidden;
-    }
-
-    .user-profile:hover {
-      box-shadow: var(--shadow-concave);
-      transform: scale(1.05);
-    }
-
-    .user-avatar {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* ── Main Layout ── */
-    .main-wrapper { flex:1; display:flex; flex-direction:column; background:var(--bg-main); }
-
-    .header {
-      height:72px; background:var(--bg-surface);
-      box-shadow:var(--shadow-convex);
-      padding:0 28px; display:flex; align-items:center; justify-content:space-between;
-      z-index:10;
-    }
-
-    .page-title { font-size:1.28rem; font-weight:700; letter-spacing:-0.01em; }
-
-    .selector-group select {
-      padding:11px 16px; border:none; border-radius:16px;
-      background:var(--bg-surface); box-shadow:var(--shadow-convex);
-      font-size:0.9rem; color:var(--text-secondary); font-weight:500;
-      cursor:pointer; appearance:none;
-    }
-
-    .chat-container {
-      flex:1; overflow-y:auto; padding:32px 24px;
-      display:flex; flex-direction:column; gap:24px;
-    }
-
-    .message { max-width:80%; display:flex; flex-direction:column; }
-
-    .msg-content {
-      padding:16px 22px; border-radius:24px;
-      font-size:0.98rem; line-height:1.6;
-      background:var(--bg-surface); box-shadow:var(--shadow-convex);
-    }
-
-    .message.user .msg-content {
-      background:linear-gradient(145deg, #6366f1, #4f46e5);
-      color:white;
-      box-shadow:8px 8px 16px #5255c2, -8px -8px 16px #7477ff;
-      border-bottom-right-radius:10px;
-    }
-
-    .message.ai .msg-content { border-bottom-left-radius:10px; }
-
-    .msg-time { font-size:0.72rem; color:#718096; margin-top:8px; opacity:0.85; }
-    .message.user .msg-time { align-self:flex-end; }
-
-    .input-bar { padding:24px 28px; background:var(--bg-main); }
-
-    .input-wrapper {
-      background:var(--bg-surface); border-radius:32px;
-      box-shadow:var(--shadow-convex);
-      padding:14px 18px; display:flex; align-items:center;
-      max-width:960px; margin:0 auto;
-    }
-
-    .input-bar input {
-      flex:1; border:none; outline:none; background:transparent;
-      font-size:1.02rem; color:var(--text-primary); padding:0 20px;
-    }
-
-    .send-btn {
-      width:56px; height:56px;
-      background:linear-gradient(145deg, #6366f1, #4f46e5);
-      color:white; border:none; border-radius:50%;
-      display:flex; align-items:center; justify-content:center;
-      box-shadow:var(--shadow-button); cursor:pointer;
-      transition:all 0.25s ease;
-    }
-
-    .send-btn:active {
-      box-shadow:inset 5px 5px 10px #5255c2,
-                  inset -5px -5px 10px #7477ff;
-      transform:scale(0.94);
-    }
-
-    .typing-indicator {
-      display:none; padding:18px 24px;
-      background:var(--bg-surface); border-radius:24px;
-      box-shadow:var(--shadow-convex); width:fit-content; gap:7px;
-    }
-
-    .dot {
-      width:10px; height:10px; background:#a0aec0;
-      border-radius:50%; animation:bounce 1.5s infinite ease-in-out;
-    }
-
-    .dot:nth-child(2) { animation-delay:0.25s; }
-    .dot:nth-child(3) { animation-delay:0.5s; }
-
-    @keyframes bounce {
-      0%,80%,100% { transform:scale(0.5); opacity:0.5; }
-      40% { transform:scale(1.1); opacity:1; }
-    }
-
-    /* ── Auth Modal / Bottom Sheet ── */
-    .auth-backdrop {
-      position:fixed; inset:0;
-      background:rgba(0,0,0,0.5);
-      backdrop-filter:blur(8px);
-      z-index:1000;
-      opacity:0; visibility:hidden;
-      transition:opacity 0.4s, visibility 0s 0.4s;
-    }
-    .auth-backdrop.active { opacity:1; visibility:visible; transition:opacity 0.4s; }
-
-    .auth-container {
-      position:fixed; z-index:1100;
-      background:var(--bg-surface);
-      box-shadow:0 -10px 40px rgba(0,0,0,0.15);
-      border-radius:32px 32px 0 0;
       overflow:hidden;
-      transition:all 0.45s cubic-bezier(0.34,1.56,0.64,1);
-      transform:translateY(100%);
-      bottom:0; left:0; right:0;
-      max-height:85vh;
       width:100%;
     }
 
+    /* SIDEBAR */
+    .sidebar {
+      background:#FFFFFF;
+      border-right:1px solid var(--border);
+      display:flex;
+      flex-direction:column;
+      transition:width 0.3s cubic-bezier(0.4,0,0.2,1);
+      z-index:50;
+      position:relative;
+    }
+
     @media (min-width:769px) {
-      .auth-container {
-        top:50%; left:50%; right:auto; bottom:auto;
-        transform:translate(-50%,-50%) scale(0.92);
-        width:420px; max-width:90vw;
-        border-radius:32px;
-        box-shadow:var(--shadow-convex);
-      }
-      .auth-container.active {
-        transform:translate(-50%,-50%) scale(1);
-      }
+      .sidebar { width:var(--sidebar-collapsed-width); }
+      .sidebar:hover { width:var(--sidebar-width); }
+      .sidebar:not(:hover) .nav-text,
+      .sidebar:not(:hover) .brand-text,
+      .sidebar:not(:hover) .user-info { opacity:0; pointer-events:none; white-space:nowrap; }
+      .hamburger { display:none !important; }
+      .overlay { display:none; }
     }
 
-    .auth-container.active { transform:translateY(0); }
-
-    .auth-content { padding:40px 32px 60px; position:relative; }
-    .auth-close {
-      position:absolute; top:16px; right:20px;
-      background:none; border:none; font-size:32px;
-      color:#94a3b8; cursor:pointer;
+    @media (max-width:768px) {
+      .sidebar { position:fixed; top:0; left:0; height:100%; width:var(--sidebar-width); transform:translateX(-100%); box-shadow:2px 0 10px rgba(0,0,0,0.1); }
+      .sidebar.open { transform:translateX(0); }
+      .hamburger { display:flex !important; }
+      .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:40; opacity:0; visibility:hidden; transition:opacity 0.3s; }
+      .overlay.active { opacity:1; visibility:visible; }
     }
 
-    .auth-header { text-align:center; margin-bottom:32px; }
-    .auth-header h2 { font-size:1.8rem; margin-bottom:8px; font-weight:700; }
-    .auth-header p { color:var(--text-secondary); font-size:1rem; }
+    .sidebar-header { height:var(--header-height); display:flex; align-items:center; padding:0 20px; overflow:hidden; }
+    .logo-container { display:flex; align-items:center; gap:12px; min-width:max-content; }
+    .brand-logo { width:32px; height:32px; background:var(--primary); border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; flex-shrink:0; }
+    .brand-text { font-weight:700; font-size:1rem; transition:opacity 0.2s; }
 
-    .auth-btn {
-      width:100%; padding:16px;
-      border-radius:16px; font-size:1.05rem; font-weight:600;
-      cursor:pointer; display:flex; align-items:center; justify-content:center;
-      gap:12px; transition:all 0.25s;
-      box-shadow:var(--shadow-button);
-      background:linear-gradient(145deg, #ffffff, #f0f4ff);
-      color:var(--text-primary);
-    }
+    .nav-links { display:flex; flex-direction:column; gap:8px; padding:20px 12px; flex:1; }
+    .nav-item { display:flex; align-items:center; gap:14px; padding:12px 14px; border-radius:12px; color:var(--text-muted); text-decoration:none; transition:background 0.2s, color 0.2s; white-space:nowrap; overflow:hidden; cursor:pointer; }
+    .nav-item:hover, .nav-item.active { background:var(--ai-bubble); color:var(--primary); }
+    .nav-item .material-symbols-rounded { font-size:22px; flex-shrink:0; }
+    .nav-text { font-weight:500; font-size:0.9rem; transition:opacity 0.2s; }
 
-    .auth-btn.google {
-      background:linear-gradient(145deg, #4285f4, #357ae8);
-      color:white;
-      box-shadow:6px 6px 12px #b3c0d1, -6px -6px 12px #ffffff;
-    }
+    .sidebar-footer { padding:16px 12px 20px; border-top:1px solid var(--border); }
 
-    .auth-btn.google:hover { transform:translateY(-2px); }
+    .user-profile { display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:12px; transition:background 0.2s; margin-bottom:8px; }
+    .user-profile:hover { background:var(--ai-bubble); }
+    .user-avatar { width:44px; height:44px; border-radius:50%; background:#e0e7ff; background-size:cover; background-position:center; flex-shrink:0; border:2px solid #c7d2fe; box-shadow:0 2px 8px rgba(79,70,229,0.1); }
+    .user-info { flex:1; min-width:0; transition:opacity 0.2s; }
+    .user-name { font-weight:600; font-size:0.95rem; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .user-email { font-size:0.78rem; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-    .auth-footer {
-      text-align:center; margin-top:24px;
-      font-size:0.88rem; color:var(--text-secondary);
-    }
-    .auth-footer a { color:var(--accent); text-decoration:none; }
+    /* MAIN LAYOUT */
+    .main-wrapper { flex:1; display:flex; flex-direction:column; height:100%; position:relative; }
+    .header { height:var(--header-height); background:#FFFFFF; padding:0 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; z-index:10; }
+    .header-left { display:flex; align-items:center; gap:16px; }
+    .hamburger { background:none; border:none; color:var(--text-main); cursor:pointer; display:flex; align-items:center; padding:4px; }
+    .page-title { font-size:1rem; font-weight:700; }
+    .selector-group { display:flex; gap:8px; }
+    select { padding:8px 12px; border:1px solid var(--border); border-radius:10px; font-size:0.75rem; font-weight:500; color:var(--text-muted); background:#FAFBFC; outline:none; appearance:none; cursor:pointer; }
 
-    /* ── Copy button ── */
+    @media (max-width:500px) { .selector-group select { max-width:100px; text-overflow:ellipsis; } }
+
+    .chat-container { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:20px; padding-bottom:100px; }
+    .message { max-width:85%; display:flex; flex-direction:column; }
+    .message.user { align-self:flex-end; }
+    .message.ai { align-self:flex-start; }
+
+    .msg-content { padding:14px 18px; font-size:0.92rem; line-height:1.6; border-radius:20px; }
+    .message.user .msg-content { background:var(--user-bubble); color:var(--text-main); border:1px solid var(--border); box-shadow:var(--shadow); border-bottom-right-radius:4px; }
+    .message.ai .msg-content { background:var(--ai-bubble); color:var(--text-main); border-bottom-left-radius:4px; }
+
+    .katex { font-size:1.05em !important; }
+    .katex-display { margin:1em 0; position:relative; }
+
+    /* Copy button for display math */
     .katex-display .copy-btn {
-      position:absolute; top:12px; right:12px;
-      background:var(--bg-surface); border:none; border-radius:12px;
-      padding:6px 12px; font-size:0.82rem; color:var(--text-secondary);
-      cursor:pointer; box-shadow:var(--shadow-convex);
-      transition:all 0.2s; opacity:0.8;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 0.78rem;
+      color: #444;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s;
+      opacity: 0.75;
+      z-index: 5;
+      font-family: system-ui, -apple-system, sans-serif;
     }
 
-    .katex-display:hover .copy-btn { opacity:1; }
+    .katex-display:hover .copy-btn { opacity: 1; }
+    .katex-display .copy-btn:hover { background: #f0f0ff; }
     .katex-display .copy-btn.copied {
-      background:var(--accent); color:white;
-      box-shadow:inset 3px 3px 6px rgba(0,0,0,0.2);
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
     }
+
+    .msg-time { font-size:0.65rem; color:var(--text-muted); margin-top:6px; font-weight:500; }
+    .message.user .msg-time { align-self:flex-end; }
+
+    .input-bar {
+      position:absolute; bottom:24px;
+      left:20px; right:20px;
+      background:#FFFFFF;
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:8px 8px 8px 20px;
+      display:flex; align-items:center;
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);
+      z-index:20; max-width:800px; margin:0 auto;
+    }
+
+    .input-bar input {
+      flex:1; border:none; outline:none;
+      font-family:inherit; font-size:0.95rem;
+      color:var(--text-main); padding-right:10px;
+    }
+
+    .send-btn {
+      width:44px; height:44px;
+      background:var(--primary); color:white;
+      border:none; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; transition:transform 0.2s;
+    }
+
+    .send-btn:active { transform:scale(0.9); }
+
+    .typing-indicator {
+      display:none; gap:4px;
+      padding:14px 18px;
+      background:var(--ai-bubble); border-radius:20px;
+      width:fit-content;
+    }
+
+    .dot { width:5px; height:5px; background:var(--text-muted); border-radius:50%; animation:pulse 1s infinite alternate; }
+    .dot:nth-child(2) { animation-delay:0.2s; }
+    .dot:nth-child(3) { animation-delay:0.4s; }
+    @keyframes pulse { to { opacity:0.3; transform:translateY(-2px); } }
+
+    /* AUTH UI */
+    .auth-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; opacity:0; visibility:hidden; transition:opacity 0.4s, visibility 0s 0.4s; backdrop-filter:blur(4px); }
+    .auth-backdrop.active { opacity:1; visibility:visible; transition:opacity 0.4s; }
+    .auth-container { position:fixed; z-index:1100; background:white; border-radius:16px; box-shadow:0 20px 70px rgba(0,0,0,0.25); overflow:hidden; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); transform:scale(0.92); opacity:0; }
+    .auth-container.active { transform:scale(1); opacity:1; }
+    .auth-container.shimmer-once { animation:authShimmer 2.5s ease-out forwards; background:linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 50%); background-size:200% 100%; }
+    @keyframes authShimmer { 0% { background-position:200% 0; } 100% { background-position:-200% 0; background:white; } }
+    @media (min-width:769px) { .auth-container { top:50%; left:50%; transform:translate(-50%,-50%) scale(0.92); width:420px; max-width:90vw; } .auth-container.active { transform:translate(-50%,-50%) scale(1); } }
+    @media (max-width:768px) { .auth-container { bottom:0; left:0; right:0; width:100%; max-height:85vh; border-radius:24px 24px 0 0; transform:translateY(100%); } .auth-container.active { transform:translateY(0); } }
+    .auth-content { position:relative; padding:32px 24px 40px; }
+    .auth-close { position:absolute; top:16px; right:16px; background:none; border:none; font-size:28px; color:#999; cursor:pointer; line-height:1; }
+    .auth-header { text-align:center; margin-bottom:32px; }
+    .auth-header h2 { font-size:1.6rem; margin-bottom:8px; }
+    .auth-header p { color:var(--text-muted); font-size:0.95rem; }
+    .auth-btn { width:100%; padding:14px 16px; margin:12px 0; border:1px solid #dadce0; border-radius:8px; font-size:1rem; font-weight:500; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:12px; background:#ffffff; transition:all 0.2s; box-shadow:0 1px 2px rgba(0,0,0,0.05); font-family:'Roboto',sans-serif; position:relative; }
+    .auth-btn.google { background:#1a73e8; color:white; border:none; }
+    .auth-btn.google:hover:not(:disabled) { background:#185abc; box-shadow:0 2px 6px rgba(0,0,0,0.15); }
+    .auth-btn:disabled { opacity:0.7; cursor:not-allowed; }
+    .auth-btn svg { width:24px; height:24px; flex-shrink:0; }
+    .auth-btn .spinner { display:none; width:20px; height:20px; border:3px solid rgba(255,255,255,0.3); border-top:3px solid white; border-radius:50%; animation:spin 1s linear infinite; }
+    .auth-btn.loading .spinner { display:inline-block; }
+    .auth-btn.loading span:not(.spinner) { display:none; }
+    @keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
+    .auth-footer { text-align:center; margin-top:24px; font-size:0.82rem; color:var(--text-muted); }
+    .auth-footer a { color:var(--accent); text-decoration:none; }
   </style>
 </head>
 <body>
 
-  <!-- Auth Modal / Bottom Sheet -->
+  <!-- Auth UI -->
   <div id="authBackdrop" class="auth-backdrop"></div>
   <div id="authContainer" class="auth-container">
     <div class="auth-content">
       <button class="auth-close" onclick="closeAuth()">×</button>
       <div class="auth-header">
         <h2 id="authTitle">Welcome to Vynix AI</h2>
-        <p id="authSubtitle">Sign in to start your learning journey</p>
+        <p id="authSubtitle">Sign in to continue your learning journey</p>
       </div>
-      <button class="auth-btn google" id="googleSignInBtn" onclick="signInWithGoogle()">
-        <svg viewBox="0 0 48 48" width="24" height="24">
-          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-        </svg>
-        <span>Continue with Google</span>
-        <div class="spinner"></div>
-      </button>
-      <p class="auth-footer">
-        By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
-      </p>
+      <div class="auth-body">
+        <button class="auth-btn google" id="googleSignInBtn" onclick="signInWithGoogle()">
+          <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          <span>Continue with Google</span>
+          <div class="spinner"></div>
+        </button>
+        <p class="auth-footer">
+          By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
+        </p>
+      </div>
     </div>
   </div>
 
@@ -408,50 +250,29 @@
 
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <div class="brand-logo"><span class="material-symbols-rounded">bolt</span></div>
+      <div class="logo-container">
+        <div class="brand-logo"><span class="material-symbols-rounded">bolt</span></div>
+        <span class="brand-text">Vynix AI</span>
+      </div>
     </div>
-
     <div class="nav-links">
-      <a href="#" class="nav-item active">
-        <div class="icon-wrapper">
-          <span class="material-symbols-rounded">chat_bubble</span>
-        </div>
-        <span class="sidebar-text">Chat</span>
-      </a>
-      <a href="#" class="nav-item">
-        <div class="icon-wrapper">
-          <span class="material-symbols-rounded">school</span>
-        </div>
-        <span class="sidebar-text">Lessons</span>
-      </a>
-      <a href="#" class="nav-item">
-        <div class="icon-wrapper">
-          <span class="material-symbols-rounded">quiz</span>
-        </div>
-        <span class="sidebar-text">Quizzes</span>
-      </a>
-      <a href="#" class="nav-item">
-        <div class="icon-wrapper">
-          <span class="material-symbols-rounded">history</span>
-        </div>
-        <span class="sidebar-text">History</span>
-      </a>
-      <a href="#" class="nav-item">
-        <div class="icon-wrapper">
-          <span class="material-symbols-rounded">settings</span>
-        </div>
-        <span class="sidebar-text">Settings</span>
-      </a>
+      <a href="#" class="nav-item active"><span class="material-symbols-rounded">chat_bubble</span><span class="nav-text">Chat</span></a>
+      <a href="#" class="nav-item"><span class="material-symbols-rounded">school</span><span class="nav-text">Lessons</span></a>
+      <a href="#" class="nav-item"><span class="material-symbols-rounded">quiz</span><span class="nav-text">Quizzes</span></a>
+      <a href="#" class="nav-item"><span class="material-symbols-rounded">history</span><span class="nav-text">History</span></a>
+      <a href="#" class="nav-item"><span class="material-symbols-rounded">settings</span><span class="nav-text">Settings</span></a>
     </div>
-
     <div class="sidebar-footer">
-      <a href="#" class="nav-item" id="signOutBtn">
-        <div class="user-profile" id="userProfile">
-          <div class="icon-wrapper">
-            <div class="user-avatar" id="userAvatar"></div>
-          </div>
+      <div class="user-profile" id="userProfile">
+        <div class="user-avatar" id="userAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="userDisplayName">Guest</div>
+          <div class="user-email" id="userEmail">not signed in</div>
         </div>
-        <span class="sidebar-text">Sign Out</span>
+      </div>
+      <a href="#" class="nav-item" id="signOutBtn">
+        <span class="material-symbols-rounded">logout</span>
+        <span class="nav-text">Sign Out</span>
       </a>
     </div>
   </nav>
@@ -464,7 +285,6 @@
         </button>
         <h1 class="page-title">Education AI</h1>
       </div>
-
       <div class="selector-group">
         <select id="gradeSelect">
           <option>Grade 10</option>
@@ -482,9 +302,7 @@
 
     <main class="chat-container" id="chatContainer">
       <div class="message ai" id="welcomeMessage">
-        <div class="msg-content">
-          Hello! Please sign in to start learning with Vynix AI.
-        </div>
+        <div class="msg-content">Hello! Please sign in to start learning with Vynix AI.</div>
       </div>
       <div class="typing-indicator" id="typingIndicator">
         <div class="dot"></div><div class="dot"></div><div class="dot"></div>
@@ -492,12 +310,10 @@
     </main>
 
     <div class="input-bar">
-      <div class="input-wrapper">
-        <input type="text" id="userInput" placeholder="Ask anything about CAPS..." autocomplete="off">
-        <button id="sendBtn" class="send-btn">
-          <span class="material-symbols-rounded">arrow_upward</span>
-        </button>
-      </div>
+      <input type="text" id="userInput" placeholder="Ask anything about CAPS..." autocomplete="off">
+      <button id="sendBtn" class="send-btn">
+        <span class="material-symbols-rounded">arrow_upward</span>
+      </button>
     </div>
   </div>
 
@@ -509,12 +325,10 @@
     }
 
     function showAuthUI() {
-      const backdrop = document.getElementById('authBackdrop');
-      const container = document.getElementById('authContainer');
-      if (!backdrop.classList.contains('active')) {
-        backdrop.classList.add('active');
-        container.classList.add('active');
-      }
+      document.getElementById('authBackdrop').classList.add('active');
+      document.getElementById('authContainer').classList.add('active');
+      document.getElementById('authContainer').classList.add('shimmer-once');
+      setTimeout(() => document.getElementById('authContainer').classList.remove('shimmer-once'), 3000);
     }
 
     function closeAuth() {
@@ -562,9 +376,7 @@
 
       if (!user) {
         showAuthUI();
-        if (welcomeBubble) {
-          welcomeBubble.innerHTML = "Hello! Please sign in to start learning with Vynix AI.";
-        }
+        if (welcomeBubble) welcomeBubble.innerHTML = "Hello! Please sign in to start learning with Vynix AI.";
         document.getElementById('userInput').disabled = true;
         document.getElementById('sendBtn').disabled = true;
         nameEl.textContent = "Guest";
@@ -573,14 +385,13 @@
       } else {
         closeAuth();
         initConfig();
-
         document.getElementById('userInput').disabled = false;
         document.getElementById('sendBtn').disabled = false;
 
         const displayName = user.displayName || "Student";
-        const firstName = displayName.split(" ")[0] || "Student";
+        const firstName = displayName.split(" ")[0];
         const email = user.email || "no email";
-        const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=6366f1&color=fff&size=128`;
+        const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=4F46E5&color=fff&size=128`;
 
         nameEl.textContent = firstName;
         emailEl.textContent = email;
@@ -604,13 +415,13 @@
       remoteConfig.settings = { minimumFetchIntervalMillis: 0 };
       try {
         await remoteConfig.fetchAndActivate();
-        XAI_API_KEY = remoteConfig.getValue('xai_api_key').asString() || "";
+        XAI_API_KEY = remoteConfig.getValue('xai_api_key').asString();
       } catch (e) {
         console.error("Remote config error:", e);
       }
     }
 
-    // ── Copy button logic ──
+    // ── Copy button logic for KaTeX display math ──
     function addCopyButtonsToFormulas(container = document) {
       const blocks = container.querySelectorAll('.katex-display');
       blocks.forEach(block => {
@@ -623,9 +434,20 @@
 
         btn.onclick = async () => {
           try {
-            let latex = block.querySelector('.katex-mathml annotation')?.textContent ||
-                        block.querySelector('annotation-xml')?.textContent ||
-                        block.getAttribute('data-tex') || '';
+            let latex = '';
+
+            // Try different ways to get the raw LaTeX
+            const mathml = block.querySelector('.katex-mathml annotation');
+            if (mathml) latex = mathml.textContent;
+
+            if (!latex) {
+              const annotationXml = block.querySelector('annotation-xml');
+              if (annotationXml) latex = annotationXml.textContent;
+            }
+
+            if (!latex) {
+              latex = block.getAttribute('data-tex') || '';
+            }
 
             if (!latex) {
               const mathEl = block.querySelector('math');
@@ -647,7 +469,7 @@
             }
           } catch (err) {
             console.error('Clipboard copy failed:', err);
-            alert('Failed to copy formula');
+            alert('Failed to copy formula to clipboard');
           }
         };
 
@@ -656,7 +478,7 @@
       });
     }
 
-    // ── Chat Logic ──
+    // ── Append message + render math + add copy buttons ──
     function appendMessage(role, text) {
       const chat = document.getElementById('chatContainer');
       const indicator = document.getElementById('typingIndicator');
@@ -671,6 +493,7 @@
       chat.insertBefore(msg, indicator);
       chat.scrollTop = chat.scrollHeight;
 
+      // Render KaTeX
       if (typeof renderMathInElement === 'function') {
         renderMathInElement(msg, {
           delimiters: [
@@ -683,6 +506,7 @@
         });
       }
 
+      // Add copy buttons
       addCopyButtonsToFormulas(msg);
     }
 
@@ -744,7 +568,7 @@ Use proper LaTeX notation inside $...$ for inline math and $$...$$ for display m
       firebase.auth().signOut();
     };
 
-    // Initial math render + copy buttons
+    // Initial math + copy buttons on welcome message
     document.addEventListener("DOMContentLoaded", () => {
       const welcome = document.getElementById('welcomeMessage');
       if (welcome && typeof renderMathInElement === 'function') {
