@@ -21,24 +21,25 @@
 
   <style>
     :root {
-      --bg-page: #e8ebf2;
-      --bg-surface: #e8ebf2;
-      --neumo-light: #ffffff;
-      --neumo-dark: #c5cee0;
-      --text-primary: #2d3748;
+      --bg-main:        #e8ebf2;
+      --bg-surface:     #e8ebf2;
+      --neumo-light:    #ffffff;
+      --neumo-dark:     #c5cee0;
+      --text-primary:   #2d3748;
       --text-secondary: #4a5568;
-      --accent: #6366f1;
-      --accent-dark: #4f46e5;
-      --radius: 22px;
+      --accent:         #6366f1;
+      --accent-dark:    #4f46e5;
+      --radius:         22px;
       --sidebar-collapsed: 76px;
-      --sidebar-open: 260px;
-      --shadow-convex: 10px 10px 20px #d1d9e6, -10px -10px 20px #ffffff;
-      --shadow-concave: inset 8px 8px 16px #d1d9e6, inset -8px -8px 16px #ffffff;
-      --shadow-button: 6px 6px 12px #d1d9e6, -6px -6px 12px #ffffff;
-      --shadow-soft: 0 4px 12px rgba(0,0,0,0.06);
+      --sidebar-open:    260px;
+      --shadow-convex:   10px 10px 20px #d1d9e6, -10px -10px 20px #ffffff;
+      --shadow-concave:  inset 8px 8px 16px #d1d9e6, inset -8px -8px 16px #ffffff;
+      --shadow-button:   6px 6px 12px #d1d9e6, -6px -6px 12px #ffffff;
+      --shadow-soft:     0 4px 12px rgba(0,0,0,0.06);
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
+
     body {
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       background: var(--bg-main);
@@ -48,7 +49,7 @@
       overflow: hidden;
     }
 
-    /* ── Neumorphic Sidebar ── */
+    /* ── SIDEBAR ── */
     .sidebar {
       width: var(--sidebar-collapsed);
       background: var(--bg-surface);
@@ -90,8 +91,12 @@
 
     .sidebar-header {
       height:84px; padding:0 24px;
-      display:flex; align-items:center; gap:16px;
+      display:flex; align-items:center; justify-content:center;
       border-bottom:1px solid rgba(0,0,0,0.04);
+    }
+
+    .logo-container {
+      display:flex; align-items:center; gap:16px;
     }
 
     .brand-logo {
@@ -104,39 +109,68 @@
       flex-shrink:0;
     }
 
-    .sidebar-text {
+    .sidebar-text.brand {
       font-weight:700; font-size:1.2rem;
       color:var(--text-primary);
       transition:opacity 0.3s ease;
     }
 
     .nav-links {
-      padding:28px 16px; flex:1;
+      padding:28px 0;
+      flex:1;
       display:flex; flex-direction:column; gap:10px;
     }
 
     .nav-item {
-      display:flex; align-items:center; gap:16px;
-      padding:16px 20px; border-radius:var(--radius);
-      color:var(--text-secondary); text-decoration:none;
-      background:var(--bg-surface); box-shadow:var(--shadow-convex);
-      transition:all 0.3s ease; position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;           /* center icon when collapsed */
+      padding:16px 0;
+      position:relative;
+      color:var(--text-secondary);
+      text-decoration:none;
+      transition:all 0.3s ease;
     }
 
-    .nav-item:hover {
-      box-shadow:var(--shadow-concave);
-      color:var(--accent);
-      transform:translateY(-2px);
+    .nav-item .icon-wrapper {
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 18px;
+      background: var(--bg-surface);
+      box-shadow: var(--shadow-convex);
+      transition: all 0.3s ease;
     }
 
-    .nav-item.active {
-      background:linear-gradient(145deg, #eef2ff, #e2e8f5);
-      box-shadow:var(--shadow-concave);
-      color:var(--accent-dark);
+    .nav-item:hover .icon-wrapper,
+    .nav-item.active .icon-wrapper {
+      box-shadow: var(--shadow-concave);
+      background: linear-gradient(145deg, #eef2ff, #e2e8f5);
     }
 
     .nav-item .material-symbols-rounded {
-      font-size:28px; width:28px; flex-shrink:0;
+      font-size: 28px;
+      color: inherit;
+    }
+
+    .nav-item .sidebar-text {
+      position: absolute;
+      left: 76px;
+      white-space: nowrap;
+      font-weight: 600;
+      font-size: 0.98rem;
+      color: var(--text-primary);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    @media (min-width:769px) {
+      .sidebar:hover .nav-item .sidebar-text { opacity: 1; pointer-events: auto; }
+      .sidebar:hover .nav-item { justify-content: flex-start; padding: 16px 20px; }
+      .sidebar:hover .nav-item .icon-wrapper { box-shadow: none; background: transparent; }
     }
 
     .sidebar-footer {
@@ -166,7 +200,7 @@
     .user-name { font-weight:600; font-size:1.05rem; color:var(--text-primary); }
     .user-email { font-size:0.84rem; color:var(--text-secondary); opacity:0.9; }
 
-    /* ── Main Layout ── */
+    /* ── Rest of the layout (unchanged from previous neumorphic version) ── */
     .main-wrapper { flex:1; display:flex; flex-direction:column; background:var(--bg-main); }
 
     .header {
@@ -258,7 +292,7 @@
       40% { transform:scale(1.1); opacity:1; }
     }
 
-    /* ── Copy button ── */
+    /* Copy button */
     .katex-display .copy-btn {
       position:absolute; top:12px; right:12px;
       background:var(--bg-surface); border:none; border-radius:12px;
@@ -272,76 +306,11 @@
       background:var(--accent); color:white;
       box-shadow:inset 3px 3px 6px rgba(0,0,0,0.2);
     }
-
-    /* ── Auth Modal ── */
-    .auth-backdrop {
-      position:fixed; inset:0;
-      background:rgba(0,0,0,0.5);
-      backdrop-filter:blur(8px);
-      z-index:1000;
-      opacity:0; visibility:hidden;
-      transition:opacity 0.4s, visibility 0s 0.4s;
-    }
-    .auth-backdrop.active {
-      opacity:1; visibility:visible;
-      transition:opacity 0.4s;
-    }
-
-    .auth-container {
-      position:fixed; z-index:1100;
-      background:var(--bg-surface);
-      border-radius:24px;
-      box-shadow: var(--shadow-convex);
-      overflow:hidden;
-      transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
-      transform:scale(0.92); opacity:0;
-      width:420px; max-width:90vw;
-      top:50%; left:50%; transform:translate(-50%,-50%) scale(0.92);
-    }
-
-    .auth-container.active {
-      transform:translate(-50%,-50%) scale(1); opacity:1;
-    }
-
-    .auth-content { padding:40px 32px; position:relative; }
-    .auth-close {
-      position:absolute; top:16px; right:20px;
-      background:none; border:none; font-size:32px;
-      color:#94a3b8; cursor:pointer;
-    }
-
-    .auth-header { text-align:center; margin-bottom:32px; }
-    .auth-header h2 { font-size:1.8rem; margin-bottom:8px; font-weight:700; }
-    .auth-header p { color:var(--text-secondary); font-size:1rem; }
-
-    .auth-btn {
-      width:100%; padding:16px;
-      border-radius:16px; font-size:1.05rem; font-weight:600;
-      cursor:pointer; display:flex; align-items:center; justify-content:center;
-      gap:12px; transition:all 0.25s;
-      box-shadow:var(--shadow-button);
-      background:linear-gradient(145deg, #ffffff, #f0f4ff);
-      color:var(--text-primary);
-    }
-
-    .auth-btn.google {
-      background:linear-gradient(145deg, #4285f4, #357ae8);
-      color:white;
-      box-shadow:6px 6px 12px #b3c0d1, -6px -6px 12px #ffffff;
-    }
-
-    .auth-btn.google:hover { transform:translateY(-2px); }
-
-    .auth-footer {
-      text-align:center; margin-top:24px;
-      font-size:0.88rem; color:var(--text-secondary);
-    }
-    .auth-footer a { color:var(--accent); text-decoration:none; }
   </style>
 </head>
 <body>
 
-  <!-- Auth Modal -->
+  <!-- Auth UI -->
   <div id="authBackdrop" class="auth-backdrop"></div>
   <div id="authContainer" class="auth-container">
     <div class="auth-content">
@@ -376,23 +345,33 @@
 
     <div class="nav-links">
       <a href="#" class="nav-item active">
-        <span class="material-symbols-rounded">chat_bubble</span>
+        <div class="icon-wrapper">
+          <span class="material-symbols-rounded">chat_bubble</span>
+        </div>
         <span class="sidebar-text">Chat</span>
       </a>
       <a href="#" class="nav-item">
-        <span class="material-symbols-rounded">school</span>
+        <div class="icon-wrapper">
+          <span class="material-symbols-rounded">school</span>
+        </div>
         <span class="sidebar-text">Lessons</span>
       </a>
       <a href="#" class="nav-item">
-        <span class="material-symbols-rounded">quiz</span>
+        <div class="icon-wrapper">
+          <span class="material-symbols-rounded">quiz</span>
+        </div>
         <span class="sidebar-text">Quizzes</span>
       </a>
       <a href="#" class="nav-item">
-        <span class="material-symbols-rounded">history</span>
+        <div class="icon-wrapper">
+          <span class="material-symbols-rounded">history</span>
+        </div>
         <span class="sidebar-text">History</span>
       </a>
       <a href="#" class="nav-item">
-        <span class="material-symbols-rounded">settings</span>
+        <div class="icon-wrapper">
+          <span class="material-symbols-rounded">settings</span>
+        </div>
         <span class="sidebar-text">Settings</span>
       </a>
     </div>
@@ -407,7 +386,9 @@
       </div>
 
       <a href="#" class="nav-item" id="signOutBtn">
-        <span class="material-symbols-rounded">logout</span>
+        <div class="icon-wrapper">
+          <span class="material-symbols-rounded">logout</span>
+        </div>
         <span class="sidebar-text">Sign Out</span>
       </a>
     </div>
@@ -466,21 +447,15 @@
     }
 
     function showAuthUI() {
-      const backdrop = document.getElementById('authBackdrop');
-      const container = document.getElementById('authContainer');
-      if (!backdrop.classList.contains('active')) {
-        backdrop.classList.add('active');
-        container.classList.add('active');
-        container.classList.add('shimmer-once');
-        setTimeout(() => container.classList.remove('shimmer-once'), 3000);
-      }
+      document.getElementById('authBackdrop').classList.add('active');
+      document.getElementById('authContainer').classList.add('active');
+      document.getElementById('authContainer').classList.add('shimmer-once');
+      setTimeout(() => document.getElementById('authContainer').classList.remove('shimmer-once'), 3000);
     }
 
     function closeAuth() {
-      const backdrop = document.getElementById('authBackdrop');
-      const container = document.getElementById('authContainer');
-      backdrop.classList.remove('active');
-      container.classList.remove('active');
+      document.getElementById('authBackdrop').classList.remove('active');
+      document.getElementById('authContainer').classList.remove('active');
     }
 
     // ── Firebase ──
@@ -506,14 +481,14 @@
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider)
         .catch(err => {
-          console.error("Google sign-in failed:", err);
+          console.error("Google sign-in failed", err);
           alert("Sign in failed: " + (err.message || "Please try again"));
           googleBtn.classList.remove('loading');
           googleBtn.disabled = false;
         });
     }
 
-    // ── Auth State Listener ── (fixed & optimized)
+    // ── Auth State Listener ──
     let isModalShown = false;
 
     auth.onAuthStateChanged(user => {
@@ -524,7 +499,6 @@
       const emailEl = document.getElementById('userEmail');
 
       if (!user) {
-        // Only show modal if not already shown (prevents flicker/repeat)
         if (!isModalShown) {
           showAuthUI();
           isModalShown = true;
@@ -539,7 +513,7 @@
         avatarEl.style.backgroundImage = "";
       } else {
         closeAuth();
-        isModalShown = false; // reset flag for next logout
+        isModalShown = false;
         initConfig();
 
         document.getElementById('userInput').disabled = false;
@@ -561,7 +535,6 @@
         }
       }
 
-      // Re-render math if needed
       if (welcomeEl && typeof renderMathInElement === 'function') {
         renderMathInElement(welcomeEl);
         addCopyButtonsToFormulas(welcomeEl);
@@ -579,7 +552,7 @@
       }
     }
 
-    // ── Copy button for KaTeX ──
+    // ── Copy button logic ──
     function addCopyButtonsToFormulas(container = document) {
       const blocks = container.querySelectorAll('.katex-display');
       blocks.forEach(block => {
@@ -713,7 +686,7 @@ Use proper LaTeX notation inside $...$ for inline math and $$...$$ for display m
       firebase.auth().signOut();
     };
 
-    // Initial math + copy buttons
+    // Initial math render + copy buttons
     document.addEventListener("DOMContentLoaded", () => {
       const welcome = document.getElementById('welcomeMessage');
       if (welcome && typeof renderMathInElement === 'function') {
