@@ -41,11 +41,92 @@
       line-height: 1.6;
     }
     
+    /* Login Screen */
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    
+    .login-card {
+      background: var(--surface);
+      padding: 48px;
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    
+    .login-logo {
+      width: 80px;
+      height: 80px;
+      background: var(--gradient);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      color: white;
+      font-size: 40px;
+      font-weight: 700;
+    }
+    
+    .login-card h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    
+    .login-card p {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+    
+    .google-btn {
+      width: 100%;
+      padding: 14px 24px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.2s;
+    }
+    
+    .google-btn:hover {
+      background: var(--bg);
+      box-shadow: var(--shadow);
+    }
+    
+    .google-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .login-note {
+      margin-top: 24px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    
     /* Layout */
     .dashboard {
-      display: grid;
+      display: none;
       grid-template-columns: 260px 1fr;
       min-height: 100vh;
+    }
+    
+    .dashboard.active {
+      display: grid;
     }
     
     /* Sidebar */
@@ -58,6 +139,8 @@
       width: 260px;
       overflow-y: auto;
       z-index: 100;
+      display: flex;
+      flex-direction: column;
     }
     
     .brand {
@@ -131,6 +214,54 @@
     
     .nav-item .material-symbols-rounded {
       font-size: 20px;
+    }
+    
+    .user-profile {
+      margin-top: auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    
+    .profile-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .profile-card:hover {
+      background: var(--bg);
+    }
+    
+    .profile-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .profile-info {
+      flex: 1;
+      overflow: hidden;
+    }
+    
+    .profile-name {
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .profile-email {
+      font-size: 12px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     
     /* Main Content */
@@ -380,6 +511,8 @@
       align-items: center;
       padding: 24px;
       border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 16px;
     }
     
     .search-box {
@@ -480,11 +613,6 @@
       color: var(--text-secondary);
     }
     
-    .status-banned {
-      background: rgba(234,67,53,0.1);
-      color: var(--danger);
-    }
-    
     .usage-bar {
       width: 100px;
       height: 6px;
@@ -529,132 +657,6 @@
       color: var(--danger);
     }
     
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      backdrop-filter: blur(4px);
-    }
-    
-    .modal-overlay.active {
-      display: flex;
-    }
-    
-    .modal {
-      background: var(--surface);
-      border-radius: 16px;
-      width: 90%;
-      max-width: 500px;
-      max-height: 90vh;
-      overflow: hidden;
-      animation: modalIn 0.3s ease;
-    }
-    
-    @keyframes modalIn {
-      from {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-    
-    .modal-header {
-      padding: 24px;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .modal-header h3 {
-      font-size: 20px;
-      font-weight: 600;
-    }
-    
-    .modal-body {
-      padding: 24px;
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    .form-group label {
-      display: block;
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
-    
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 14px;
-      transition: all 0.2s;
-    }
-    
-    .form-group input:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(66,133,244,0.1);
-    }
-    
-    .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-      padding: 24px;
-      border-top: 1px solid var(--border);
-      background: var(--bg);
-    }
-    
-    /* Responsive */
-    @media (max-width: 1200px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .charts-section {
-        grid-template-columns: 1fr;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .dashboard {
-        grid-template-columns: 1fr;
-      }
-      .sidebar {
-        transform: translateX(-100%);
-      }
-      .main {
-        margin-left: 0;
-      }
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-    
-    /* Loading State */
-    .skeleton {
-      background: linear-gradient(90deg, var(--bg) 25%, #e8eaed 50%, var(--bg) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-      border-radius: 4px;
-    }
-    
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-    
     /* Toast Notification */
     .toast-container {
       position: fixed;
@@ -692,17 +694,103 @@
     .toast.success { border-left: 4px solid var(--success); }
     .toast.error { border-left: 4px solid var(--danger); }
     .toast.warning { border-left: 4px solid var(--warning); }
+    
+    /* Loading State */
+    .loading-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9998;
+    }
+    
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .charts-section {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main {
+        margin-left: 0;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .search-box {
+        min-width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="dashboard">
+  <!-- Login Screen -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <div class="login-logo">V</div>
+      <h1>Welcome to Vynix AI</h1>
+      <p>Analytics Dashboard</p>
+      
+      <button class="google-btn" id="googleSignInBtn" onclick="signInWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Sign in with Google
+      </button>
+      
+      <p class="login-note">
+        Only authenticated users can access analytics data.<br>
+        Your data is securely stored and encrypted.
+      </p>
+    </div>
+  </div>
+
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loadingScreen" style="display: none;">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dashboard" id="dashboard">
     <!-- Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <div class="brand">
         <div class="brand-icon">V</div>
         <div class="brand-text">
           <h1>Vynix AI</h1>
-          <span>Admin Dashboard</span>
+          <span>Analytics Dashboard</span>
         </div>
       </div>
       
@@ -734,10 +822,14 @@
         </div>
       </div>
       
-      <div style="margin-top: auto; padding-top: 24px; border-top: 1px solid var(--border);">
-        <div class="nav-item" onclick="handleLogout()">
-          <span class="material-symbols-rounded">logout</span>
-          Logout
+      <div class="user-profile">
+        <div class="profile-card" onclick="toggleProfileMenu()">
+          <img src="" alt="" class="profile-avatar" id="profileAvatar">
+          <div class="profile-info">
+            <div class="profile-name" id="profileName">User</div>
+            <div class="profile-email" id="profileEmail">user@example.com</div>
+          </div>
+          <span class="material-symbols-rounded" style="color: var(--text-secondary);">expand_more</span>
         </div>
       </div>
     </aside>
@@ -827,9 +919,9 @@
           <div class="chart-header">
             <h3 class="chart-title">Usage Trends</h3>
             <div class="chart-filters">
-              <button class="filter-btn active" onclick="setChartPeriod('7d')">7 Days</button>
-              <button class="filter-btn" onclick="setChartPeriod('30d')">30 Days</button>
-              <button class="filter-btn" onclick="setChartPeriod('90d')">90 Days</button>
+              <button class="filter-btn active" onclick="setChartPeriod('7d', this)">7 Days</button>
+              <button class="filter-btn" onclick="setChartPeriod('30d', this)">30 Days</button>
+              <button class="filter-btn" onclick="setChartPeriod('90d', this)">90 Days</button>
             </div>
           </div>
           <div class="chart-container">
@@ -851,15 +943,11 @@
       <div class="users-section" id="usersSection">
         <div class="section-header">
           <h3 class="chart-title">User Management</h3>
-          <div style="display: flex; gap: 12px;">
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
             <div class="search-box">
               <span class="material-symbols-rounded" style="color: var(--text-secondary);">search</span>
               <input type="text" placeholder="Search users..." id="searchInput" onkeyup="searchUsers()">
             </div>
-            <button class="btn btn-primary" onclick="openAddUserModal()">
-              <span class="material-symbols-rounded">add</span>
-              Add User
-            </button>
           </div>
         </div>
         
@@ -885,42 +973,11 @@
     </main>
   </div>
 
-  <!-- Add User Modal -->
-  <div class="modal-overlay" id="addUserModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h3>Add New User</h3>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="newUserEmail" placeholder="user@example.com">
-        </div>
-        <div class="form-group">
-          <label>Display Name</label>
-          <input type="text" id="newUserName" placeholder="John Doe">
-        </div>
-        <div class="form-group">
-          <label>Role</label>
-          <select id="newUserRole">
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-            <option value="moderator">Moderator</option>
-          </select>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="addUser()">Add User</button>
-      </div>
-    </div>
-  </div>
-
   <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
 
   <script>
-    // Firebase Configuration (same as your main app)
+    // Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
       authDomain: "fire-b-a8878.firebaseapp.com",
@@ -932,6 +989,7 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const database = firebase.database();
+    const provider = new firebase.auth.GoogleAuthProvider();
 
     // State
     let currentUser = null;
@@ -939,32 +997,94 @@
     let usageChart = null;
     let currentPeriod = '7d';
 
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-      checkAuth();
-      initCharts();
-      loadDashboardData();
+    // Auth State Listener
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        // User is signed in
+        currentUser = user;
+        showDashboard();
+        updateProfileUI(user);
+        initDashboard();
+      } else {
+        // User is signed out
+        showLoginScreen();
+      }
     });
 
-    function checkAuth() {
-      auth.onAuthStateChanged(user => {
-        if (!user) {
-          window.location.href = '/login.html';
-          return;
-        }
-        currentUser = user;
-        // Check if admin (you'll need to implement admin check in your database)
-        checkAdminStatus(user.uid);
+    function showLoginScreen() {
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('dashboard').classList.remove('active');
+      document.getElementById('loadingScreen').style.display = 'none';
+    }
+
+    function showDashboard() {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').classList.add('active');
+      document.getElementById('loadingScreen').style.display = 'none';
+    }
+
+    function showLoading() {
+      document.getElementById('loadingScreen').style.display = 'flex';
+    }
+
+    function signInWithGoogle() {
+      const btn = document.getElementById('googleSignInBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner" style="width: 18px; height: 18px; border-width: 2px;"></div> Signing in...';
+
+      auth.signInWithPopup(provider)
+        .then(result => {
+          showToast('Welcome, ' + result.user.displayName, 'success');
+        })
+        .catch(error => {
+          console.error('Sign in error:', error);
+          showToast('Sign in failed: ' + error.message, 'error');
+          btn.disabled = false;
+          btn.innerHTML = `
+            <svg width="18" height="18" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Sign in with Google
+          `;
+        });
+    }
+
+    function handleLogout() {
+      showLoading();
+      auth.signOut().then(() => {
+        showToast('Logged out successfully', 'success');
+      }).catch(error => {
+        showToast('Logout failed: ' + error.message, 'error');
+        showDashboard();
       });
     }
 
-    function checkAdminStatus(uid) {
-      database.ref(`admins/${uid}`).once('value', snap => {
-        if (!snap.exists()) {
-          showToast('Access denied. Admins only.', 'error');
-          setTimeout(() => auth.signOut(), 2000);
+    function updateProfileUI(user) {
+      document.getElementById('profileAvatar').src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=random`;
+      document.getElementById('profileName').textContent = user.displayName || 'User';
+      document.getElementById('profileEmail').textContent = user.email || '';
+    }
+
+    function toggleProfileMenu() {
+      // Simple toggle - in production, show a dropdown menu
+      if (confirm('Do you want to logout?')) {
+        handleLogout();
+      }
+    }
+
+    function initDashboard() {
+      initCharts();
+      loadDashboardData();
+      
+      // Auto-refresh every 30 seconds
+      setInterval(() => {
+        if (currentUser) {
+          loadDashboardData();
         }
-      });
+      }, 30000);
     }
 
     function initCharts() {
@@ -1020,13 +1140,9 @@
     }
 
     function loadDashboardData() {
-      // Load stats
       loadStats();
-      // Load users
       loadUsers();
-      // Load activity
       loadActivity();
-      // Load chart data
       loadChartData(currentPeriod);
     }
 
@@ -1034,40 +1150,76 @@
       // Total users
       database.ref('users').once('value', snap => {
         const count = snap.numChildren();
-        animateValue('totalUsers', 0, count, 1000);
+        animateValue('totalUsers', parseInt(document.getElementById('totalUsers').textContent) || 0, count, 1000);
       });
 
-      // Total conversations
-      database.ref('conversations').once('value', snap => {
+      // Total conversations across all users
+      database.ref('users').once('value', snap => {
         let count = 0;
-        snap.forEach(userConv => {
-          count += userConv.numChildren();
+        snap.forEach(userSnap => {
+          const conversations = userSnap.child('conversations');
+          if (conversations.exists()) {
+            count += conversations.numChildren();
+          }
         });
-        animateValue('totalConversations', 0, count, 1000);
+        animateValue('totalConversations', parseInt(document.getElementById('totalConversations').textContent) || 0, count, 1000);
       });
 
       // Total messages
-      database.ref('messages').once('value', snap => {
-        const count = snap.numChildren();
-        animateValue('totalMessages', 0, count, 1000);
+      database.ref('users').once('value', snap => {
+        let count = 0;
+        snap.forEach(userSnap => {
+          const conversations = userSnap.child('conversations');
+          conversations.forEach(conv => {
+            const messages = conv.child('messages');
+            if (messages.exists()) {
+              count += messages.numChildren();
+            }
+          });
+        });
+        animateValue('totalMessages', parseInt(document.getElementById('totalMessages').textContent) || 0, count, 1000);
       });
 
-      // Avg response time (mock calculation)
+      // Avg response time (mock)
       document.getElementById('avgResponseTime').textContent = '1.2s';
     }
 
     function loadUsers() {
       const tbody = document.getElementById('usersTable');
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">Loading users...</td></tr>';
 
-      database.ref('users').limitToLast(50).once('value', snap => {
+      database.ref('users').limitToLast(100).once('value', snap => {
         usersData = [];
         snap.forEach(child => {
+          const userData = child.val();
+          // Calculate stats for each user
+          let convCount = 0;
+          let msgCount = 0;
+          let lastActive = userData.lastActive || 0;
+          
+          if (userData.conversations) {
+            convCount = Object.keys(userData.conversations).length;
+            Object.values(userData.conversations).forEach(conv => {
+              if (conv.messages) {
+                msgCount += Object.keys(conv.messages).length;
+              }
+              if (conv.lastUpdated > lastActive) {
+                lastActive = conv.lastUpdated;
+              }
+            });
+          }
+          
           usersData.push({
             id: child.key,
-            ...child.val()
+            ...userData,
+            conversationCount: convCount,
+            messageCount: msgCount,
+            lastActive: lastActive
           });
         });
+        
+        // Sort by last active
+        usersData.sort((a, b) => b.lastActive - a.lastActive);
         renderUsers(usersData);
       });
     }
@@ -1076,15 +1228,22 @@
       const tbody = document.getElementById('usersTable');
       tbody.innerHTML = '';
 
+      if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">No users found</td></tr>';
+        return;
+      }
+
       users.forEach(user => {
         const tr = document.createElement('tr');
+        const isCurrentUser = user.id === currentUser.uid;
+        
         tr.innerHTML = `
           <td>
             <div class="user-info">
               <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=random`}" 
-                   class="user-avatar" alt="">
+                   class="user-avatar" alt="" onerror="this.src='https://ui-avatars.com/api/?name=User&background=random'">
               <div class="user-details">
-                <h4>${user.displayName || 'Anonymous'}</h4>
+                <h4>${user.displayName || 'Anonymous'} ${isCurrentUser ? '<span style="color: var(--primary); font-size: 10px;">(You)</span>' : ''}</h4>
                 <span>${user.email || 'No email'}</span>
               </div>
             </div>
@@ -1102,23 +1261,22 @@
           <td>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="usage-bar">
-                <div class="usage-fill" style="width: ${Math.min((user.messageCount || 0) / 10, 100)}%"></div>
+                <div class="usage-fill" style="width: ${Math.min((user.messageCount || 0) / 50 * 100, 100)}%"></div>
               </div>
-              <span style="font-size: 12px; color: var(--text-secondary);">${Math.min((user.messageCount || 0) / 10, 100).toFixed(0)}%</span>
+              <span style="font-size: 12px; color: var(--text-secondary);">${Math.min((user.messageCount || 0) / 50 * 100, 100).toFixed(0)}%</span>
             </div>
           </td>
           <td>${formatTime(user.lastActive)}</td>
           <td>
             <div class="action-btns">
-              <button class="icon-btn" onclick="viewUser('${user.id}')" title="View">
+              <button class="icon-btn" onclick="viewUser('${user.id}')" title="View Details">
                 <span class="material-symbols-rounded">visibility</span>
               </button>
-              <button class="icon-btn" onclick="editUser('${user.id}')" title="Edit">
-                <span class="material-symbols-rounded">edit</span>
-              </button>
-              <button class="icon-btn delete" onclick="deleteUser('${user.id}')" title="Delete">
+              ${!isCurrentUser ? `
+              <button class="icon-btn delete" onclick="deleteUser('${user.id}')" title="Delete User">
                 <span class="material-symbols-rounded">delete</span>
               </button>
+              ` : ''}
             </div>
           </td>
         `;
@@ -1130,50 +1288,108 @@
       const container = document.getElementById('activityList');
       container.innerHTML = '';
 
-      // Mock activity data - replace with real data from your database
-      const activities = [
-        { user: 'John Doe', action: 'started a new conversation', time: Date.now() - 300000, type: 'chat' },
-        { user: 'Jane Smith', action: 'uploaded an image', time: Date.now() - 600000, type: 'image' },
-        { user: 'Mike Johnson', action: 'signed up', time: Date.now() - 900000, type: 'user' },
-        { user: 'Sarah Wilson', action: 'sent 15 messages', time: Date.now() - 1200000, type: 'message' },
-        { user: 'Tom Brown', action: 'exported conversation', time: Date.now() - 1800000, type: 'download' }
-      ];
+      // Get recent activity from database
+      database.ref('users').orderByChild('lastActive').limitToLast(10).once('value', snap => {
+        const activities = [];
+        
+        snap.forEach(child => {
+          const user = child.val();
+          if (user.lastActive) {
+            activities.push({
+              user: user.displayName || 'Anonymous',
+              action: 'was active',
+              time: user.lastActive,
+              type: 'user'
+            });
+          }
+        });
 
-      activities.forEach(act => {
-        const div = document.createElement('div');
-        div.className = 'activity-item';
-        div.innerHTML = `
-          <div class="activity-avatar">${act.user.charAt(0)}</div>
-          <div class="activity-content">
-            <div class="activity-text">
-              <strong>${act.user}</strong> ${act.action}
+        activities.sort((a, b) => b.time - a.time);
+
+        if (activities.length === 0) {
+          container.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-secondary);">No recent activity</div>';
+          return;
+        }
+
+        activities.slice(0, 5).forEach(act => {
+          const div = document.createElement('div');
+          div.className = 'activity-item';
+          div.innerHTML = `
+            <div class="activity-avatar">${act.user.charAt(0).toUpperCase()}</div>
+            <div class="activity-content">
+              <div class="activity-text">
+                <strong>${act.user}</strong> ${act.action}
+              </div>
+              <div class="activity-time">${timeAgo(act.time)}</div>
             </div>
-            <div class="activity-time">${timeAgo(act.time)}</div>
-          </div>
-        `;
-        container.appendChild(div);
+          `;
+          container.appendChild(div);
+        });
       });
     }
 
     function loadChartData(period) {
-      // Generate mock data based on period
       const days = period === '7d' ? 7 : period === '30d' ? 30 : 90;
       const labels = [];
       const userData = [];
       const convData = [];
 
+      // Generate labels
       for (let i = days - 1; i >= 0; i--) {
         const date = new Date();
         date.setDate(date.getDate() - i);
         labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
-        userData.push(Math.floor(Math.random() * 50) + 20);
-        convData.push(Math.floor(Math.random() * 100) + 50);
       }
 
-      usageChart.data.labels = labels;
-      usageChart.data.datasets[0].data = userData;
-      usageChart.data.datasets[1].data = convData;
-      usageChart.update();
+      // Fetch real data from Firebase
+      database.ref('users').once('value').then(snap => {
+        const dailyData = {};
+        
+        // Initialize all days with 0
+        labels.forEach((label, idx) => {
+          dailyData[idx] = { users: 0, conversations: 0 };
+        });
+
+        snap.forEach(userSnap => {
+          const user = userSnap.val();
+          
+          // Count users by creation date
+          if (user.createdAt) {
+            const createdDate = new Date(user.createdAt);
+            const daysAgo = Math.floor((Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24));
+            if (daysAgo < days) {
+              const idx = days - 1 - daysAgo;
+              if (dailyData[idx]) dailyData[idx].users++;
+            }
+          }
+
+          // Count conversations
+          if (user.conversations) {
+            Object.values(user.conversations).forEach(conv => {
+              if (conv.createdAt) {
+                const convDate = new Date(conv.createdAt);
+                const daysAgo = Math.floor((Date.now() - convDate.getTime()) / (1000 * 60 * 60 * 24));
+                if (daysAgo < days) {
+                  const idx = days - 1 - daysAgo;
+                  if (dailyData[idx]) dailyData[idx].conversations++;
+                }
+              }
+            });
+          }
+        });
+
+        // Convert to arrays
+        labels.forEach((_, idx) => {
+          userData.push(dailyData[idx].users);
+          convData.push(dailyData[idx].conversations);
+        });
+
+        // Update chart
+        usageChart.data.labels = labels;
+        usageChart.data.datasets[0].data = userData;
+        usageChart.data.datasets[1].data = convData;
+        usageChart.update();
+      });
     }
 
     // User Management Functions
@@ -1186,42 +1402,21 @@
       renderUsers(filtered);
     }
 
-    function openAddUserModal() {
-      document.getElementById('addUserModal').classList.add('active');
-    }
-
-    function closeModal() {
-      document.getElementById('addUserModal').classList.remove('active');
-    }
-
-    function addUser() {
-      const email = document.getElementById('newUserEmail').value;
-      const name = document.getElementById('newUserName').value;
-      const role = document.getElementById('newUserRole').value;
-
-      if (!email || !name) {
-        showToast('Please fill in all fields', 'error');
-        return;
-      }
-
-      // Create user in Firebase Auth (requires Admin SDK in production)
-      // For now, just show success
-      showToast('User added successfully', 'success');
-      closeModal();
-      loadUsers();
-    }
-
     function viewUser(userId) {
-      window.open(`/user-profile.html?id=${userId}`, '_blank');
-    }
-
-    function editUser(userId) {
-      // Implement edit functionality
-      showToast('Edit user: ' + userId, 'warning');
+      const user = usersData.find(u => u.id === userId);
+      if (!user) return;
+      
+      // Show user details in a modal or alert (simplified for now)
+      alert(`User Details:\n\nName: ${user.displayName || 'N/A'}\nEmail: ${user.email || 'N/A'}\nConversations: ${user.conversationCount || 0}\nMessages: ${user.messageCount || 0}\nLast Active: ${formatTime(user.lastActive)}`);
     }
 
     function deleteUser(userId) {
-      if (!confirm('Are you sure you want to delete this user?')) return;
+      if (userId === currentUser.uid) {
+        showToast('You cannot delete your own account', 'error');
+        return;
+      }
+      
+      if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
       
       database.ref(`users/${userId}`).remove()
         .then(() => {
@@ -1235,6 +1430,7 @@
 
     // Utility Functions
     function animateValue(id, start, end, duration) {
+      if (start === end) return;
       const obj = document.getElementById(id);
       const range = end - start;
       const increment = end > start ? 1 : -1;
@@ -1247,12 +1443,19 @@
         if (current === end) {
           clearInterval(timer);
         }
-      }, stepTime);
+      }, Math.max(stepTime, 10));
     }
 
     function formatTime(timestamp) {
       if (!timestamp) return 'Never';
       const date = new Date(timestamp);
+      const now = new Date();
+      const diff = now - date;
+      
+      if (diff < 60000) return 'Just now';
+      if (diff < 3600000) return Math.floor(diff / 60000) + ' min ago';
+      if (diff < 86400000) return Math.floor(diff / 3600000) + ' hours ago';
+      
       return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
@@ -1276,10 +1479,10 @@
       return 'Just now';
     }
 
-    function setChartPeriod(period) {
+    function setChartPeriod(period, btn) {
       currentPeriod = period;
-      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
       loadChartData(period);
     }
 
@@ -1289,8 +1492,26 @@
     }
 
     function exportReport() {
-      showToast('Exporting report...', 'success');
-      // Implement CSV/PDF export
+      // Generate CSV report
+      const csv = [
+        ['Name', 'Email', 'Conversations', 'Messages', 'Last Active'].join(','),
+        ...usersData.map(u => [
+          `"${u.displayName || 'Anonymous'}"`,
+          `"${u.email || ''}"`,
+          u.conversationCount || 0,
+          u.messageCount || 0,
+          `"${formatTime(u.lastActive)}"`
+        ].join(','))
+      ].join('\n');
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `vynix-analytics-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      
+      showToast('Report exported successfully', 'success');
     }
 
     function showToast(message, type = 'success') {
@@ -1308,32 +1529,28 @@
       container.appendChild(toast);
       
       setTimeout(() => {
-        toast.remove();
+        toast.style.animation = 'slideIn 0.3s ease reverse';
+        setTimeout(() => toast.remove(), 300);
       }, 3000);
-    }
-
-    function handleLogout() {
-      auth.signOut().then(() => {
-        window.location.href = '/login.html';
-      });
     }
 
     function showSection(section) {
       document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
       event.target.closest('.nav-item').classList.add('active');
       
-      // Implement section switching logic
       if (section === 'users') {
         document.getElementById('usersSection').scrollIntoView({ behavior: 'smooth' });
+      } else if (section === 'dashboard') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        showToast(`${section} section coming soon`, 'warning');
       }
     }
 
-    // Close modal on outside click
-    document.getElementById('addUserModal').addEventListener('click', (e) => {
-      if (e.target === document.getElementById('addUserModal')) {
-        closeModal();
-      }
-    });
+    // Mobile sidebar toggle
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
   </script>
 </body>
 </html>
