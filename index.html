@@ -1,983 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vynix AI Analytics Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vynix AI • Admin Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
+
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
   <style>
     :root {
-      --primary: #4285F4;
-      --primary-dark: #3367D6;
-      --accent: #D96570;
-      --success: #34A853;
-      --warning: #FBBC05;
-      --danger: #EA4335;
-      --bg: #F0F4F9;
-      --surface: #FFFFFF;
-      --text: #1F1F1F;
-      --text-secondary: #5F6368;
-      --border: #DADCE0;
-      --shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-      --shadow-lg: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-      --gradient: linear-gradient(135deg, #4285F4 0%, #D96570 100%);
+      --bg-body: #F0F4F9;
+      --bg-surface: #FFFFFF;
+      --primary-gradient: linear-gradient(135deg, #4285F4, #D96570);
+      --text-main: #1F1F1F;
+      --text-secondary: #444746;
+      --text-muted: #8E918F;
+      --recording-red: #EA4335;
     }
-    
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
-    
-    /* Login Screen */
-    .login-screen {
-      position: fixed;
-      inset: 0;
-      background: var(--gradient);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-    
-    .login-card {
-      background: var(--surface);
-      padding: 48px;
-      border-radius: 24px;
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-      text-align: center;
-      max-width: 400px;
-      width: 90%;
-    }
-    
-    .login-logo {
-      width: 80px;
-      height: 80px;
-      background: var(--gradient);
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 24px;
-      color: white;
-      font-size: 40px;
-      font-weight: 700;
-    }
-    
-    .login-card h1 {
-      font-size: 28px;
-      margin-bottom: 8px;
-    }
-    
-    .login-card p {
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-    }
-    
-    .google-btn {
-      width: 100%;
-      padding: 14px 24px;
-      border: 1px solid var(--border);
-      background: white;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      transition: all 0.2s;
-    }
-    
-    .google-btn:hover {
-      background: var(--bg);
-      box-shadow: var(--shadow);
-    }
-    
-    .google-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    
-    .login-note {
-      margin-top: 24px;
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-    
-    /* Layout */
-    .dashboard {
-      display: none;
-      grid-template-columns: 260px 1fr;
+      font-family: 'Outfit', system-ui, sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
       min-height: 100vh;
+      padding: 32px 16px;
+      line-height: 1.5;
     }
-    
-    .dashboard.active {
-      display: grid;
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    
-    /* Sidebar */
-    .sidebar {
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      padding: 24px 16px;
-      position: fixed;
-      height: 100vh;
-      width: 260px;
-      overflow-y: auto;
-      z-index: 100;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 24px;
-    }
-    
-    .brand-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--gradient);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 700;
-      font-size: 20px;
-    }
-    
-    .brand-text h1 {
-      font-size: 18px;
-      font-weight: 600;
-    }
-    
-    .brand-text span {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-    
-    .nav-section {
-      margin-bottom: 24px;
-    }
-    
-    .nav-title {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-      padding-left: 12px;
-    }
-    
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: var(--text-secondary);
-      font-size: 14px;
-      margin-bottom: 4px;
-    }
-    
-    .nav-item:hover {
-      background: var(--bg);
-      color: var(--text);
-    }
-    
-    .nav-item.active {
-      background: rgba(66,133,244,0.1);
-      color: var(--primary);
-      font-weight: 500;
-    }
-    
-    .nav-item .material-symbols-rounded {
-      font-size: 20px;
-    }
-    
-    .user-profile {
-      margin-top: auto;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-    }
-    
-    .profile-card {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .profile-card:hover {
-      background: var(--bg);
-    }
-    
-    .profile-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    
-    .profile-info {
-      flex: 1;
-      overflow: hidden;
-    }
-    
-    .profile-name {
-      font-weight: 600;
-      font-size: 14px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    
-    .profile-email {
-      font-size: 12px;
-      color: var(--text-secondary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    
-    /* Main Content */
-    .main {
-      margin-left: 260px;
-      padding: 24px 32px;
-    }
-    
-    /* Header */
+
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 32px;
-    }
-    
-    .header h2 {
-      font-size: 28px;
-      font-weight: 600;
-    }
-    
-    .header-actions {
-      display: flex;
-      gap: 12px;
-    }
-    
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      border-radius: 8px;
-      border: none;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-    
-    .btn-primary:hover {
-      background: var(--primary-dark);
-      box-shadow: var(--shadow);
-    }
-    
-    .btn-secondary {
-      background: white;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-    
-    .btn-secondary:hover {
-      background: var(--bg);
-    }
-    
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
-      margin-bottom: 32px;
-    }
-    
-    .stat-card {
-      background: var(--surface);
-      padding: 24px;
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      transition: transform 0.2s;
-    }
-    
-    .stat-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
-    }
-    
-    .stat-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 16px;
-    }
-    
-    .stat-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-    }
-    
-    .stat-icon.blue { background: rgba(66,133,244,0.1); color: var(--primary); }
-    .stat-icon.green { background: rgba(52,168,83,0.1); color: var(--success); }
-    .stat-icon.orange { background: rgba(251,188,5,0.1); color: var(--warning); }
-    .stat-icon.red { background: rgba(234,67,53,0.1); color: var(--danger); }
-    
-    .stat-trend {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 4px 8px;
-      border-radius: 12px;
-    }
-    
-    .trend-up {
-      background: rgba(52,168,83,0.1);
-      color: var(--success);
-    }
-    
-    .trend-down {
-      background: rgba(234,67,53,0.1);
-      color: var(--danger);
-    }
-    
-    .stat-value {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    
-    .stat-label {
-      font-size: 14px;
-      color: var(--text-secondary);
-    }
-    
-    /* Charts Section */
-    .charts-section {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 24px;
-      margin-bottom: 32px;
-    }
-    
-    .chart-card {
-      background: var(--surface);
-      padding: 24px;
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-    }
-    
-    .chart-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    
-    .chart-title {
-      font-size: 18px;
-      font-weight: 600;
-    }
-    
-    .chart-filters {
-      display: flex;
-      gap: 8px;
-    }
-    
-    .filter-btn {
-      padding: 6px 12px;
-      border: 1px solid var(--border);
-      background: white;
-      border-radius: 6px;
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .filter-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-    
-    .chart-container {
-      position: relative;
-      height: 300px;
-    }
-    
-    /* Activity Feed */
-    .activity-list {
-      max-height: 320px;
-      overflow-y: auto;
-    }
-    
-    .activity-item {
-      display: flex;
-      gap: 12px;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .activity-item:last-child {
-      border-bottom: none;
-    }
-    
-    .activity-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--gradient);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 600;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-    
-    .activity-content {
-      flex: 1;
-    }
-    
-    .activity-text {
-      font-size: 14px;
-      margin-bottom: 4px;
-    }
-    
-    .activity-text strong {
-      color: var(--text);
-    }
-    
-    .activity-time {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-    
-    /* Users Section */
-    .users-section {
-      background: var(--surface);
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-    
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 24px;
-      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
       flex-wrap: wrap;
       gap: 16px;
     }
-    
-    .search-box {
+
+    .brand-gradient-text {
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      color: transparent;
+      font-weight: 700;
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+    }
+
+    .user-pill {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 16px;
-      background: var(--bg);
-      border-radius: 8px;
-      border: 1px solid transparent;
-      transition: all 0.2s;
-      min-width: 300px;
-    }
-    
-    .search-box:focus-within {
-      border-color: var(--primary);
+      gap: 12px;
       background: white;
+      padding: 10px 20px;
+      border-radius: 999px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      font-size: 0.95rem;
     }
-    
-    .search-box input {
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .sign-in-btn {
+      background: var(--primary-gradient);
+      color: white;
       border: none;
-      background: none;
-      outline: none;
-      font-size: 14px;
+      padding: 12px 28px;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(66, 133, 244, 0.3);
+      transition: all 0.2s;
+    }
+
+    .sign-in-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(66, 133, 244, 0.4);
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      margin-bottom: 32px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: #F8FAFC;
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      border: 1px solid #E1E5EA;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: #4285F4;
+    }
+
+    .search-container {
+      margin: 24px 0;
+      max-width: 480px;
+    }
+
+    #userSearchInput {
       width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #D0D7DE;
+      border-radius: 12px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    
-    .table-container {
-      overflow-x: auto;
+
+    #userSearchInput:focus {
+      border-color: #4285F4;
+      box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
     }
-    
+
     table {
       width: 100%;
       border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 0.95rem;
     }
-    
-    th {
+
+    th, td {
+      padding: 14px 16px;
       text-align: left;
-      padding: 16px 24px;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-secondary);
+      border-bottom: 1px solid #E8EEF4;
+    }
+
+    th {
+      background: #F0F4F9;
       font-weight: 600;
-      background: var(--bg);
+      color: #444746;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
-    
-    td {
-      padding: 16px 24px;
-      font-size: 14px;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    tr:hover td {
-      background: rgba(66,133,244,0.02);
-    }
-    
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    
-    .user-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    
-    .user-details h4 {
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-    
-    .user-details span {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-    
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
-    }
-    
-    .status-active {
-      background: rgba(52,168,83,0.1);
-      color: var(--success);
-    }
-    
-    .status-inactive {
-      background: rgba(95,99,104,0.1);
-      color: var(--text-secondary);
-    }
-    
-    .usage-bar {
-      width: 100px;
-      height: 6px;
-      background: var(--bg);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    
-    .usage-fill {
-      height: 100%;
-      background: var(--gradient);
-      border-radius: 3px;
-      transition: width 0.3s;
-    }
-    
-    .action-btns {
-      display: flex;
-      gap: 8px;
-    }
-    
-    .icon-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
+
+    .status-online { color: #34A853; font-weight: 600; }
+    .status-offline { color: #8E918F; }
+
+    .block-btn {
+      padding: 8px 18px;
       border: none;
-      background: transparent;
-      color: var(--text-secondary);
+      border-radius: 999px;
+      font-weight: 500;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       transition: all 0.2s;
+      min-width: 100px;
+      text-align: center;
     }
-    
-    .icon-btn:hover {
-      background: var(--bg);
-      color: var(--primary);
+
+    .block-btn.block { background: #EA4335; color: white; }
+    .block-btn.unblock { background: #34A853; color: white; }
+
+    .loading, .empty-state, .no-results {
+      text-align: center;
+      padding: 80px 20px;
+      color: #4285F4;
+      font-size: 1.1rem;
     }
-    
-    .icon-btn.delete:hover {
-      background: rgba(234,67,53,0.1);
-      color: var(--danger);
+
+    .auth-required {
+      text-align: center;
+      padding: 120px 24px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+      max-width: 520px;
+      margin: 100px auto;
     }
-    
-    /* Toast Notification */
-    .toast-container {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      z-index: 2000;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+
+    .highlight {
+      background-color: #fff3cd;
+      padding: 2px 4px;
+      border-radius: 4px;
     }
-    
-    .toast {
-      background: var(--surface);
-      padding: 16px 20px;
-      border-radius: 12px;
-      box-shadow: var(--shadow-lg);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      animation: slideIn 0.3s ease;
-      min-width: 300px;
-    }
-    
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-    
-    .toast.success { border-left: 4px solid var(--success); }
-    .toast.error { border-left: 4px solid var(--danger); }
-    .toast.warning { border-left: 4px solid var(--warning); }
-    
-    /* Loading State */
-    .loading-screen {
-      position: fixed;
-      inset: 0;
-      background: var(--bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9998;
-    }
-    
-    .spinner {
-      width: 48px;
-      height: 48px;
-      border: 4px solid var(--border);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    
-    /* Responsive */
-    @media (max-width: 1200px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .charts-section {
-        grid-template-columns: 1fr;
-      }
-    }
-    
+
     @media (max-width: 768px) {
-      .dashboard {
-        grid-template-columns: 1fr;
-      }
-      .sidebar {
-        transform: translateX(-100%);
-        transition: transform 0.3s;
-      }
-      .sidebar.open {
-        transform: translateX(0);
-      }
-      .main {
-        margin-left: 0;
-      }
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-      .search-box {
-        min-width: 100%;
-      }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .stat-value { font-size: 2.1rem; }
+      table { font-size: 0.9rem; }
+      th, td { padding: 12px 10px; }
     }
   </style>
 </head>
 <body>
-  <!-- Login Screen -->
-  <div class="login-screen" id="loginScreen">
-    <div class="login-card">
-      <div class="login-logo">V</div>
-      <h1>Welcome to Vynix AI</h1>
-      <p>Analytics Dashboard</p>
-      
-      <button class="google-btn" id="googleSignInBtn" onclick="signInWithGoogle()">
-        <svg width="18" height="18" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-        </svg>
-        Sign in with Google
-      </button>
-      
-      <p class="login-note">
-        Only authenticated users can access analytics data.<br>
-        Your data is securely stored and encrypted.
+
+  <div class="container">
+    <div class="header">
+      <h1 class="brand-gradient-text">Admin Dashboard</h1>
+      <div id="userSection"></div>
+    </div>
+
+    <div id="authRequired" class="auth-required" style="display:none;">
+      <h2>Please sign in</h2>
+      <p style="margin: 20px 0; color: #555; line-height: 1.6;">
+        You need to be signed in to access this dashboard.
       </p>
+      <button id="signInPromptBtn" class="sign-in-btn">Sign in with Google</button>
+    </div>
+
+    <div id="dashboardContent" style="display:none;">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Users</div>
+          <div class="stat-value" id="totalUsers">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Prompts</div>
+          <div class="stat-value" id="totalPrompts">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Tokens</div>
+          <div class="stat-value" id="totalTokens">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Online Now</div>
+          <div class="stat-value" id="onlineUsers">—</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin-bottom: 20px;">Live User Activity & Controls</h2>
+
+        <div class="search-container">
+          <input 
+            type="text" 
+            id="userSearchInput" 
+            placeholder="Search by name or email..." 
+            autocomplete="off"
+          />
+        </div>
+
+        <div id="loading" class="loading">Connecting to live data...</div>
+        <div id="emptyState" class="empty-state" style="display:none;">
+          No users found in the system yet.
+        </div>
+        <div id="noResults" class="no-results" style="display:none;">
+          No users match your search.
+        </div>
+
+        <table id="usersTable" style="display:none;">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Prompts</th>
+              <th>Tokens Used</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
-  <!-- Loading Screen -->
-  <div class="loading-screen" id="loadingScreen" style="display: none;">
-    <div class="spinner"></div>
-  </div>
-
-  <!-- Dashboard -->
-  <div class="dashboard" id="dashboard">
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-      <div class="brand">
-        <div class="brand-icon">V</div>
-        <div class="brand-text">
-          <h1>Vynix AI</h1>
-          <span>Analytics Dashboard</span>
-        </div>
-      </div>
-      
-      <div class="nav-section">
-        <div class="nav-title">Overview</div>
-        <div class="nav-item active" onclick="showSection('dashboard')">
-          <span class="material-symbols-rounded">dashboard</span>
-          Dashboard
-        </div>
-        <div class="nav-item" onclick="showSection('analytics')">
-          <span class="material-symbols-rounded">analytics</span>
-          Analytics
-        </div>
-        <div class="nav-item" onclick="showSection('users')">
-          <span class="material-symbols-rounded">group</span>
-          Users
-        </div>
-      </div>
-      
-      <div class="nav-section">
-        <div class="nav-title">Management</div>
-        <div class="nav-item" onclick="showSection('conversations')">
-          <span class="material-symbols-rounded">chat</span>
-          Conversations
-        </div>
-        <div class="nav-item" onclick="showSection('settings')">
-          <span class="material-symbols-rounded">settings</span>
-          Settings
-        </div>
-      </div>
-      
-      <div class="user-profile">
-        <div class="profile-card" onclick="toggleProfileMenu()">
-          <img src="" alt="" class="profile-avatar" id="profileAvatar">
-          <div class="profile-info">
-            <div class="profile-name" id="profileName">User</div>
-            <div class="profile-email" id="profileEmail">user@example.com</div>
-          </div>
-          <span class="material-symbols-rounded" style="color: var(--text-secondary);">expand_more</span>
-        </div>
-      </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main">
-      <!-- Header -->
-      <div class="header">
-        <div>
-          <h2>Dashboard Overview</h2>
-          <p style="color: var(--text-secondary); font-size: 14px;">Real-time insights and user management</p>
-        </div>
-        <div class="header-actions">
-          <button class="btn btn-secondary" onclick="refreshData()">
-            <span class="material-symbols-rounded">refresh</span>
-            Refresh
-          </button>
-          <button class="btn btn-primary" onclick="exportReport()">
-            <span class="material-symbols-rounded">download</span>
-            Export Report
-          </button>
-        </div>
-      </div>
-
-      <!-- Stats Grid -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-header">
-            <div class="stat-icon blue">
-              <span class="material-symbols-rounded">group</span>
-            </div>
-            <div class="stat-trend trend-up">
-              <span class="material-symbols-rounded" style="font-size: 16px;">trending_up</span>
-              +12.5%
-            </div>
-          </div>
-          <div class="stat-value" id="totalUsers">0</div>
-          <div class="stat-label">Total Users</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-header">
-            <div class="stat-icon green">
-              <span class="material-symbols-rounded">chat</span>
-            </div>
-            <div class="stat-trend trend-up">
-              <span class="material-symbols-rounded" style="font-size: 16px;">trending_up</span>
-              +8.2%
-            </div>
-          </div>
-          <div class="stat-value" id="totalConversations">0</div>
-          <div class="stat-label">Total Conversations</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-header">
-            <div class="stat-icon orange">
-              <span class="material-symbols-rounded">message</span>
-            </div>
-            <div class="stat-trend trend-up">
-              <span class="material-symbols-rounded" style="font-size: 16px;">trending_up</span>
-              +24.3%
-            </div>
-          </div>
-          <div class="stat-value" id="totalMessages">0</div>
-          <div class="stat-label">Messages Sent</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-header">
-            <div class="stat-icon red">
-              <span class="material-symbols-rounded">timer</span>
-            </div>
-            <div class="stat-trend trend-down">
-              <span class="material-symbols-rounded" style="font-size: 16px;">trending_down</span>
-              -2.1%
-            </div>
-          </div>
-          <div class="stat-value" id="avgResponseTime">0s</div>
-          <div class="stat-label">Avg Response Time</div>
-        </div>
-      </div>
-
-      <!-- Charts Section -->
-      <div class="charts-section">
-        <div class="chart-card">
-          <div class="chart-header">
-            <h3 class="chart-title">Usage Trends</h3>
-            <div class="chart-filters">
-              <button class="filter-btn active" onclick="setChartPeriod('7d', this)">7 Days</button>
-              <button class="filter-btn" onclick="setChartPeriod('30d', this)">30 Days</button>
-              <button class="filter-btn" onclick="setChartPeriod('90d', this)">90 Days</button>
-            </div>
-          </div>
-          <div class="chart-container">
-            <canvas id="usageChart"></canvas>
-          </div>
-        </div>
-
-        <div class="chart-card">
-          <div class="chart-header">
-            <h3 class="chart-title">Recent Activity</h3>
-          </div>
-          <div class="activity-list" id="activityList">
-            <!-- Activity items will be populated here -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Users Section -->
-      <div class="users-section" id="usersSection">
-        <div class="section-header">
-          <h3 class="chart-title">User Management</h3>
-          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-            <div class="search-box">
-              <span class="material-symbols-rounded" style="color: var(--text-secondary);">search</span>
-              <input type="text" placeholder="Search users..." id="searchInput" onkeyup="searchUsers()">
-            </div>
-          </div>
-        </div>
-        
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Status</th>
-                <th>Conversations</th>
-                <th>Messages</th>
-                <th>Usage</th>
-                <th>Last Active</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="usersTable">
-              <!-- Users will be populated here -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </main>
-  </div>
-
-  <!-- Toast Container -->
-  <div class="toast-container" id="toastContainer"></div>
-
   <script>
-    // Firebase Configuration
+    // ────────────────────────────────────────────────
+    //  Firebase Configuration
+    // ────────────────────────────────────────────────
     const firebaseConfig = {
       apiKey: "AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
       authDomain: "fire-b-a8878.firebaseapp.com",
@@ -988,569 +307,200 @@
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    const database = firebase.database();
+    const db = firebase.database();
+
     const provider = new firebase.auth.GoogleAuthProvider();
 
     // State
     let currentUser = null;
-    let usersData = [];
-    let usageChart = null;
-    let currentPeriod = '7d';
+    let usersListener = null;
+    let presenceListeners = {};
 
-    // Auth State Listener
+    // ────────────────────────────────────────────────
+    //  Auth State Listener
+    // ────────────────────────────────────────────────
     auth.onAuthStateChanged(user => {
+      currentUser = user;
+      updateUserSection();
+
       if (user) {
-        // User is signed in
-        currentUser = user;
-        showDashboard();
-        updateProfileUI(user);
-        initDashboard();
+        document.getElementById('authRequired').style.display = 'none';
+        document.getElementById('dashboardContent').style.display = 'block';
+        startRealTimeListeners();
       } else {
-        // User is signed out
-        showLoginScreen();
+        document.getElementById('dashboardContent').style.display = 'none';
+        document.getElementById('authRequired').style.display = 'block';
       }
     });
 
-    function showLoginScreen() {
-      document.getElementById('loginScreen').style.display = 'flex';
-      document.getElementById('dashboard').classList.remove('active');
-      document.getElementById('loadingScreen').style.display = 'none';
-    }
-
-    function showDashboard() {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('dashboard').classList.add('active');
-      document.getElementById('loadingScreen').style.display = 'none';
-    }
-
-    function showLoading() {
-      document.getElementById('loadingScreen').style.display = 'flex';
+    function updateUserSection() {
+      const section = document.getElementById('userSection');
+      if (currentUser) {
+        section.innerHTML = `
+          <div class="user-pill">
+            <div class="avatar" style="background-image: url('${currentUser.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName || 'User')}&background=4285F4&color=fff`}')"></div>
+            <span>${currentUser.displayName || currentUser.email.split('@')[0]}</span>
+            <button onclick="auth.signOut()" style="background:none; border:none; color:#EA4335; cursor:pointer; font-weight:500; margin-left:12px;">Sign out</button>
+          </div>
+        `;
+      } else {
+        section.innerHTML = `<button class="sign-in-btn" onclick="signInWithGoogle()">Sign in with Google</button>`;
+      }
     }
 
     function signInWithGoogle() {
-      const btn = document.getElementById('googleSignInBtn');
-      btn.disabled = true;
-      btn.innerHTML = '<div class="spinner" style="width: 18px; height: 18px; border-width: 2px;"></div> Signing in...';
-
-      auth.signInWithPopup(provider)
-        .then(result => {
-          showToast('Welcome, ' + result.user.displayName, 'success');
-        })
-        .catch(error => {
-          console.error('Sign in error:', error);
-          showToast('Sign in failed: ' + error.message, 'error');
-          btn.disabled = false;
-          btn.innerHTML = `
-            <svg width="18" height="18" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-            </svg>
-            Sign in with Google
-          `;
-        });
-    }
-
-    function handleLogout() {
-      showLoading();
-      auth.signOut().then(() => {
-        showToast('Logged out successfully', 'success');
-      }).catch(error => {
-        showToast('Logout failed: ' + error.message, 'error');
-        showDashboard();
+      auth.signInWithPopup(provider).catch(err => {
+        console.error("Sign-in error:", err);
+        alert("Sign-in failed: " + err.message);
       });
     }
 
-    function updateProfileUI(user) {
-      document.getElementById('profileAvatar').src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=random`;
-      document.getElementById('profileName').textContent = user.displayName || 'User';
-      document.getElementById('profileEmail').textContent = user.email || '';
-    }
+    // ────────────────────────────────────────────────
+    //  Real-time Data + Search
+    // ────────────────────────────────────────────────
+    function startRealTimeListeners() {
+      // Cleanup previous listeners
+      if (usersListener) db.ref('users').off('value', usersListener);
+      Object.values(presenceListeners).forEach(ref => ref.off());
+      presenceListeners = {};
 
-    function toggleProfileMenu() {
-      // Simple toggle - in production, show a dropdown menu
-      if (confirm('Do you want to logout?')) {
-        handleLogout();
-      }
-    }
+      const userRows = {}; // uid → <tr>
 
-    function initDashboard() {
-      initCharts();
-      loadDashboardData();
-      
-      // Auto-refresh every 30 seconds
-      setInterval(() => {
-        if (currentUser) {
-          loadDashboardData();
-        }
-      }, 30000);
-    }
+      usersListener = db.ref('users').on('value', snapshot => {
+        const usersData = snapshot.val() || {};
+        const tableBody = document.getElementById('usersTableBody');
 
-    function initCharts() {
-      const ctx = document.getElementById('usageChart').getContext('2d');
-      
-      usageChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: [],
-          datasets: [{
-            label: 'Active Users',
-            data: [],
-            borderColor: '#4285F4',
-            backgroundColor: 'rgba(66,133,244,0.1)',
-            tension: 0.4,
-            fill: true
-          }, {
-            label: 'Conversations',
-            data: [],
-            borderColor: '#D96570',
-            backgroundColor: 'rgba(217,101,112,0.1)',
-            tension: 0.4,
-            fill: true
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                usePointStyle: true,
-                padding: 20
-              }
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              grid: {
-                color: 'rgba(0,0,0,0.05)'
-              }
-            },
-            x: {
-              grid: {
-                display: false
-              }
+        // Remove deleted users
+        Object.keys(userRows).forEach(uid => {
+          if (!usersData[uid]) {
+            if (userRows[uid]) userRows[uid].remove();
+            delete userRows[uid];
+            if (presenceListeners[uid]) {
+              db.ref(`presence/${uid}`).off();
+              delete presenceListeners[uid];
             }
           }
-        }
-      });
-    }
-
-    function loadDashboardData() {
-      loadStats();
-      loadUsers();
-      loadActivity();
-      loadChartData(currentPeriod);
-    }
-
-    function loadStats() {
-      // Total users
-      database.ref('users').once('value', snap => {
-        const count = snap.numChildren();
-        animateValue('totalUsers', parseInt(document.getElementById('totalUsers').textContent) || 0, count, 1000);
-      });
-
-      // Total conversations across all users
-      database.ref('users').once('value', snap => {
-        let count = 0;
-        snap.forEach(userSnap => {
-          const conversations = userSnap.child('conversations');
-          if (conversations.exists()) {
-            count += conversations.numChildren();
-          }
         });
-        animateValue('totalConversations', parseInt(document.getElementById('totalConversations').textContent) || 0, count, 1000);
-      });
 
-      // Total messages
-      database.ref('users').once('value', snap => {
-        let count = 0;
-        snap.forEach(userSnap => {
-          const conversations = userSnap.child('conversations');
-          conversations.forEach(conv => {
-            const messages = conv.child('messages');
-            if (messages.exists()) {
-              count += messages.numChildren();
-            }
+        let totalPrompts = 0;
+        let totalTokens = 0;
+
+        Object.entries(usersData).forEach(([uid, data]) => {
+          if (!userRows[uid]) {
+            const tr = document.createElement('tr');
+            tr.dataset.uid = uid;
+            tableBody.appendChild(tr);
+            userRows[uid] = tr;
+          }
+
+          const row = userRows[uid];
+          const usage = data.usage || {};
+          let prompts = 0;
+          let tokens = 0;
+
+          Object.values(usage).forEach(entry => {
+            prompts += entry.promptCount || 0;
+            tokens += entry.totalTokens || entry.estimatedTokens || 0;
           });
-        });
-        animateValue('totalMessages', parseInt(document.getElementById('totalMessages').textContent) || 0, count, 1000);
-      });
 
-      // Avg response time (mock)
-      document.getElementById('avgResponseTime').textContent = '1.2s';
-    }
+          totalPrompts += prompts;
+          totalTokens += tokens;
 
-    function loadUsers() {
-      const tbody = document.getElementById('usersTable');
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">Loading users...</td></tr>';
+          const displayName = data.displayName || data.email?.split('@')[0] || 'Unknown';
+          const email = data.email || '';
+          const blocked = !!data.blocked;
 
-      database.ref('users').limitToLast(100).once('value', snap => {
-        usersData = [];
-        snap.forEach(child => {
-          const userData = child.val();
-          // Calculate stats for each user
-          let convCount = 0;
-          let msgCount = 0;
-          let lastActive = userData.lastActive || 0;
-          
-          if (userData.conversations) {
-            convCount = Object.keys(userData.conversations).length;
-            Object.values(userData.conversations).forEach(conv => {
-              if (conv.messages) {
-                msgCount += Object.keys(conv.messages).length;
-              }
-              if (conv.lastUpdated > lastActive) {
-                lastActive = conv.lastUpdated;
-              }
-            });
-          }
-          
-          usersData.push({
-            id: child.key,
-            ...userData,
-            conversationCount: convCount,
-            messageCount: msgCount,
-            lastActive: lastActive
-          });
-        });
-        
-        // Sort by last active
-        usersData.sort((a, b) => b.lastActive - a.lastActive);
-        renderUsers(usersData);
-      });
-    }
-
-    function renderUsers(users) {
-      const tbody = document.getElementById('usersTable');
-      tbody.innerHTML = '';
-
-      if (users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">No users found</td></tr>';
-        return;
-      }
-
-      users.forEach(user => {
-        const tr = document.createElement('tr');
-        const isCurrentUser = user.id === currentUser.uid;
-        
-        tr.innerHTML = `
-          <td>
-            <div class="user-info">
-              <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=random`}" 
-                   class="user-avatar" alt="" onerror="this.src='https://ui-avatars.com/api/?name=User&background=random'">
-              <div class="user-details">
-                <h4>${user.displayName || 'Anonymous'} ${isCurrentUser ? '<span style="color: var(--primary); font-size: 10px;">(You)</span>' : ''}</h4>
-                <span>${user.email || 'No email'}</span>
-              </div>
-            </div>
-          </td>
-          <td>
-            <span class="status-badge status-${user.status || 'active'}">
-              <span class="material-symbols-rounded" style="font-size: 12px;">
-                ${user.status === 'active' ? 'check_circle' : user.status === 'banned' ? 'block' : 'pause_circle'}
-              </span>
-              ${user.status || 'Active'}
-            </span>
-          </td>
-          <td>${user.conversationCount || 0}</td>
-          <td>${user.messageCount || 0}</td>
-          <td>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <div class="usage-bar">
-                <div class="usage-fill" style="width: ${Math.min((user.messageCount || 0) / 50 * 100, 100)}%"></div>
-              </div>
-              <span style="font-size: 12px; color: var(--text-secondary);">${Math.min((user.messageCount || 0) / 50 * 100, 100).toFixed(0)}%</span>
-            </div>
-          </td>
-          <td>${formatTime(user.lastActive)}</td>
-          <td>
-            <div class="action-btns">
-              <button class="icon-btn" onclick="viewUser('${user.id}')" title="View Details">
-                <span class="material-symbols-rounded">visibility</span>
+          row.innerHTML = `
+            <td data-search="${(displayName + ' ' + email).toLowerCase()}">
+              <strong>${displayName}</strong><br>
+              <small style="color:#777;">${email || 'no email'}</small>
+            </td>
+            <td>${prompts.toLocaleString()}</td>
+            <td>${tokens.toLocaleString()}</td>
+            <td class="status-cell">Loading...</td>
+            <td>
+              <button class="block-btn ${blocked ? 'unblock' : 'block'}"
+                      onclick="toggleBlock('${uid}', ${!blocked})">
+                ${blocked ? 'Unblock' : 'Block'}
               </button>
-              ${!isCurrentUser ? `
-              <button class="icon-btn delete" onclick="deleteUser('${user.id}')" title="Delete User">
-                <span class="material-symbols-rounded">delete</span>
-              </button>
-              ` : ''}
-            </div>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function loadActivity() {
-      const container = document.getElementById('activityList');
-      container.innerHTML = '';
-
-      // Get recent activity from database
-      database.ref('users').orderByChild('lastActive').limitToLast(10).once('value', snap => {
-        const activities = [];
-        
-        snap.forEach(child => {
-          const user = child.val();
-          if (user.lastActive) {
-            activities.push({
-              user: user.displayName || 'Anonymous',
-              action: 'was active',
-              time: user.lastActive,
-              type: 'user'
-            });
-          }
-        });
-
-        activities.sort((a, b) => b.time - a.time);
-
-        if (activities.length === 0) {
-          container.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-secondary);">No recent activity</div>';
-          return;
-        }
-
-        activities.slice(0, 5).forEach(act => {
-          const div = document.createElement('div');
-          div.className = 'activity-item';
-          div.innerHTML = `
-            <div class="activity-avatar">${act.user.charAt(0).toUpperCase()}</div>
-            <div class="activity-content">
-              <div class="activity-text">
-                <strong>${act.user}</strong> ${act.action}
-              </div>
-              <div class="activity-time">${timeAgo(act.time)}</div>
-            </div>
+            </td>
           `;
-          container.appendChild(div);
-        });
-      });
-    }
 
-    function loadChartData(period) {
-      const days = period === '7d' ? 7 : period === '30d' ? 30 : 90;
-      const labels = [];
-      const userData = [];
-      const convData = [];
+          // Presence listener (once per user)
+          if (!presenceListeners[uid]) {
+            const presenceRef = db.ref(`presence/${uid}`);
+            presenceListeners[uid] = presenceRef.on('value', pSnap => {
+              const pres = pSnap.val() || {};
+              const isOnline = pres.online && (Date.now() - (pres.lastActive || 0) < 300000);
 
-      // Generate labels
-      for (let i = days - 1; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
-        labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
-      }
-
-      // Fetch real data from Firebase
-      database.ref('users').once('value').then(snap => {
-        const dailyData = {};
-        
-        // Initialize all days with 0
-        labels.forEach((label, idx) => {
-          dailyData[idx] = { users: 0, conversations: 0 };
-        });
-
-        snap.forEach(userSnap => {
-          const user = userSnap.val();
-          
-          // Count users by creation date
-          if (user.createdAt) {
-            const createdDate = new Date(user.createdAt);
-            const daysAgo = Math.floor((Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24));
-            if (daysAgo < days) {
-              const idx = days - 1 - daysAgo;
-              if (dailyData[idx]) dailyData[idx].users++;
-            }
-          }
-
-          // Count conversations
-          if (user.conversations) {
-            Object.values(user.conversations).forEach(conv => {
-              if (conv.createdAt) {
-                const convDate = new Date(conv.createdAt);
-                const daysAgo = Math.floor((Date.now() - convDate.getTime()) / (1000 * 60 * 60 * 24));
-                if (daysAgo < days) {
-                  const idx = days - 1 - daysAgo;
-                  if (dailyData[idx]) dailyData[idx].conversations++;
-                }
+              const statusCell = row.querySelector('.status-cell');
+              if (statusCell) {
+                statusCell.innerHTML = isOnline
+                  ? '<span class="status-online">Online</span>'
+                  : '<span class="status-offline">Offline</span>';
               }
             });
           }
         });
 
-        // Convert to arrays
-        labels.forEach((_, idx) => {
-          userData.push(dailyData[idx].users);
-          convData.push(dailyData[idx].conversations);
-        });
+        // Update totals
+        document.getElementById('totalUsers').textContent = Object.keys(usersData).length;
+        document.getElementById('totalPrompts').textContent = totalPrompts.toLocaleString();
+        document.getElementById('totalTokens').textContent = totalTokens.toLocaleString();
 
-        // Update chart
-        usageChart.data.labels = labels;
-        usageChart.data.datasets[0].data = userData;
-        usageChart.data.datasets[1].data = convData;
-        usageChart.update();
+        // UI states
+        const hasUsers = Object.keys(usersData).length > 0;
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('emptyState').style.display = hasUsers ? 'none' : 'block';
+        document.getElementById('usersTable').style.display = hasUsers ? 'table' : 'none';
+
+        // Re-apply current search filter
+        filterUsers();
       });
     }
 
-    // User Management Functions
-    function searchUsers() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = usersData.filter(u => 
-        (u.displayName || '').toLowerCase().includes(query) ||
-        (u.email || '').toLowerCase().includes(query)
-      );
-      renderUsers(filtered);
+    // ────────────────────────────────────────────────
+    //  Search / Filter
+    // ────────────────────────────────────────────────
+    function filterUsers() {
+      const input = document.getElementById('userSearchInput').value.toLowerCase().trim();
+      const rows = document.querySelectorAll('#usersTableBody tr');
+
+      let visibleCount = 0;
+
+      rows.forEach(row => {
+        const searchText = row.querySelector('td[data-search]')?.dataset.search || '';
+        const match = searchText.includes(input);
+
+        row.style.display = match ? '' : 'none';
+        if (match) visibleCount++;
+      });
+
+      document.getElementById('noResults').style.display =
+        (visibleCount === 0 && input.length > 0) ? 'block' : 'none';
     }
 
-    function viewUser(userId) {
-      const user = usersData.find(u => u.id === userId);
-      if (!user) return;
-      
-      // Show user details in a modal or alert (simplified for now)
-      alert(`User Details:\n\nName: ${user.displayName || 'N/A'}\nEmail: ${user.email || 'N/A'}\nConversations: ${user.conversationCount || 0}\nMessages: ${user.messageCount || 0}\nLast Active: ${formatTime(user.lastActive)}`);
-    }
-
-    function deleteUser(userId) {
-      if (userId === currentUser.uid) {
-        showToast('You cannot delete your own account', 'error');
-        return;
-      }
-      
-      if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
-      
-      database.ref(`users/${userId}`).remove()
+    // ────────────────────────────────────────────────
+    //  Block / Unblock User
+    // ────────────────────────────────────────────────
+    function toggleBlock(uid, shouldBlock) {
+      db.ref(`users/${uid}/blocked`).set(shouldBlock)
         .then(() => {
-          showToast('User deleted successfully', 'success');
-          loadUsers();
+          console.log(`User ${uid} ${shouldBlock ? 'blocked' : 'unblocked'}`);
         })
         .catch(err => {
-          showToast('Error deleting user: ' + err.message, 'error');
+          console.error("Block update failed:", err);
+          alert("Failed to update user status: " + err.message);
         });
     }
 
-    // Utility Functions
-    function animateValue(id, start, end, duration) {
-      if (start === end) return;
-      const obj = document.getElementById(id);
-      const range = end - start;
-      const increment = end > start ? 1 : -1;
-      const stepTime = Math.abs(Math.floor(duration / range));
-      let current = start;
-      
-      const timer = setInterval(() => {
-        current += increment;
-        obj.textContent = current.toLocaleString();
-        if (current === end) {
-          clearInterval(timer);
-        }
-      }, Math.max(stepTime, 10));
-    }
-
-    function formatTime(timestamp) {
-      if (!timestamp) return 'Never';
-      const date = new Date(timestamp);
-      const now = new Date();
-      const diff = now - date;
-      
-      if (diff < 60000) return 'Just now';
-      if (diff < 3600000) return Math.floor(diff / 60000) + ' min ago';
-      if (diff < 86400000) return Math.floor(diff / 3600000) + ' hours ago';
-      
-      return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-
-    function timeAgo(timestamp) {
-      const seconds = Math.floor((Date.now() - timestamp) / 1000);
-      const intervals = {
-        year: 31536000,
-        month: 2592000,
-        week: 604800,
-        day: 86400,
-        hour: 3600,
-        minute: 60
-      };
-      
-      for (const [unit, secondsInUnit] of Object.entries(intervals)) {
-        const interval = Math.floor(seconds / secondsInUnit);
-        if (interval >= 1) {
-          return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
-        }
-      }
-      return 'Just now';
-    }
-
-    function setChartPeriod(period, btn) {
-      currentPeriod = period;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      loadChartData(period);
-    }
-
-    function refreshData() {
-      showToast('Refreshing data...', 'warning');
-      loadDashboardData();
-    }
-
-    function exportReport() {
-      // Generate CSV report
-      const csv = [
-        ['Name', 'Email', 'Conversations', 'Messages', 'Last Active'].join(','),
-        ...usersData.map(u => [
-          `"${u.displayName || 'Anonymous'}"`,
-          `"${u.email || ''}"`,
-          u.conversationCount || 0,
-          u.messageCount || 0,
-          `"${formatTime(u.lastActive)}"`
-        ].join(','))
-      ].join('\n');
-
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `vynix-analytics-${new Date().toISOString().split('T')[0]}.csv`;
-      a.click();
-      
-      showToast('Report exported successfully', 'success');
-    }
-
-    function showToast(message, type = 'success') {
-      const container = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
-      
-      const icon = type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info';
-      
-      toast.innerHTML = `
-        <span class="material-symbols-rounded">${icon}</span>
-        <span>${message}</span>
-      `;
-      
-      container.appendChild(toast);
-      
-      setTimeout(() => {
-        toast.style.animation = 'slideIn 0.3s ease reverse';
-        setTimeout(() => toast.remove(), 300);
-      }, 3000);
-    }
-
-    function showSection(section) {
-      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-      event.target.closest('.nav-item').classList.add('active');
-      
-      if (section === 'users') {
-        document.getElementById('usersSection').scrollIntoView({ behavior: 'smooth' });
-      } else if (section === 'dashboard') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        showToast(`${section} section coming soon`, 'warning');
-      }
-    }
-
-    // Mobile sidebar toggle
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
-    }
+    // ────────────────────────────────────────────────
+    //  Init
+    // ────────────────────────────────────────────────
+    document.getElementById('userSearchInput')?.addEventListener('input', filterUsers);
+    document.querySelectorAll('.sign-in-btn').forEach(btn => {
+      btn.addEventListener('click', () => auth.signInWithPopup(provider));
+    });
   </script>
 </body>
 </html>
