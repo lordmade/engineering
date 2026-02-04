@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vynix AI • Admin Dashboard</title>
+  <title>Vynix AI • Dashboard</title>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -18,17 +18,91 @@
       --dark: #202124;
       --gray: #5f6368;
       --border: #dadce0;
+      --bg-overlay: rgba(0,0,0,0.4);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       background: var(--light);
       color: var(--dark);
-      line-height: 1.5;
       min-height: 100vh;
-      padding: 24px;
+      overflow: hidden;
     }
-    .container { max-width: 1400px; margin: 0 auto; }
+
+    /* ──────────────── AUTH MODAL ──────────────── */
+    #authOverlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-overlay);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    #authOverlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .auth-modal {
+      background: white;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 420px;
+      padding: 32px 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      text-align: center;
+      transform: scale(0.92);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    #authOverlay.active .auth-modal {
+      transform: scale(1);
+    }
+    .auth-title {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+      color: var(--dark);
+    }
+    .auth-subtitle {
+      color: var(--gray);
+      margin-bottom: 28px;
+      line-height: 1.4;
+    }
+    .google-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 14px;
+      background: white;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .google-btn:hover {
+      background: #f8f9fa;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .google-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ──────────────── MAIN CONTENT ──────────────── */
+    .main-content {
+      padding: 24px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .main-content.loaded {
+      opacity: 1;
+    }
     header {
       display: flex;
       justify-content: space-between;
@@ -40,7 +114,6 @@
     h1 {
       font-size: 1.8rem;
       color: var(--primary);
-      margin: 0;
     }
     .signout-btn {
       background: var(--danger);
@@ -63,24 +136,21 @@
       background: white;
       border-radius: 12px;
       padding: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
-      transition: all 0.2s;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      transition: transform 0.2s;
     }
     .stat-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     }
     .stat-card h3 {
       color: var(--gray);
       font-size: 0.95rem;
-      font-weight: 500;
       margin-bottom: 12px;
     }
     .stat-value {
-      font-size: 2.4rem;
+      font-size: 2.5rem;
       font-weight: 700;
       color: var(--primary);
-      line-height: 1;
     }
 
     .search-container {
@@ -94,7 +164,6 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       outline: none;
-      transition: all 0.2s;
     }
     #searchInput:focus {
       border-color: var(--primary);
@@ -105,23 +174,16 @@
       background: white;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      padding: 14px 16px;
-      text-align: left;
-    }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 14px 16px; text-align: left; }
     th {
       background: #f1f3f4;
       font-weight: 600;
       color: #3c4043;
       font-size: 0.9rem;
       text-transform: uppercase;
-      letter-spacing: 0.4px;
     }
     tr:nth-child(even) { background: #fafafa; }
     tr:hover { background: #f0f4f9; }
@@ -135,15 +197,11 @@
       border-radius: 6px;
       font-size: 0.9rem;
       cursor: pointer;
-      font-weight: 500;
-      transition: all 0.15s;
+      transition: all 0.2s;
     }
     .block-btn   { background: var(--danger);  color: white; }
     .unblock-btn { background: var(--success); color: white; }
-    .action-btn:hover { opacity: 0.9; transform: scale(1.04); }
-
-    .loading { opacity: 0.5; pointer-events: none; }
-    .error    { color: var(--danger); padding: 16px; background: #fce8e6; border-radius: 8px; margin: 16px 0; }
+    .action-btn:hover { opacity: 0.9; }
 
     @media (max-width: 768px) {
       .stats-grid { grid-template-columns: 1fr; }
@@ -153,15 +211,31 @@
 </head>
 <body>
 
-<div class="container">
+<!-- ──────────────── SIGN-IN MODAL ──────────────── -->
+<div id="authOverlay">
+  <div class="auth-modal">
+    <h2 class="auth-title">Sign in to Vynix Dashboard</h2>
+    <p class="auth-subtitle">Sign in with your Google account to view usage statistics and user activity.</p>
+    <button class="google-btn" id="googleSignInBtn">
+      <svg class="google-icon" viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      Sign in with Google
+    </button>
+  </div>
+</div>
+
+<!-- ──────────────── MAIN DASHBOARD ──────────────── -->
+<div class="main-content" id="mainContent">
   <header>
-    <h1>Vynix AI • Admin Dashboard</h1>
+    <h1>Vynix AI • Dashboard</h1>
     <button class="signout-btn" onclick="signOut()">Sign Out</button>
   </header>
 
-  <div class="stats-grid" id="statsGrid">
-    <!-- Stats cards injected here -->
-  </div>
+  <div class="stats-grid" id="statsGrid"></div>
 
   <div class="search-container">
     <input type="text" id="searchInput" placeholder="Search users by name or email..." autocomplete="off"/>
@@ -183,14 +257,10 @@
       <tbody id="usersBody"></tbody>
     </table>
   </div>
-
-  <div id="errorMessage" class="error" style="display:none;"></div>
 </div>
 
 <script>
-// ────────────────────────────────────────────────
-//  CONFIGURATION - CHANGE THESE VALUES
-// ────────────────────────────────────────────────
+// Firebase Config (same as your main app)
 const firebaseConfig = {
   apiKey: "AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
   authDomain: "fire-b-a8878.firebaseapp.com",
@@ -199,69 +269,43 @@ const firebaseConfig = {
   appId: "1:658673187627:web:6e4c29af661785f0afa36e"
 };
 
-// Option A: Hard-coded admin emails (simplest & fastest)
-const ALLOWED_ADMIN_EMAILS = [
-  "katlego@example.com",          // ← CHANGE THIS
-  // "teacher1@school.co.za",
-  // "admin@vynix.ai"
-];
-
-// Option B: If you prefer database flag → uncomment in onAuthStateChanged below
-// and set isAdmin: true for desired users in /users/{uid}
-
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-// ────────────────────────────────────────────────
-//  AUTH & ACCESS CONTROL
-// ────────────────────────────────────────────────
+// ──────────────── AUTH STATE ────────────────
 auth.onAuthStateChanged(user => {
-  if (!user) {
-    alert("Please sign in with Google to access the admin dashboard.");
-    window.location.href = "/"; // ← change to your main app URL if different
-    return;
+  if (user) {
+    // User is signed in → show dashboard
+    document.getElementById('authOverlay').classList.remove('active');
+    document.getElementById('mainContent').classList.add('loaded');
+    loadDashboard();
+  } else {
+    // Not signed in → show modal
+    document.getElementById('authOverlay').classList.add('active');
+    document.getElementById('mainContent').classList.remove('loaded');
   }
-
-  // Option A: Email list check (recommended for small team)
-  if (!ALLOWED_ADMIN_EMAILS.includes(user.email)) {
-    showError("Access denied. This dashboard is restricted to administrators only.");
-    setTimeout(() => auth.signOut(), 1800);
-    return;
-  }
-
-  // Option B: Database role check (uncomment if you prefer this method)
-  /*
-  db.ref(`users/${user.uid}/isAdmin`).once('value').then(snap => {
-    if (!snap.val()) {
-      showError("Access denied. Admin privileges required.");
-      setTimeout(() => auth.signOut(), 1800);
-      return;
-    }
-    startDashboard(user);
-  });
-  */
-
-  // If using email list → proceed directly
-  startDashboard(user);
 });
 
-function startDashboard(user) {
-  document.body.style.opacity = "1";
-  loadDashboard();
+// Google Sign-In
+document.getElementById('googleSignInBtn').onclick = () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider)
+    .catch(err => {
+      console.error("Sign-in error:", err);
+      alert("Sign in failed: " + err.message);
+    });
+};
+
+function signOut() {
+  auth.signOut().then(() => {
+    // Modal will automatically re-appear
+  }).catch(err => alert("Sign out error: " + err.message));
 }
 
-function showError(msg) {
-  const el = document.getElementById('errorMessage');
-  el.textContent = msg;
-  el.style.display = 'block';
-}
-
-// ────────────────────────────────────────────────
-//  LOAD DASHBOARD DATA
-// ────────────────────────────────────────────────
+// ──────────────── DASHBOARD LOGIC ────────────────
 function loadDashboard() {
-  // Live online count
+  // Online users (live)
   db.ref('presence').on('value', snap => {
     let online = 0;
     snap.forEach(child => {
@@ -270,62 +314,54 @@ function loadDashboard() {
     updateStat('onlineUsers', 'Users Online Now', online);
   });
 
-  // Aggregated user stats
+  // Aggregated stats
   db.ref('users').once('value').then(snap => {
     const users = snap.val() || {};
-    const totalUsers = Object.keys(users).length;
-
+    let totalUsers = Object.keys(users).length;
     let totalPrompts = 0;
-    let totalTokens  = 0;
+    let totalTokens = 0;
 
     Object.values(users).forEach(u => {
       totalPrompts += (u.usage?.total?.promptCount || 0);
       totalTokens  += (u.usage?.total?.estimatedTokens || 0);
     });
 
-    updateStat('totalUsers',   'Total Registered Users', totalUsers.toLocaleString());
-    updateStat('totalPrompts', 'Total Prompts Sent',     totalPrompts.toLocaleString());
-    updateStat('totalTokens',  'Estimated Tokens Used',  totalTokens.toLocaleString());
+    updateStat('totalUsers',   'Total Users',   totalUsers.toLocaleString());
+    updateStat('totalPrompts', 'Total Prompts', totalPrompts.toLocaleString());
+    updateStat('totalTokens',  'Est. Tokens',   totalTokens.toLocaleString());
   });
 
   // User list (live updates)
-  db.ref('users').orderByChild('usage/total/promptCount').limitToLast(100).on('value', renderUserTable);
+  db.ref('users').orderByChild('usage/total/promptCount').limitToLast(100).on('value', renderUsers);
 }
 
 function updateStat(id, title, value) {
   const grid = document.getElementById('statsGrid');
-  if (!document.getElementById(id)) {
-    const card = document.createElement('div');
+  let card = document.getElementById(id);
+  if (!card) {
+    card = document.createElement('div');
     card.className = 'stat-card';
     card.id = id;
-    card.innerHTML = `
-      <h3>${title}</h3>
-      <div class="stat-value">${value}</div>
-    `;
+    card.innerHTML = `<h3>${title}</h3><div class="stat-value">${value}</div>`;
     grid.appendChild(card);
   } else {
-    document.querySelector(`#${id} .stat-value`).textContent = value;
+    card.querySelector('.stat-value').textContent = value;
   }
 }
 
-function renderUserTable(snapshot) {
+function renderUsers(snapshot) {
   const tbody = document.getElementById('usersBody');
   tbody.innerHTML = '';
 
   const users = [];
   snapshot.forEach(child => {
-    users.push({
-      uid: child.key,
-      ...child.val()
-    });
+    users.push({ uid: child.key, ...child.val() });
   });
 
-  // Sort descending by prompt count
   users.sort((a,b) => (b.usage?.total?.promptCount || 0) - (a.usage?.total?.promptCount || 0));
 
   users.forEach(user => {
     const tr = document.createElement('tr');
-
     const prompts = (user.usage?.total?.promptCount || 0).toLocaleString();
     const tokens  = (user.usage?.total?.estimatedTokens || 0).toLocaleString();
     const lastActive = user.lastActive
@@ -345,7 +381,7 @@ function renderUserTable(snapshot) {
       <td>
         ${user.blocked
           ? `<button class="action-btn unblock-btn" onclick="toggleBlock('${user.uid}', false)">Unblock</button>`
-          : `<button class="action-btn block-btn"   onclick="toggleBlock('${user.uid}', true)">Block</button>`
+          : `<button class="action-btn block-btn" onclick="toggleBlock('${user.uid}', true)">Block</button>`
         }
       </td>
     `;
@@ -353,36 +389,24 @@ function renderUserTable(snapshot) {
   });
 }
 
-// ────────────────────────────────────────────────
-//  BLOCK / UNBLOCK
-// ────────────────────────────────────────────────
 function toggleBlock(uid, shouldBlock) {
-  if (!confirm(`Are you sure you want to ${shouldBlock ? 'BLOCK' : 'UNBLOCK'} this user?`)) return;
+  if (!confirm(`Really ${shouldBlock ? 'BLOCK' : 'UNBLOCK'} this user?`)) return;
 
   db.ref(`users/${uid}`).update({
     blocked: shouldBlock,
-    blockedAt: shouldBlock ? firebase.database.ServerValue.TIMESTAMP : null,
-    blockedBy: auth.currentUser?.email || 'admin'
-  })
-  .then(() => alert(`User has been ${shouldBlock ? 'blocked' : 'unblocked'}.`))
-  .catch(err => alert('Error: ' + err.message));
+    blockedAt: shouldBlock ? firebase.database.ServerValue.TIMESTAMP : null
+  }).then(() => {
+    alert(`User ${shouldBlock ? 'blocked' : 'unblocked'}.`);
+  }).catch(err => alert('Error: ' + err.message));
 }
 
-// ────────────────────────────────────────────────
-//  SEARCH FILTER
-// ────────────────────────────────────────────────
+// Live search
 document.getElementById('searchInput').addEventListener('input', e => {
   const term = e.target.value.toLowerCase().trim();
   document.querySelectorAll('#usersBody tr').forEach(row => {
     row.style.display = row.textContent.toLowerCase().includes(term) ? '' : 'none';
   });
 });
-
-function signOut() {
-  auth.signOut().then(() => {
-    window.location.href = "/"; // ← your main app landing page
-  });
-}
 </script>
 </body>
 </html>
