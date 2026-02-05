@@ -54,6 +54,11 @@
 
         h1 { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
 
+        .user-profile { display: flex; align-items: center; gap: 12px; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--border); }
+        .btn-logout { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; }
+        .btn-logout:hover { background: var(--danger); color: white; border-color: var(--danger); }
+
         .nav-tabs {
             display: flex;
             background: var(--bg-card);
@@ -157,7 +162,41 @@
             margin-right: 8px;
         }
 
-        /* --- Toast & Modal --- */
+        /* --- Login Modal --- */
+        #login-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .login-box {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 24px;
+            width: 100%; max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+
+        .google-btn {
+            background: white; color: #3c4043;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            padding: 10px 16px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%;
+            margin-top: 24px;
+            transition: background 0.2s;
+        }
+        .google-btn:hover { background: #f8f9fa; border-color: #d2e3fc; }
+        .google-icon { width: 18px; height: 18px; }
+
+        /* --- Toast --- */
         #toast {
             position: fixed; bottom: 24px; right: 24px;
             background: #1e293b; color: white; padding: 12px 24px;
@@ -166,92 +205,114 @@
         }
         #toast.show { opacity: 1; }
 
-        .hidden { display: none; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1><span class="material-symbols-rounded" style="color: var(--primary);">admin_panel_settings</span> Teacher Dashboard</h1>
-        <div style="font-size: 14px; color: var(--text-muted);">Admin Mode</div>
-    </header>
+    <div id="login-modal">
+        <div class="login-box">
+            <span class="material-symbols-rounded" style="font-size: 48px; color: var(--primary); margin-bottom: 16px;">admin_panel_settings</span>
+            <h2 style="margin-bottom: 8px;">Admin Access</h2>
+            <p style="color: var(--text-muted); font-size: 14px;">Please sign in to manage the quiz database.</p>
+            
+            <button class="google-btn" onclick="signInWithGoogle()">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="google-icon" alt="G">
+                Sign in with Google
+            </button>
+        </div>
+    </div>
 
-    <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('questions')">Upload Questions</button>
-        <button class="tab-btn" onclick="switchTab('students')">Manage Students</button>
+    <div id="app-content" class="hidden">
+        <header>
+            <h1><span class="material-symbols-rounded" style="color: var(--primary);">admin_panel_settings</span> Teacher Dashboard</h1>
+            <div class="user-profile">
+                <div style="font-size: 14px; color: var(--text-muted); text-align: right;">
+                    <div id="user-name">Admin</div>
+                    <div style="font-size: 11px;">Admin Mode</div>
+                </div>
+                <img id="user-pic" src="" class="user-avatar">
+                <button class="btn-logout" onclick="logout()">Sign Out</button>
+            </div>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('questions')">Upload Questions</button>
+            <button class="tab-btn" onclick="switchTab('students')">Manage Students</button>
+        </div>
+
+        <main>
+            <div id="tab-questions">
+                
+                <div class="card">
+                    <h2>Add New Question</h2>
+                    
+                    <div class="form-group">
+                        <label>Select Subject</label>
+                        <select id="subSelect" onchange="loadQuestions()">
+                            <option value="maths">Mathematics</option>
+                            <option value="physical_sciences">Physical Sciences</option>
+                            <option value="life_sciences">Life Sciences</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Question Text (Use \( .. \) for Math formulas)</label>
+                        <textarea id="qText" placeholder="e.g. What is the value of \( \pi \)?" oninput="updatePreview()"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Live Preview</label>
+                        <div id="mathPreview" class="preview-box">Type above to preview...</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group"><label>Option A</label><input type="text" id="opt1"></div>
+                        <div class="form-group"><label>Option B</label><input type="text" id="opt2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group"><label>Option C</label><input type="text" id="opt3"></div>
+                        <div class="form-group"><label>Option D</label><input type="text" id="opt4"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Correct Answer (Exact text match)</label>
+                        <select id="correctSelect">
+                            <option value="">Select Correct Option</option>
+                            <option value="0">Option A</option>
+                            <option value="1">Option B</option>
+                            <option value="2">Option C</option>
+                            <option value="3">Option D</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="uploadQuestion()">
+                        <span class="material-symbols-rounded">cloud_upload</span> Upload Question
+                    </button>
+                </div>
+
+                <div class="card">
+                    <h2>Existing Questions</h2>
+                    <div id="questionsList">Loading...</div>
+                </div>
+            </div>
+
+            <div id="tab-students" class="hidden">
+                <div class="card">
+                    <h2>Student Performance</h2>
+                    <div id="studentList">Loading students...</div>
+                </div>
+            </div>
+        </main>
     </div>
 
     <div id="toast">Action Successful</div>
 
-    <main>
-        <div id="tab-questions">
-            
-            <div class="card">
-                <h2>Add New Question</h2>
-                
-                <div class="form-group">
-                    <label>Select Subject</label>
-                    <select id="subSelect" onchange="loadQuestions()">
-                        <option value="maths">Mathematics</option>
-                        <option value="physical_sciences">Physical Sciences</option>
-                        <option value="life_sciences">Life Sciences</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Question Text (Use \( .. \) for Math formulas)</label>
-                    <textarea id="qText" placeholder="e.g. What is the value of \( \pi \)?" oninput="updatePreview()"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Live Preview</label>
-                    <div id="mathPreview" class="preview-box">Type above to preview...</div>
-                </div>
-
-                <div class="row">
-                    <div class="form-group"><label>Option A</label><input type="text" id="opt1"></div>
-                    <div class="form-group"><label>Option B</label><input type="text" id="opt2"></div>
-                </div>
-                <div class="row">
-                    <div class="form-group"><label>Option C</label><input type="text" id="opt3"></div>
-                    <div class="form-group"><label>Option D</label><input type="text" id="opt4"></div>
-                </div>
-
-                <div class="form-group">
-                    <label>Correct Answer (Exact text match)</label>
-                    <select id="correctSelect">
-                        <option value="">Select Correct Option</option>
-                        <option value="0">Option A</option>
-                        <option value="1">Option B</option>
-                        <option value="2">Option C</option>
-                        <option value="3">Option D</option>
-                    </select>
-                </div>
-
-                <button class="btn btn-primary" onclick="uploadQuestion()">
-                    <span class="material-symbols-rounded">cloud_upload</span> Upload Question
-                </button>
-            </div>
-
-            <div class="card">
-                <h2>Existing Questions</h2>
-                <div id="questionsList">Loading...</div>
-            </div>
-        </div>
-
-        <div id="tab-students" class="hidden">
-            <div class="card">
-                <h2>Student Performance</h2>
-                <div id="studentList">Loading students...</div>
-            </div>
-        </div>
-    </main>
-
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script> <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <script>
-        // Config (Same as Student App)
+        // Config
         const firebaseConfig = {
             apiKey: "AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
             authDomain: "fire-b-a8878.firebaseapp.com",
@@ -263,16 +324,54 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+        const auth = firebase.auth();
 
         // State
         let currentQuestions = [];
 
-        // Init
-        window.onload = () => {
-            loadQuestions();
-        };
+        // --- AUTHENTICATION LOGIC ---
 
-        // --- Tabs Logic ---
+        auth.onAuthStateChanged((user) => {
+            const loginModal = document.getElementById('login-modal');
+            const appContent = document.getElementById('app-content');
+
+            if (user) {
+                // User is logged in
+                loginModal.classList.add('hidden');
+                appContent.classList.remove('hidden');
+                
+                // Update UI with user info
+                document.getElementById('user-name').innerText = user.displayName || "Admin";
+                document.getElementById('user-pic').src = user.photoURL || "https://ui-avatars.com/api/?name=Admin";
+
+                // Load initial data
+                loadQuestions();
+            } else {
+                // User is logged out
+                loginModal.classList.remove('hidden');
+                appContent.classList.add('hidden');
+            }
+        });
+
+        function signInWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    showToast("Welcome " + result.user.displayName);
+                })
+                .catch((error) => {
+                    console.error(error);
+                    showToast("Login Failed: " + error.message);
+                });
+        }
+
+        function logout() {
+            auth.signOut().then(() => {
+                showToast("Signed Out");
+            });
+        }
+
+        // --- TABS LOGIC ---
         function switchTab(tab) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelector(`button[onclick="switchTab('${tab}')"]`).classList.add('active');
@@ -285,7 +384,7 @@
             if(tab === 'students') loadStudents();
         }
 
-        // --- Question Management ---
+        // --- QUESTION MANAGEMENT ---
 
         function updatePreview() {
             const txt = document.getElementById('qText').value;
@@ -309,13 +408,10 @@
                 return;
             }
 
-            // Convert object to array for display, preserving keys
             const list = [];
             if (Array.isArray(data)) {
-                // If legacy array format
                 data.forEach((q, i) => list.push({...q, key: i}));
             } else {
-                // If push() object format
                 Object.keys(data).forEach(key => list.push({...data[key], key: key}));
             }
 
@@ -342,7 +438,6 @@
             const subject = document.getElementById('subSelect').value;
             const text = document.getElementById('qText').value.trim();
             
-            // Get Options
             const opts = [
                 document.getElementById('opt1').value.trim(),
                 document.getElementById('opt2').value.trim(),
@@ -352,7 +447,6 @@
 
             const correctIdx = document.getElementById('correctSelect').value;
 
-            // Validation
             if (!text || opts.some(o => !o) || correctIdx === "") {
                 showToast("Please fill all fields!");
                 return;
@@ -361,13 +455,12 @@
             const correctVal = opts[parseInt(correctIdx)];
 
             const newQuestion = {
-                id: Date.now().toString(), // Helper ID
+                id: Date.now().toString(),
                 text: text,
                 options: opts,
                 correct: correctVal
             };
 
-            // Push to Firebase (Using push for unique keys)
             await db.ref(`quiz/subjects/${subject}/questions`).push(newQuestion);
             
             showToast("Question Uploaded!");
@@ -378,8 +471,6 @@
         async function deleteQuestion(key) {
             if(!confirm("Are you sure you want to delete this question?")) return;
             const subject = document.getElementById('subSelect').value;
-            
-            // Handle both array index and object key
             await db.ref(`quiz/subjects/${subject}/questions/${key}`).remove();
             showToast("Question deleted");
             loadQuestions();
@@ -395,7 +486,7 @@
             updatePreview();
         }
 
-        // --- Student Management ---
+        // --- STUDENT MANAGEMENT ---
 
         async function loadStudents() {
             const container = document.getElementById('studentList');
@@ -414,7 +505,6 @@
             Object.keys(users).forEach(uid => {
                 const user = users[uid];
                 
-                // Calculate Stats
                 let totalScore = 0;
                 let totalQuizzes = 0;
 
